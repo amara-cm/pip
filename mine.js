@@ -1,0 +1,20 @@
+import prisma from '../../lib/db';
+
+export default async function handler(req, res) {
+  const { telegramId } = req.body;
+
+  try {
+    const user = await prisma.user.findUnique({ where: { telegramId } });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const stonesMined = 1;  // Example logic, customize this
+    const updatedUser = await prisma.user.update({
+      where: { telegramId },
+      data: { points: user.points + stonesMined },
+    });
+
+    res.status(200).json({ success: true, points: updatedUser.points });
+  } catch (error) {
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+}
