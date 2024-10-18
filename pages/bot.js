@@ -1,5 +1,5 @@
 const { Telegraf } = require('telegraf');
-const fetch = require('node-fetch');
+const fetch = await import('node-fetch');
 
 const bot = new Telegraf('7611734053:AAGnOEPnXrJkdEhTGEdNQi7OqAdZWeuWHls');
 
