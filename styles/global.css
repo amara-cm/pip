@@ -51,15 +51,15 @@
 }
 
 .tab-bar .tab-btn.tab-rewards .icon {
-    background-image: url("public/icons/task.svg");
+    background-image: url('/icons/task.svg');
 }
 
 .tab-bar .tab-btn.tab-site .icon {
-    background-image: url("public/icons/home.svg");
+    background-image: url('/icons/home.svg');
 }
 
 .tab-bar .tab-btn.tab-friends .icon {
-    background-image: url("public/icons/friends.svg");
+    background-image: url('/icons/friends.svg');
 }
 
 .tab-bar .tab-btn .text {
@@ -79,7 +79,7 @@
   display: flex;
   width: 0.6875rem;
   height: 0.6875rem;
-  background: url('/public/icons/gamecoin.svg') no-repeat center;
+  background: url('/icons/gamecoin.svg') no-repeat center;
   background-size: contain;
 }
 
@@ -146,7 +146,7 @@
 .home-scr .coins .coin-icon {
     width: 2.1875rem;
     height: 2.1875rem;
-    background: url('/public/icons/gamecoin.svg') no-repeat center;
+    background: url('/icons/gamecoin.svg') no-repeat center;
     background-size: contain;
 }
 
@@ -440,7 +440,7 @@
 }
 
 .tasks-scr .tasks-list .task .buttons.completed .icon {
-    background: url('/public/icons/completed.svg') no-repeat center;
+    background: url('/icons/completed.svg') no-repeat center;
     background-size: contain;
 }
 
@@ -553,7 +553,7 @@
 }
 
 .friends-scr .frame .frame2 .copy-btn .icon {
-    background: url('/public/icons/copy.svg') no-repeat center;
+    background: url('/icons/copy.svg') no-repeat center;
     background-size: contain;
 }
 
@@ -584,6 +584,6 @@
 }
 
 .errorpage .refresh-icon {
-    background: url('/public/icons/refresh.svg') no-repeat center;
+    background: url('/icons/refresh.svg') no-repeat center;
     background-size: contain;
 }
