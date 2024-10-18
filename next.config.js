@@ -2,26 +2,15 @@ import webpack from 'webpack';
 import { createRequire } from 'module';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-const require = createRequire(import.meta.url);
 
 // Workaround for __filename and __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+const require = createRequire(import.meta.url); // Allows usage of require in ESM
+
 const nextConfig = {
   webpack: (config) => {
-    config.resolve.fallback = {
-      fs: false,
-      https: false,
-      http: false,
-      net: false,
-      buffer: require.resolve('buffer'),
-    };
-
-    // Optional: Adjust Webpack caching to avoid cache serialization issues
-   const nextConfig = {
-  webpack: (config) => {
-    // Your existing configuration
     config.resolve.fallback = {
       fs: false,
       https: false,
@@ -36,9 +25,9 @@ const nextConfig = {
       })
     );
 
-    // Update the cache configuration to use 'memory'
+    // Adjust Webpack caching to avoid cache serialization issues
     config.cache = {
-      type: 'memory',  // Change this line
+      type: 'memory',  // Updated to use 'memory' as per the error message
     };
 
     return config;
