@@ -1,4 +1,6 @@
 import webpack from 'webpack';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url); // Allows usage of require in ESM
 
 const nextConfig = {
   webpack: (config) => {
