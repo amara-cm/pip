@@ -19,6 +19,7 @@ const nextConfig = {
       buffer: require.resolve('buffer'),
     };
 
+    // Provide Buffer globally
     config.plugins.push(
       new webpack.ProvidePlugin({
         Buffer: ['buffer', 'Buffer'],
@@ -34,6 +35,8 @@ const nextConfig = {
       cacheUnaffected: true, // Cache unaffected modules to improve performance
       compression: false,    // Disable compression for easier serialization
     };
+
+    // You might want to add any specific loaders or plugins needed for your project here
 
     return config;
   },
