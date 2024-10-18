@@ -6,3 +6,20 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id         Int      @id @default(autoincrement())  // Unique user ID
+  telegramId String   @unique                       // Store Telegram ID
+  username   String                                // Telegram username
+  points     Int      @default(0)                   // Points accumulated
+  referrals  Int      @default(0)                   // Number of referrals made
+  tasks      Task[]                                // Relation to tasks
+}
+
+model Task {
+  id            Int      @id @default(autoincrement())  // Task ID
+  description   String                                 // Task description
+  reward        Int                                    // Points rewarded for task completion
+  completedById Int?                                   // Reference to user who completed it
+  completedBy   User?    @relation(fields: [completedById], references: [id])
+}
