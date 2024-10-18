@@ -8,6 +8,12 @@ export default function Home() {
   const [dailyReward, setDailyReward] = useState(10); // Starting daily reward
   const [taskCompleted, setTaskCompleted] = useState(false);
   const [uid, setUID] = useState(generateUID());
+  const [referralLink, setReferralLink] = useState('');
+
+  useEffect(() => {
+    // Set referral link on UID generation
+    setReferralLink(`https://t.me/yourGameBot/start/${uid}`);
+  }, [uid]);
 
   useEffect(() => {
     // Mining countdown logic
@@ -51,6 +57,16 @@ export default function Home() {
     setPoints(points + 50); // Example reward for task completion
   };
 
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(referralLink)
+      .then(() => {
+        alert('Referral link copied!');
+      })
+      .catch(() => {
+        alert('Failed to copy referral link.');
+      });
+  };
+
   function generateUID() {
     const chars = '0123456789ABC';
     let uid = '';
@@ -86,9 +102,9 @@ export default function Home() {
         </section>
 
         <section className="referrals-section">
-          <button>Invite</button>
-          <button>Copy Link</button>
-          {/* Friends list should go here */}
+          <p>Your referral link: <a href={referralLink}>{referralLink}</a></p>
+          <button onClick={handleCopyLink}>Copy Link</button>
+          {/* Friends list could go here */}
         </section>
       </main>
     </div>
