@@ -1,4 +1,4 @@
-module.exports = {
+export default = {
   webpack: (config) => {
     config.resolve.fallback = {
       fs: false,
