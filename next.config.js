@@ -1,4 +1,4 @@
-export default = {
+const nextConfig = {
   webpack: (config) => {
     config.resolve.fallback = {
       fs: false,
@@ -9,3 +9,5 @@ export default = {
     return config;
   },
 };
+
+export default nextConfig;
