@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
+import { generateUID } from '../utils/uid';
 
-export default function Home() {
+export default function Home({ initialUID }) {
   const [miningTime, setMiningTime] = useState(28800); // 8 hours in seconds
   const [collectedStone, setCollectedStone] = useState(0.0);
   const [points, setPoints] = useState(0); // Player points earned
   const [dailyLoginCountdown, setDailyLoginCountdown] = useState(86400); // 24 hours in seconds
   const [dailyReward, setDailyReward] = useState(10); // Starting daily reward
   const [taskCompleted, setTaskCompleted] = useState(false);
-  const [uid, setUID] = useState(generateUID());
+  const [uid, setUID] = useState(initialUID);
   const [referralLink, setReferralLink] = useState('');
 
   useEffect(() => {
@@ -67,46 +68,40 @@ export default function Home() {
       });
   };
 
-  function generateUID() {
-    const chars = '0123456789ABC';
-    let uid = '';
-    for (let i = 0; i < 7; i++) {
-      uid += chars[Math.floor(Math.random() * chars.length)];
-    }
-    return uid;
-  }
-
   return (
     <div className="home">
       <header>
         <p>Player UID: {uid}</p>
         <p>Points: {points} <span><img src="/public/icons/gamecoin.svg" alt="coin" /></span></p>
       </header>
-
       <main>
         <section className="mining-section">
-          <button onClick={handleSell} disabled={miningTime > 0}>Sell</button>
-          <p>Collecting: {collectedStone} stone</p>
-          <p>Time remaining: {new Date(miningTime * 1000).toISOString().substr(11, 8)}</p>
+          <p>Mining Time Left: {miningTime} seconds</p>
+          <p>Collected Stone: {collectedStone}</p>
+          <button onClick={handleSell}>Sell Stone</button>
         </section>
-
-        <section className="daily-login-section">
-          <button disabled={dailyLoginCountdown > 0} onClick={handleClaimDailyReward}>Claim</button>
-          <p>Daily Login Reward: {dailyReward} coins</p>
-          <p>Next reward in: {new Date(dailyLoginCountdown * 1000).toISOString().substr(11, 8)}</p>
+        <section className="daily-reward-section">
+          <p>Daily Login Countdown: {dailyLoginCountdown} seconds</p>
+          <button onClick={handleClaimDailyReward}>Claim Daily Reward</button>
         </section>
-
-        <section className="tasks-section">
-          <button onClick={handleTaskCompletion}>Go</button>
-          {taskCompleted && <button>Claim</button>}
+        <section className="task-section">
+          <p>Task Completed: {taskCompleted ? 'Yes' : 'No'}</p>
+          <button onClick={handleTaskCompletion}>Complete Task</button>
         </section>
-
-        <section className="referrals-section">
-          <p>Your referral link: <a href={referralLink}>{referralLink}</a></p>
+        <section className="referral-section">
+          <p>Referral Link: {referralLink}</p>
           <button onClick={handleCopyLink}>Copy Link</button>
-          {/* Friends list could go here */}
         </section>
       </main>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  const initialUID = generateUID(); // Generate UID on the server
+  return {
+    props: {
+      initialUID,
+    },
+  };
 }
