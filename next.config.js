@@ -9,13 +9,25 @@ const nextConfig = {
       https: false,
       http: false,
       net: false,
-      buffer: require.resolve('buffer/'),
+      buffer: require.resolve('buffer'),
     };
+
     config.plugins.push(
       new webpack.ProvidePlugin({
         Buffer: ['buffer', 'Buffer'],
       })
     );
+
+    // Optional: Adjust Webpack caching to avoid cache serialization issues
+    config.cache = {
+      type: 'filesystem',
+      buildDependencies: {
+        config: [__filename],
+      },
+      cacheUnaffected: true, // Cache unaffected modules to improve performance
+      compression: false,    // Disable compression for easier serialization
+    };
+
     return config;
   },
 };
