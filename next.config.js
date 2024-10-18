@@ -13,7 +13,7 @@ const nextConfig = {
       https: false,
       http: false,
       net: false,
-      buffer: 'buffer',  // Directly use 'buffer'
+      buffer: 'buffer',  // This is a string instead of using require
     };
 
     config.plugins.push(
@@ -24,7 +24,7 @@ const nextConfig = {
 
     // Adjust Webpack caching to avoid cache serialization issues
     config.cache = {
-      type: 'memory',  // Updated to use 'memory' as per the error message
+      type: 'memory',  // Keep this as it is
     };
 
     return config;
