@@ -19,24 +19,28 @@ const nextConfig = {
       buffer: require.resolve('buffer'),
     };
 
-    // Provide Buffer globally
+    // Optional: Adjust Webpack caching to avoid cache serialization issues
+   const nextConfig = {
+  webpack: (config) => {
+    // Your existing configuration
+    config.resolve.fallback = {
+      fs: false,
+      https: false,
+      http: false,
+      net: false,
+      buffer: require.resolve('buffer'),
+    };
+
     config.plugins.push(
       new webpack.ProvidePlugin({
         Buffer: ['buffer', 'Buffer'],
       })
     );
 
-    // Optional: Adjust Webpack caching to avoid cache serialization issues
+    // Update the cache configuration to use 'memory'
     config.cache = {
-      type: 'filesystem',
-      buildDependencies: {
-        config: [__filename], // Using the correct path for config
-      },
-      cacheUnaffected: true, // Cache unaffected modules to improve performance
-      compression: false,    // Disable compression for easier serialization
+      type: 'memory',  // Change this line
     };
-
-    // You might want to add any specific loaders or plugins needed for your project here
 
     return config;
   },
