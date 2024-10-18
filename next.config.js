@@ -1,5 +1,12 @@
 import webpack from 'webpack';
 import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// Workaround for __filename and __dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const require = createRequire(import.meta.url); // Allows usage of require in ESM
 
 const nextConfig = {
@@ -22,7 +29,7 @@ const nextConfig = {
     config.cache = {
       type: 'filesystem',
       buildDependencies: {
-        config: [__filename],
+        config: [__filename], // Using the correct path for config
       },
       cacheUnaffected: true, // Cache unaffected modules to improve performance
       compression: false,    // Disable compression for easier serialization
