@@ -1,4 +1,3 @@
-import webpack from 'webpack';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -18,12 +17,6 @@ const nextConfig = {
         url: false, // Add this
       };
     }
-
-    config.plugins.push(
-      new webpack.ProvidePlugin({
-        Buffer: ['buffer', 'Buffer'],
-      }),
-    );
 
     config.cache = {
       type: 'memory',
