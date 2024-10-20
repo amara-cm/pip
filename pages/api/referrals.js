@@ -1,6 +1,6 @@
 import prisma from '../../lib/db';
 import react, { useState } from 'react';
-import './global.css';
+import './styles/global.css';
 
 const friends = [
   { id: 1, name: 'Friend 1', username: '@friend1' },
