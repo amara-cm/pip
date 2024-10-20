@@ -8,18 +8,25 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())  // Unique user ID
-  telegramId String   @unique                       // Store Telegram ID
-  username   String                                // Telegram username
-  points     Int      @default(0)                   // Points accumulated
-  referrals  Int      @default(0)                   // Number of referrals made
-  tasks      Task[]                                // Relation to tasks
+  id       String   @id @default(cuid())
+  telegramUsername String @unique
+  uid      String @unique
+  referrals Referral[]
+  tasks    Task[]
+}
+
+model Referral {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [id], references: [id])
+  referredBy String
+  reward    Int
 }
 
 model Task {
-  id            Int      @id @default(autoincrement())  // Task ID
-  description   String                                 // Task description
-  reward        Int                                    // Points rewarded for task completion
-  completedById Int?                                   // Reference to user who completed it
-  completedBy   User?    @relation(fields: [completedById], references: [id])
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [id], references: [id])
+  taskId    String
+  taskName  String
+  completed Boolean @default(false)
+  reward    Int
 }
