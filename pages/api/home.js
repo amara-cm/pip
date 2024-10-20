@@ -1,5 +1,5 @@
 import react, { useState, useEffect } from 'react';
-import './styles.css';
+import './styles/global.css';
 
 const Home = () => {
   const [coins, setCoins] = useState(0);
