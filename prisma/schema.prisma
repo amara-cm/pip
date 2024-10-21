@@ -27,6 +27,6 @@ model Task {
   user      User     @relation(fields: [id], references: [id])
   taskId    String
   taskName  String
-  completed Boolean @default(false)
+  completed Boolean  @default(false)
   reward    Int
 }
