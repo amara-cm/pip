@@ -3,28 +3,30 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite" // Change to "sqlite"
+  url      = env("DATABASE_URL") // Keep this to load from your .env file
 }
 
 model User {
-  id       String   @id @default(cuid())
-  telegramUsername String @unique
-  uid      String @unique
-  referrals Referral[]
-  tasks    Task[]
+  id               String     @id @default(cuid())
+  telegramUsername String      @unique
+  uid              String      @unique
+  referrals        Referral[]
+  tasks            Task[]
 }
 
 model Referral {
-  id        String   @id @default(cuid())
-  user      User     @relation(fields: [id], references: [id])
+  id        String @id @default(cuid())
+  userId    String
+  user      User   @relation(fields: [userId], references: [id]) // Updated to refer to userId
   referredBy String
   reward    Int
 }
 
 model Task {
-  id        String   @id @default(cuid())
-  user      User     @relation(fields: [id], references: [id])
+  id        String @id @default(cuid())
+  userId    String
+  user      User   @relation(fields: [userId], references: [id]) // Updated to refer to userId
   taskId    String
   taskName  String
   completed Boolean  @default(false)
