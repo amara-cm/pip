@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import prisma from '../lib/db'; // Ensure prisma is correctly set up
 
 const HomeScreen = () => {
     const [coins, setCoins] = useState(0);
@@ -10,8 +9,14 @@ const HomeScreen = () => {
     useEffect(() => {
         // Load user data when component mounts
         const loadUserData = async () => {
-            const user = await prisma.user.findUnique({ where: { email: 'user@example.com' } }); // Replace with appropriate logic
-            setCoins(user.coins);
+            const response = await fetch('/api/user');
+            if (!response.ok) {
+                console.error('Failed to load user data');
+                return;
+            }
+
+            const user = await response.json();
+            setCoins(user.coins); // Assuming 'coins' is a field in your User model
         };
 
         loadUserData();
