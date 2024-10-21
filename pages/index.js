@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react'; // Assuming you're using next-auth for authentication
 import prisma from '../lib/db'; // Make sure you set this up
 
 const HomeScreen = () => {
