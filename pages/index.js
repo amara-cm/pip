@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import prisma from '../lib/db'; // Make sure you set this up
+import prisma from '../lib/db'; // Ensure prisma is correctly set up
 
 const HomeScreen = () => {
-    const { data: session } = useSession();
     const [coins, setCoins] = useState(0);
     const [stone, setStone] = useState(0);
     const [timer, setTimer] = useState(28800); // 8 hours in seconds
@@ -11,12 +10,12 @@ const HomeScreen = () => {
     useEffect(() => {
         // Load user data when component mounts
         const loadUserData = async () => {
-            const user = await prisma.user.findUnique({ where: { email: session?.user.email } });
+            const user = await prisma.user.findUnique({ where: { email: 'user@example.com' } }); // Replace with appropriate logic
             setCoins(user.coins);
         };
 
         loadUserData();
-    }, [session]);
+    }, []);
 
     const startMining = () => {
         if (!mining) {
