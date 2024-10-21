@@ -1,12 +1,4 @@
 import prisma from '../../lib/db';
-import react, { useState } from 'react';
-import './styles/global.css';
-
-const friends = [
-  { id: 1, name: 'Friend 1', username: '@friend1' },
-  { id: 2, name: 'Friend 2', username: '@friend2' },
-  // Add more friends...
-];
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -38,16 +30,3 @@ export default async function handler(req, res) {
     res.status(500).json({ error: 'Something went wrong' });
   }
 }
-
-const Friends = () => {
-  const [selectedFriend, setSelectedFriend] = useState(null);
-  const [inviteLink, setInviteLink] = useState('');
-
-  const handleInvite = () => {
-    // Generate unique invite link
-  };
-
-  const handleCopyLink = () => {
-    // Copy invite link to clipboard
-  };
-};
