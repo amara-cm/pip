@@ -12,9 +12,9 @@ const nextConfig = {
         https: false,
         http: false,
         net: false,
-        buffer: false, // Change this to false
-        stream: false, // Add this
-        url: false, // Add this
+        buffer: false,
+        stream: false,
+        url: false,
       };
     }
 
