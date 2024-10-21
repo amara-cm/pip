@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite" // Change to "sqlite"
-  url      = env("DATABASE_URL") // Keep this to load from your .env file
+  provider = "postgresql"
+  url = env("PINK_PRISMA_URL") // uses connection pooling
+  directUrl = env("PINK_URL_NON_POOLING") // uses a direct connection
 }
 
 model User {
