@@ -9,14 +9,24 @@ const HomeScreen = () => {
     useEffect(() => {
         // Load user data when component mounts
         const loadUserData = async () => {
-            const response = await fetch('/api/user');
-            if (!response.ok) {
-                console.error('Failed to load user data');
-                return;
-            }
+            try {
+                const response = await fetch('/api/user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ telegramUsername: 'lons' }), // Replace with actual username
+                });
 
-            const user = await response.json();
-            setCoins(user.coins); // Assuming 'coins' is a field in your User model
+                if (!response.ok) {
+                    throw new Error('Failed to load user data');
+                }
+
+                const user = await response.json();
+                setCoins(user.coins); // Assuming 'coins' is a field in your User model
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
         };
 
         loadUserData();
@@ -32,7 +42,7 @@ const HomeScreen = () => {
                     if (prev <= 1) {
                         clearInterval(interval);
                         setMining(false);
-                        setCoins(coins + 500); // Add coins after mining
+                        setCoins(prevCoins => prevCoins + 500); // Add coins after mining
                         return 0;
                     }
                     return prev - 1;
@@ -43,7 +53,7 @@ const HomeScreen = () => {
 
     const handleSell = () => {
         // Logic to sell stones and update coins
-        setCoins(coins + 500);
+        setCoins(prevCoins => prevCoins + 500);
         setStone(0); // Reset stone after selling
     };
 
@@ -63,7 +73,7 @@ const HomeScreen = () => {
                     <div className="frame">
                         <div className="text collecting">Collecting</div>
                         <div className="text stone-amt">{stone}</div>
-                        <div className="text tmr">{`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60)}:${timer % 60}`}</div>
+                        <div className="text tmr">{`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}</div>
                     </div>
                 </div>
             )}
