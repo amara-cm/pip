@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import styles from '../styles/global.css'; // Ensure the global styles are included
 
 const HomeScreen = () => {
     const [coins, setCoins] = useState(0);
