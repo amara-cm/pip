@@ -11,7 +11,7 @@ const nextConfig = {
         url: false,
       };
     }
-    
+
     return config;
   },
 };
