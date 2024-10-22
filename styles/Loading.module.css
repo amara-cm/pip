@@ -1,0 +1,19 @@
+.loading-scr {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    background: var(--b);
+}
+
+.loading-scr .text {
+    align-self: center;
+    font-family: var(--pf);
+    font-weight: 600;
+    font-size: var(--fs-m);
+    line-height: var(--lh);
+    color: var(--w);
+}
