@@ -4,12 +4,10 @@
     justify-content: center;
     align-items: center; /* Center items vertically */
     flex-direction: column;
-    width: 100vw; /* Full width */
-    height: 100vh; /* Full height */
+    width: 100vw;
+    height: 100vh;
     background: var(--b);
     overflow: hidden; /* Prevent overflow */
-    padding: 0; /* Remove any padding */
-    margin: 0; /* Remove any margin */
 }
 
 .coins {
