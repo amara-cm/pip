@@ -1,0 +1,35 @@
+.error-scr {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    background: var(--b);
+}
+
+.errorpage .try-again {
+    font-family: var(--pf);
+    font-weight: 600;
+    font-size: var(--fs-l);
+    line-height: var(--lh);
+    color: var(--w);
+    height: auto;
+    width: auto;
+}
+
+.errorpage .refresh-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 35px;
+    background: #383838;
+    border-radius: 10px;
+}
+
+.errorpage .refresh-icon {
+    background: url('/icons/refresh.svg') no-repeat center;
+    background-size: contain;
+}
