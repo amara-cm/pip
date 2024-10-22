@@ -1,53 +1,41 @@
 import { useState } from 'react';
 
 const Friends = () => {
-    const [referrals, setReferrals] = useState([]);
-    const [userId, setUserId] = useState('lons'); // Replace with actual Telegram ID
-    const [newReferralId, setNewReferralId] = useState('');
+  const [referrals, setReferrals] = useState([]);
+  const [newReferralId, setNewReferralId] = useState('');
 
-    const handleInvite = async () => {
-        try {
-            const response = await fetch('/api/referrals', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ inviterId: userId, inviteeId: newReferralId }),
-            });
+  const handleInvite = () => {
+    // Mock invite logic
+    setReferrals([...referrals, newReferralId]);
+    setNewReferralId('');
+  };
 
-            if (!response.ok) {
-                throw new Error('Failed to invite friend');
-            }
-
-            const { success, referralId } = await response.json();
-            if (success) {
-                setReferrals([...referrals, referralId]);
-            }
-        } catch (error) {
-            console.error('Error inviting friend:', error);
-        }
-    };
-
-    return (
-        <div className="friends-scr">
-            <div className="invite-section">
-                <button className="invite-btn" onClick={handleInvite}>Invite</button>
-                <input
-                    type="text"
-                    value={newReferralId}
-                    onChange={(e) => setNewReferralId(e.target.value)}
-                    placeholder="Enter referral ID"
-                />
-            </div>
-            <div className="referrals-list">
-                {referrals.map(ref => (
-                    <div key={ref} className="referral">
-                        <span>{ref}</span>
-                    </div>
-                ))}
-            </div>
+  return (
+    <div className="friends-scr">
+      <div className="frame">
+        <div className="inv-text">Invite Friends</div>
+        <div className="frame2">
+          <input
+            type="text"
+            placeholder="Enter referral ID"
+            value={newReferralId}
+            onChange={(e) => setNewReferralId(e.target.value)}
+          />
+          <button className="send-btn" onClick={handleInvite}>Send</button>
         </div>
-    );
+      </div>
+      <div className="referrals-list">
+        {referrals.map((ref, index) => (
+          <div key={index} className="referral">{ref}</div>
+        ))}
+      </div>
+      <div className="tab-bar">
+        <button className="tab-btn tab-rewards" onClick={() => window.location.href = '/tasks'}>Rewards</button>
+        <button className="tab-btn tab-site" onClick={() => window.location.href = '/home'}>Site</button>
+        <button className="tab-btn tab-friends active" onClick={() => window.location.href = '/friends'}>Friends</button>
+      </div>
+    </div>
+  );
 };
 
 export default Friends;
