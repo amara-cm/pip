@@ -5,7 +5,7 @@ const Error = () => {
 
   return (
     <div className="error-scr">
-      <div className="text">An error occurred. Try again.</div>
+      <div className="text">Try Again</div>
       <button className="refresh-btn" onClick={handleRefresh}>Refresh</button>
     </div>
   );
