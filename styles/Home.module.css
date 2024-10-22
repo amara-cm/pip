@@ -4,13 +4,15 @@
     justify-content: center;
     align-items: center; /* Center items vertically */
     flex-direction: column;
-    width: 100vw;
-    height: 100vh;
+    width: 100vw; /* Full width */
+    height: 100vh; /* Full height */
     background: var(--b);
     overflow: hidden; /* Prevent overflow */
+    padding: 0; /* Remove any padding */
+    margin: 0; /* Remove any margin */
 }
 
-.home-scr .coins {
+.coins {
     display: flex;
     justify-content: center; /* Center coins */
     align-items: center;
@@ -18,14 +20,14 @@
     margin-top: 20px; /* Optional margin for spacing */
 }
 
-.home-scr .coins .coin-icon {
+.coins .coin-icon {
     width: 2.1875rem;
     height: 2.1875rem;
     background: url('/icons/gamecoin.svg') no-repeat center;
     background-size: contain;
 }
 
-.home-scr .coins .coin-amt {
+.coins .coin-amt {
     font-family: 'Roboto', sans-serif;
     font-weight: 700;
     font-size: 2.5rem;
@@ -34,9 +36,9 @@
     line-height: var(--lh);
 }
 
-.home-scr .mine-btn, 
-.home-scr .8h-tmr, 
-.home-scr .sell-btn {
+.mine-btn, 
+.8h-tmr, 
+.sell-btn {
     display: flex;
     justify-content: center; /* Center content within buttons */
     align-items: center;
@@ -46,9 +48,9 @@
     margin-top: 20px; /* Add margin for spacing */
 }
 
-.home-scr .mine-btn .text, 
-.home-scr .8h-tmr .text, 
-.home-scr .sell-btn .text {
+.mine-btn .text, 
+.8h-tmr .text, 
+.sell-btn .text {
     font-family: var(--pf);
     font-weight: 600;
     text-align: center;
@@ -56,11 +58,11 @@
     line-height: var(--lh);
 }
 
-.home-scr .mine-btn .text {
+.mine-btn .text {
     color: #1E1E1E;
 }
 
-.home-scr .8h-tmr {
+.8h-tmr {
     display: flex;
     justify-content: space-between; /* Space out elements */
     background: #383838;
@@ -69,7 +71,7 @@
     padding: 10px; /* Add padding for better appearance */
 }
 
-.home-scr .8h-tmr .frame {
+.8h-tmr .frame {
     display: flex;
     gap: var(--gap);
     font-family: 'Outfit';
@@ -77,22 +79,26 @@
     font-size: var(--fs-m);
 }
 
-.home-scr .8h-tmr .frame .text.collecting, 
-.home-scr .8h-tmr .frame .text.stone-amt, 
-.home-scr .8h-tmr .frame .text.tmr {
+.8h-tmr .frame .text.collecting, 
+.8h-tmr .frame .text.stone-amt, 
+.8h-tmr .frame .text.tmr {
     color: #B3B3B3;
 }
 
-.home-scr .sell-btn {
+.sell-btn {
     background: var(--p);
 }
 
-.home-scr .sell-btn .text {
+.sell-btn .text {
     color: #FFFFFF;
 }
 
-.home-scr .tab-bar {
+.tab-bar {
     position: fixed;
     bottom: 0;
     width: 100vw; /* Make sure tab bar stretches across the bottom */
+    display: flex; /* Flex to layout buttons */
+    justify-content: space-around; /* Evenly space buttons */
+    padding: 10px 0; /* Add padding for aesthetics */
+    background: var(--bg-color); /* Add a background color if needed */
 }
