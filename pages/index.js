@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
+import styles from '../styles/Home.module.css';
 
 const HomeScreen = () => {
     const [coins, setCoins] = useState(0);
     const [stone, setStone] = useState(0);
     const [timer, setTimer] = useState(28800); // 8 hours in seconds
     const [mining, setMining] = useState(false);
-    const [isTimerActive, setIsTimerActive] = useState(false);
 
-    // Load user data on component mount
     useEffect(() => {
         const loadUserData = async () => {
             try {
@@ -25,7 +24,6 @@ const HomeScreen = () => {
 
                 const user = await response.json();
                 setCoins(user.coins);
-                setStone(user.stone); // Load the current stone amount if necessary
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
@@ -34,34 +32,29 @@ const HomeScreen = () => {
         loadUserData();
     }, []);
 
-    // Start mining and countdown logic
     const startMining = () => {
-        if (!mining && !isTimerActive) {
+        if (!mining) {
             setMining(true);
-            setIsTimerActive(true);
             setTimer(28800); // Reset timer
             setStone(0); // Reset stone collected
-
             const interval = setInterval(() => {
                 setTimer(prev => {
                     if (prev <= 1) {
                         clearInterval(interval);
                         setMining(false);
-                        setIsTimerActive(false);
                         setCoins(prevCoins => prevCoins + 500); // Add coins after mining
                         return 0;
                     }
                     return prev - 1;
                 });
+                setStone(prevStone => prevStone + (1 / 28800)); // Increment stone amount
             }, 1000);
         }
     };
 
     const handleSell = () => {
-        if (stone > 0) {
-            setCoins(prevCoins => prevCoins + 500);
-            setStone(0);
-        }
+        setCoins(prevCoins => prevCoins + 500);
+        setStone(0);
     };
 
     return (
@@ -72,8 +65,7 @@ const HomeScreen = () => {
                     <div className={styles['coin-amt']}>{coins}</div>
                 </div>
             </div>
-
-            {/* Conditionally show the Mine or Collecting UI */}
+            
             {!mining ? (
                 <button className={styles['mine-btn']} onClick={startMining}>
                     <div className={styles.text}>Mine</div>
@@ -82,7 +74,7 @@ const HomeScreen = () => {
                 <div className={styles['8h-tmr']}>
                     <div className={styles.frame}>
                         <div className={`${styles.text} ${styles.collecting}`}>Collecting</div>
-                        <div className={`${styles.text} ${styles['stone-amt']}`}>{(stone + (500 * (1 - (timer / 28800)))).toFixed(3)}</div> {/* Update to show collected stone over time */}
+                        <div className={`${styles.text} ${styles['stone-amt']}`}>{stone.toFixed(3)}</div>
                         <div className={`${styles.text} ${styles.tmr}`}>{`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}</div>
                     </div>
                 </div>
@@ -94,10 +86,9 @@ const HomeScreen = () => {
                 </button>
             )}
 
-            {/* Tab Bar should always be visible */}
             <div className={styles['tab-bar']}>
-                <button className={styles['tab-btn']}>Rewards</button>
-                <button className={styles['tab-btn']}>Friends</button>
+                <button className={styles['tab-btn']} onClick={() => window.location.href = '/tasks'}>Rewards</button>
+                <button className={styles['tab-btn']} onClick={() => window.location.href = '/home'}>Friends</button>
             </div>
         </div>
     );
