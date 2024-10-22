@@ -1,9 +1,3 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 const nextConfig = {
   webpack: (config, { isServer }) => {
     if (!isServer) {
@@ -17,11 +11,7 @@ const nextConfig = {
         url: false,
       };
     }
-
-    config.cache = {
-      type: 'memory',
-    };
-
+    
     return config;
   },
 };
