@@ -1,0 +1,257 @@
+.tasks-scr {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    background: var(--b);
+    overflow-y: scroll;
+}
+
+.tasks-scr .login-fr {
+    display: flex;
+    flex-direction: column;
+    align-items: space-around;
+    padding: 1% 2% 0;
+    gap: 2%;
+    position: absolute;
+    width: 100vw;
+    height: 21.56vh;
+    top: 0;
+    overflow-y: scroll;
+}
+
+.tasks-scr .login-fr .login-text {
+    display: flex;
+    align-self: flex-start;
+    justify-content: flex-start;
+    width: auto;
+    height: auto;
+    font-family: var(--pf);
+    font-weight: 600;
+    font-size: var(--fs-m);
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    color: var(--w);
+}
+
+.tasks-scr .login-fr .days {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 90.29vw;
+    height: 27.78vh;
+    gap: 0.3125rem;
+}
+
+.tasks-scr .days .day {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: space-around;
+    padding: 0 1%;
+    gap: 0.625rem;
+    position: absolute;
+    width: 13.04%;
+    height: 100%;
+    background: var(--b);
+    border: 1px solid var(--w);
+    border-radius: 0.625rem;
+}
+
+.tasks-scr .days .day .text {
+    font-family: var(--pf);
+    font-weight: 600;
+    font-size: 0.6875rem;
+    line-height: 0.625rem;
+    letter-spacing: 0.03125rem;
+    color: var(--w);
+}
+
+.tasks-scr .days .day .coinsamt-fr {
+    width: 68.01%;
+    height: 20%;
+}
+
+.tasks-scr .login-fr .claim-btn {
+    position: absolute;
+    width: 85%;
+    height: 20.2%;
+    background: #F5F5F5;
+    border-radius: var(--br);
+    bottom: 31.8%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tasks-scr .login-fr .claim-btn .text {
+    width: auto;
+    height: 1rem;
+    font-family: var(--pf);
+    font-weight: 600;
+    font-size: var(--fs-m);
+    line-height: var(--lh);
+    color: #1E1E1E;
+}
+
+.tasks-scr .login-fr .24h-tmr {
+    box-sizing: border-box;
+    background: #383838;
+    border: 1px solid #E7E7E7;
+    border-radius: var(--br);
+    width: 85%;
+    height: 20.2%;
+    bottom: 31.8%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tasks-scr .login-fr .24h-tmr .text {
+    width: auto;
+    height: 1rem;
+    font-family: var(--pf);
+    font-weight: 600;
+    font-size: var(--fs-m);
+    line-height: var(--lh);
+    color: #B3B3B3;
+}
+
+/* Tasks List */
+.tasks-scr .tasks-list {
+    display: flex;
+    flex-direction: column;
+    width: 94.66vw;
+    height: auto;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+    overflow-y: scroll;
+}
+
+.tasks-scr .tasks-list .task {
+    width: 94.87%;
+    height: 70px;
+    background: #222222;
+    border-radius: 15px;
+    position: relative;
+}
+
+.tasks-scr .tasks-list .task .text {
+    position: absolute;
+    width: auto;
+    height: 13px;
+    left: 7.57%;
+    top: calc(50% - 13px/2 - 6.37px);
+    font-family: var(--pf);
+    font-weight: 700;
+    font-size: 0.8125rem;
+    line-height: 100%;
+    display: flex;
+    align-items: center;
+    color: var(--w);
+}
+
+.tasks-scr .tasks-list .task .coinsamt-fr {
+    position: absolute;
+    width: 9.73%;
+    height: 15.71%;
+    top: 54%;
+    left: 7.57%;
+}
+
+.tasks-scr .tasks-list .task .buttons {
+    position: absolute;
+    width: 18.92%;
+    height: 50%;
+    right: 5.14%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    border-radius: 0.5rem;
+}
+
+.tasks-scr .tasks-list .task .buttons .text {
+    display: flex;
+    align-self: center;
+    width: auto;
+    height: auto;
+    font-family: var(--pf);
+    font-weight: 600;
+    font-size: var(--fs-m);
+    line-height: var(--lh);
+    text-align: center;
+}
+
+.tasks-scr .tasks-list .task .buttons.go {
+    background: var(--b);
+}
+
+.tasks-scr .tasks-list .task .buttons.go .text {
+    color: var(--w);
+}
+
+.tasks-scr .tasks-list .task .buttons.progress {
+    background: #383838;
+}
+
+.tasks-scr .tasks-list .task .buttons.progress .text {
+    color: #B3B3B3;
+}
+
+.tasks-scr .tasks-list .task .buttons.claim {
+    background: #F5F5F5;
+}
+
+.tasks-scr .tasks-list .task .buttons.claim .text {
+    color: #1E1E1E;
+}
+
+.tasks-scr .tasks-list .task .buttons.completed {
+    background: #383838;
+}
+
+.tasks-scr .tasks-list .task .buttons.completed .icon {
+    background: url('/icons/completed.svg') no-repeat center;
+    background-size: contain;
+}
+
+/* Failed Task Popup */
+.tasks-scr .failed-popup {
+    position: relative;
+    width: 88.11vw;
+    height: 5.56vh;
+    border-radius: 0.625rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    top: 2.1%;
+    background: var(--b);
+}
+
+.tasks-scr .failed-popup .text {
+    position: absolute;
+    width: auto;
+    height: auto;
+    left: 2%;
+    top: 1.5%;
+    font-family: var(--pf);
+    font-weight: 600;
+    font-size: var(--fs-l);
+    line-height: var(--lh);
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.00625rem;
+    color: var(--w);
+}
+
+.tasks-scr .tab-bar .tab-btn.tab-rewards .icon,
+.tasks-scr .tab-bar .tab-btn.tab-rewards .text {
+    color: #FFFFFF;
+}
