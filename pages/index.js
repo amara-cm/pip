@@ -57,32 +57,41 @@ const HomeScreen = () => {
     };
 
     return (
-        <div className={styles['home-scr']}>
-            <div className={styles.coins}>
-                <div className={styles['coinsamt-fr']}>
-                    <div className={styles['coin-icon']}></div>
-                    <div className={styles['coin-amt']}>{coins}</div>
-                </div>
+    <div className={styles['home-scr']}>
+        <div className={styles.coins}>
+            <div className={styles['coinsamt-fr']}>
+                <div className={styles['coin-icon']}></div>
+                <div className={styles['coin-amt']}>{coins}</div>
             </div>
+        </div>
+
+        {/* Conditionally show the Mine or Collecting UI */}
+        {!mining ? (
             <button className={styles['mine-btn']} onClick={startMining}>
                 <div className={styles.text}>Mine</div>
             </button>
-            {mining && (
-                <div className={styles['8h-tmr']}>
-                    <div className={styles.frame}>
-                        <div className={`${styles.text} ${styles.collecting}`}>Collecting</div>
-                        <div className={`${styles.text} ${styles['stone-amt']}`}>{stone}</div>
-                        <div className={`${styles.text} ${styles.tmr}`}>{`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}</div>
-                    </div>
+        ) : (
+            <div className={styles['8h-tmr']}>
+                <div className={styles.frame}>
+                    <div className={`${styles.text} ${styles.collecting}`}>Collecting</div>
+                    <div className={`${styles.text} ${styles['stone-amt']}`}>{stone.toFixed(3)}</div>
+                    <div className={`${styles.text} ${styles.tmr}`}>{`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}</div>
                 </div>
-            )}
-            {stone > 0 && (
-                <button className={styles['sell-btn']} onClick={handleSell}>
-                    <div className={styles.text}>Sell</div>
-                </button>
-            )}
+            </div>
+        )}
+
+        {stone > 0 && (
+            <button className={styles['sell-btn']} onClick={handleSell}>
+                <div className={styles.text}>Sell</div>
+            </button>
+        )}
+
+        {/* Tab Bar should always be visible */}
+        <div className={styles['tab-bar']}>
+            <button className={styles['tab-btn']}>Rewards</button>
+            <button className={styles['tab-btn']}>Friends</button>
         </div>
-    );
-};
+    </div>
+);
 
 export default HomeScreen;
