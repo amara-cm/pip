@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import styles from '../styles/Home.module.css';
 
 const HomeScreen = () => {
     const [coins, setCoins] = useState(0);
