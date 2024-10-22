@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import styles from '../styles/Loading.module.css';
 
 const Loading = () => {
   const [progress, setProgress] = useState(0);
@@ -19,8 +20,8 @@ const Loading = () => {
   }, [router]);
 
   return (
-    <div className="loading-scr">
-      <div className="text">Loading... {progress}%</div>
+    <div className={styles['loading-scr']}>
+      <div className={styles.text}>Loading... {progress}%</div>
     </div>
   );
 };
