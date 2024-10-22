@@ -1,12 +1,14 @@
+import styles from '../styles/Error.module.css';
+
 const Error = () => {
   const handleRefresh = () => {
     window.location.reload();
   };
 
   return (
-    <div className="error-scr">
-      <div className="text">Try Again</div>
-      <button className="refresh-btn" onClick={handleRefresh}>Refresh</button>
+    <div className={styles['error-scr']}>
+      <div className={styles.text}>Try Again</div>
+      <button className={styles['refresh-btn']} onClick={handleRefresh}>Refresh</button>
     </div>
   );
 };
