@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import styles from '../styles/Home.module.css';
 
 const HomeScreen = () => {
     const [coins, setCoins] = useState(0);
@@ -58,28 +59,28 @@ const HomeScreen = () => {
     };
 
     return (
-        <div className="home-scr">
-            <div className="coins">
-                <div className="coinsamt-fr">
-                    <div className="coin-icon"></div>
-                    <div className="coin-amt">{coins}</div>
+        <div className={styles['home-scr']}>
+            <div className={styles.coins}>
+                <div className={styles['coinsamt-fr']}>
+                    <div className={styles['coin-icon']}></div>
+                    <div className={styles['coin-amt']}>{coins}</div>
                 </div>
             </div>
-            <button className="mine-btn" onClick={startMining}>
-                <div className="text">Mine</div>
+            <button className={styles['mine-btn']} onClick={startMining}>
+                <div className={styles.text}>Mine</div>
             </button>
             {mining && (
-                <div className="8h-tmr">
-                    <div className="frame">
-                        <div className="text collecting">Collecting</div>
-                        <div className="text stone-amt">{stone}</div>
-                        <div className="text tmr">{`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}</div>
+                <div className={styles['8h-tmr']}>
+                    <div className={styles.frame}>
+                        <div className={`${styles.text} ${styles.collecting}`}>Collecting</div>
+                        <div className={`${styles.text} ${styles['stone-amt']}`}>{stone}</div>
+                        <div className={`${styles.text} ${styles.tmr}`}>{`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}</div>
                     </div>
                 </div>
             )}
             {stone > 0 && (
-                <button className="sell-btn" onClick={handleSell}>
-                    <div className="text">Sell</div>
+                <button className={styles['sell-btn']} onClick={handleSell}>
+                    <div className={styles.text}>Sell</div>
                 </button>
             )}
         </div>
