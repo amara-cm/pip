@@ -1,21 +1,21 @@
 .home-scr {
-    position: relative;
     display: flex;
-    justify-content: center;
-    align-items: center; /* Center items vertically */
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 100vw;
     height: 100vh;
     background: var(--b);
-    overflow: hidden; /* Prevent overflow */
+    overflow: hidden;
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
 }
 
 .coins {
     display: flex;
-    justify-content: center; /* Center coins */
     align-items: center;
     gap: var(--gap);
-    margin-top: 20px; /* Optional margin for spacing */
+    margin-top: 20px;
 }
 
 .coins .coin-icon {
@@ -32,18 +32,19 @@
     letter-spacing: -0.02em;
     color: #FFFEFD;
     line-height: var(--lh);
+    margin-right: 0.5rem; /* Add spacing between the amount and the icon */
 }
 
 .mine-btn, 
 .8h-tmr, 
 .sell-btn {
     display: flex;
-    justify-content: center; /* Center content within buttons */
+    justify-content: center;
     align-items: center;
-    width: 84.87vw; /* Adjust width as necessary */
+    width: 84.87vw;
     height: 5.45vh;
     border-radius: var(--br);
-    margin-top: 20px; /* Add margin for spacing */
+    margin-top: 20px;
 }
 
 .mine-btn .text, 
@@ -62,11 +63,11 @@
 
 .8h-tmr {
     display: flex;
-    justify-content: space-between; /* Space out elements */
+    justify-content: space-between;
     background: #383838;
     border: 1px solid #E7E7E7;
     border-radius: var(--br);
-    padding: 10px; /* Add padding for better appearance */
+    padding: 10px;
 }
 
 .8h-tmr .frame {
@@ -94,9 +95,9 @@
 .tab-bar {
     position: fixed;
     bottom: 0;
-    width: 100vw; /* Make sure tab bar stretches across the bottom */
-    display: flex; /* Flex to layout buttons */
-    justify-content: space-around; /* Evenly space buttons */
-    padding: 10px 0; /* Add padding for aesthetics */
-    background: var(--bg-color); /* Add a background color if needed */
+    width: 100vw;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    background: var(--bg-color);
 }
