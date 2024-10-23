@@ -32,6 +32,21 @@ const HomeScreen = () => {
         loadUserData();
     }, []);
 
+    useEffect(() => {
+        const storedMiningData = localStorage.getItem('miningData');
+        if (storedMiningData) {
+            const { storedCoins, storedStone, storedTimer, storedMining } = JSON.parse(storedMiningData);
+            setCoins(storedCoins);
+            setStone(storedStone);
+            setTimer(storedTimer);
+            setMining(storedMining);
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('miningData', JSON.stringify({ coins, stone, timer, mining }));
+    }, [coins, stone, timer, mining]);
+
     const startMining = () => {
         if (!mining) {
             setMining(true);
@@ -61,8 +76,8 @@ const HomeScreen = () => {
         <div className={styles['home-scr']}>
             <div className={styles.coins}>
                 <div className={styles['coinsamt-fr']}>
-                    <div className={styles['coin-icon']}></div>
                     <div className={styles['coin-amt']}>{coins}</div>
+                    <div className={styles['coin-icon']}></div>
                 </div>
             </div>
             
@@ -88,7 +103,7 @@ const HomeScreen = () => {
 
             <div className={styles['tab-bar']}>
                 <button className={styles['tab-btn']} onClick={() => window.location.href = '/tasks'}>Rewards</button>
-                <button className={styles['tab-btn']} onClick={() => window.location.href = '/home'}>Friends</button>
+                <button className={styles['tab-btn']} onClick={() => window.location.href = '/friends'}>Friends</button>
             </div>
         </div>
     );
