@@ -32,6 +32,7 @@
     letter-spacing: -0.02em;
     color: #FFFEFD;
     line-height: var(--lh);
+    display: inline-block;
 }
 
 .mainicon {
@@ -85,7 +86,6 @@
 }
 
 .8h-tmr .frame .text.collecting, 
-.8h-tmr .frame .text.stone-amt, 
 .8h-tmr .frame .text.tmr {
     color: #B3B3B3;
 }
