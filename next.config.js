@@ -1,4 +1,6 @@
-const nextConfig = {
+import BuilderDevTools from "@builder.io/dev-tools/next";
+
+const nextConfig = BuilderDevTools()({
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
@@ -14,9 +16,8 @@ const nextConfig = {
         child_process: false,
       };
     }
-
     return config;
   },
-};
+});
 
 export default nextConfig;
