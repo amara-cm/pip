@@ -8,43 +8,18 @@ const HomeScreen = () => {
     const [mining, setMining] = useState(false);
 
     useEffect(() => {
-        const loadUserData = async () => {
-            try {
-                const response = await fetch('/api/user', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ telegramUsername: 'lons' }),
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to load user data');
-                }
-
-                const user = await response.json();
-                setCoins(user.coins);
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        };
-
-        loadUserData();
-    }, []);
-
-    useEffect(() => {
-        const storedMiningData = localStorage.getItem('miningData');
-        if (storedMiningData) {
-            const { storedCoins, storedStone, storedTimer, storedMining } = JSON.parse(storedMiningData);
-            setCoins(storedCoins);
-            setStone(storedStone);
-            setTimer(storedTimer);
-            setMining(storedMining);
+        const savedState = localStorage.getItem('gameState');
+        if (savedState) {
+            const { coins, stone, timer, mining } = JSON.parse(savedState);
+            setCoins(coins);
+            setStone(stone);
+            setTimer(timer);
+            setMining(mining);
         }
     }, []);
 
     useEffect(() => {
-        localStorage.setItem('miningData', JSON.stringify({ coins, stone, timer, mining }));
+        localStorage.setItem('gameState', JSON.stringify({ coins, stone, timer, mining }));
     }, [coins, stone, timer, mining]);
 
     const startMining = () => {
@@ -57,7 +32,6 @@ const HomeScreen = () => {
                     if (prev <= 1) {
                         clearInterval(interval);
                         setMining(false);
-                        setCoins(prevCoins => prevCoins + 500); // Add coins after mining
                         return 0;
                     }
                     return prev - 1;
@@ -76,34 +50,34 @@ const HomeScreen = () => {
         <div className={styles['home-scr']}>
             <div className={styles.coins}>
                 <div className={styles['coinsamt-fr']}>
-                    <div className={styles['coin-amt']}>{coins}</div>
                     <div className={styles['coin-icon']}></div>
+                    <div className={styles['coin-amt']}>{coins}</div>
                 </div>
             </div>
             
+            <img src="/mainicon.gif" alt="Main Icon" className={styles.mainicon} />
+
             {!mining ? (
                 <button className={styles['mine-btn']} onClick={startMining}>
                     <div className={styles.text}>Mine</div>
                 </button>
-            ) : (
+            ) : timer > 0 ? (
                 <div className={styles['8h-tmr']}>
                     <div className={styles.frame}>
-                        <div className={`${styles.text} ${styles.collecting}`}>Collecting</div>
-                        <div className={`${styles.text} ${styles['stone-amt']}`}>{stone.toFixed(3)}</div>
+                        <div className={`${styles.text} ${styles.collecting}`}>Collecting {stone.toFixed(3)}</div>
                         <div className={`${styles.text} ${styles.tmr}`}>{`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}</div>
                     </div>
                 </div>
-            )}
-
-            {stone > 0 && (
+            ) : (
                 <button className={styles['sell-btn']} onClick={handleSell}>
-                    <div className={styles.text}>Sell</div>
+                    <div className={styles.text}>Sell <img src="/icons/gamecoin.svg" alt="Coin Icon" /> +500</div>
                 </button>
             )}
 
             <div className={styles['tab-bar']}>
                 <button className={styles['tab-btn']} onClick={() => window.location.href = '/tasks'}>Rewards</button>
-                <button className={styles['tab-btn']} onClick={() => window.location.href = '/friends'}>Friends</button>
+                <button className={styles['tab-btn']} onClick={() => window.location.href = '/home'}>Friends</button>
+                <button className={styles['tab-btn']} onClick={(e) => e.preventDefault()}>Site</button>
             </div>
         </div>
     );
