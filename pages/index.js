@@ -10,16 +10,22 @@ const HomeScreen = () => {
     useEffect(() => {
         const savedState = localStorage.getItem('gameState');
         if (savedState) {
-            const { coins, stone, timer, mining } = JSON.parse(savedState);
+            const { coins, stone, timer, mining, lastUpdate } = JSON.parse(savedState);
             setCoins(coins);
             setStone(stone);
-            setTimer(timer);
-            setMining(mining);
+            const elapsed = Math.floor((Date.now() - lastUpdate) / 1000);
+            if (mining && elapsed < timer) {
+                setTimer(timer - elapsed);
+                setStone(stone + ((1 / 28800) * elapsed));
+            } else {
+                setTimer(0);
+                setMining(false);
+            }
         }
     }, []);
 
     useEffect(() => {
-        localStorage.setItem('gameState', JSON.stringify({ coins, stone, timer, mining }));
+        localStorage.setItem('gameState', JSON.stringify({ coins, stone, timer, mining, lastUpdate: Date.now() }));
     }, [coins, stone, timer, mining]);
 
     const startMining = () => {
