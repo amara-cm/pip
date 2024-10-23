@@ -1,18 +1,18 @@
 .home-scr {
+    position: relative;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
     width: 100vw;
     height: 100vh;
     background: var(--b);
     overflow: hidden;
-    padding: 0; /* Remove padding */
-    margin: 0; /* Remove margin */
 }
 
 .coins {
     display: flex;
+    justify-content: center;
     align-items: center;
     gap: var(--gap);
     margin-top: 20px;
@@ -32,7 +32,12 @@
     letter-spacing: -0.02em;
     color: #FFFEFD;
     line-height: var(--lh);
-    margin-right: 0.5rem; /* Add spacing between the amount and the icon */
+}
+
+.mainicon {
+    width: 100px;
+    height: 100px;
+    margin-top: 20px;
 }
 
 .mine-btn, 
@@ -100,4 +105,22 @@
     justify-content: space-around;
     padding: 10px 0;
     background: var(--bg-color);
+}
+
+.tab-btn {
+    flex: 1;
+    text-align: center;
+    font-family: var(--pf);
+    font-weight: 600;
+    font-size: var(--fs-m);
+    line-height: var(--lh);
+    color: #FFFFFF;
+    background: none;
+    border: none;
+    outline: none;
+    padding: 10px;
+}
+
+.tab-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
