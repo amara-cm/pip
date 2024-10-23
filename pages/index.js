@@ -76,8 +76,8 @@ const HomeScreen = () => {
 
             <div className={styles['tab-bar']}>
                 <button className={styles['tab-btn']} onClick={() => window.location.href = '/tasks'}>Rewards</button>
-                <button className={styles['tab-btn']} onClick={() => window.location.href = '/home'}>Friends</button>
-                <button className={styles['tab-btn']} onClick={(e) => e.preventDefault()}>Site</button>
+                <button className={styles['tab-btn']} onClick={() => window.location.href = '/home'}>Site</button>
+                <button className={styles['tab-btn']} onClick={() => window.location.href = '/friends'}>Friends</button>
             </div>
         </div>
     );
