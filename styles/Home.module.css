@@ -7,7 +7,8 @@
     width: 100vw;
     height: 100vh;
     background: var(--b);
-    overflow: hidden;
+    overflow-x: hidden; /* Fix right-side overflow */
+    box-sizing: border-box; /* Include padding/borders in element size */
 }
 
 .coins {
@@ -19,8 +20,8 @@
 }
 
 .coins .coin-icon {
-    width: 2.1875rem;
-    height: 2.1875rem;
+    width: 0.9375rem;
+    height: 0.9375rem;
     background: url('/icons/gamecoin.svg') no-repeat center;
     background-size: contain;
 }
@@ -32,7 +33,6 @@
     letter-spacing: -0.02em;
     color: #FFFEFD;
     line-height: var(--lh);
-    display: inline-block;
 }
 
 .mainicon {
@@ -86,6 +86,7 @@
 }
 
 .8h-tmr .frame .text.collecting, 
+.8h-tmr .frame .text.stone-amt, 
 .8h-tmr .frame .text.tmr {
     color: #B3B3B3;
 }
@@ -105,7 +106,7 @@
     display: flex;
     justify-content: space-around;
     padding: 10px 0;
-    background: var(--bg-color);
+    background: var(--b);
 }
 
 .tab-btn {
