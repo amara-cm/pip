@@ -26,14 +26,12 @@
 }
 
 .mine-btn, 
-.8h-tmr, 
-.sell-btn {
+.8h-tmr {
   @apply flex items-center justify-center w-[85vw] h-[6vh] rounded mt-5;
 }
 
 .mine-btn .text, 
-.8h-tmr .text, 
-.sell-btn .text {
+.8h-tmr .text {
   @apply font-sans font-semibold text-center text-base;
 }
 
@@ -56,11 +54,7 @@
 }
 
 .sell-btn {
-  @apply bg-pink-500;
-}
-
-.sell-btn .text {
-  @apply text-white;
+  background-image: url('/public/icons/sell-btn.svg');
 }
 
 .tab-bar {
