@@ -71,42 +71,47 @@ const HomeScreen = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center w-screen h-screen bg-black overflow-hidden">
-            <div className="flex items-center justify-center gap-2 mt-5">
-                <div className="w-4 h-4 bg-[url('/icons/gamecoin.svg')] bg-contain bg-no-repeat"></div>
-                <div className="font-sans font-bold text-4xl text-white">{coins}</div>
+        <div className="home-scr">
+            <div className="coins">
+                <div className="coinsamt-fr">
+                    <div className="coin-icon"></div>
+                    <div className="text">{coins}</div>
+                </div>
             </div>
 
-            <img src="/mainicon.gif" alt="Main Icon" className="w-screen max-h-[80vh] mt-5" />
+            <img src="/mainicon.gif" alt="Main Icon" className="mainicon" />
 
             {!mining ? (
-                <button className="flex items-center justify-center w-[85vw] h-[5.5vh] rounded mt-5 bg-yellow-500" onClick={startMining}>
-                    <div className="font-sans font-semibold text-center text-base text-black">Mine</div>
+                <button className="mine-btn" onClick={startMining}>
+                    <div className="text">Mine</div>
                 </button>
             ) : timer > 0 ? (
-                <div className="flex justify-between items-center w-[85vw] h-[5.5vh] bg-gray-700 border border-gray-200 rounded p-2 mt-5">
-                    <div className="flex gap-2 font-sans font-semibold text-base text-gray-400">
-                        <div>Collecting {stone.toFixed(3)}</div>
-                        <div>{`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}</div>
+                <div className="8h-tmr">
+                    <div className="frame">
+                        <div className="text collecting">Collecting {stone.toFixed(3)}</div>
+                        <div className="text tmr">{`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}</div>
                     </div>
                 </div>
             ) : (
-                <button className="flex items-center justify-center w-[85vw] h-[5.5vh] rounded mt-5 bg-yellow-500" onClick={handleSell}>
-                    <div className="font-sans font-semibold text-center text-base text-white">
+                <button className="sell-btn" onClick={handleSell}>
+                    <div className="text">
                         Sell <img src="/icons/gamecoin.svg" alt="Coin Icon" className="inline-block w-4 h-4" /> +500
                     </div>
                 </button>
             )}
 
-            <div className="fixed bottom-0 flex justify-around w-screen p-2 bg-black">
-                <button className="flex-1 text-center font-sans font-semibold text-base text-white" onClick={() => window.location.href = '/tasks'}>
-                    Rewards
+            <div className="tab-bar">
+                <button className="tab-btn tab-rewards" onClick={() => window.location.href = '/tasks'}>
+                    <div className="icon"></div>
+                    <div className="text">Rewards</div>
                 </button>
-                <button className="flex-1 text-center font-sans font-semibold text-base text-white" onClick={() => window.location.href = '/home'}>
-                    Site
+                <button className="tab-btn tab-site" onClick={() => window.location.href = '/home'}>
+                    <div className="icon"></div>
+                    <div className="text">Site</div>
                 </button>
-                <button className="flex-1 text-center font-sans font-semibold text-base text-white" onClick={() => window.location.href = '/friends'}>
-                    Friends
+                <button className="tab-btn tab-friends" onClick={() => window.location.href = '/friends'}>
+                    <div className="icon"></div>
+                    <div className="text">Friends</div>
                 </button>
             </div>
         </div>
