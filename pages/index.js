@@ -73,10 +73,8 @@ const HomeScreen = () => {
     return (
         <div className="home-scr">
             <div className="coins">
-                <div className="coinsamt-fr">
-                    <div className="coin-icon"></div>
-                    <div className="text">{coins}</div>
-                </div>
+                <div className="coin-icon"></div>
+                <div className="coin-amt">{coins}</div>
             </div>
 
             <img src="/mainicon.gif" alt="Main Icon" className="mainicon" />
