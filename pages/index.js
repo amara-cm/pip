@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import styles from '../styles/Home.module.css';
 
 const HomeScreen = () => {
     const [coins, setCoins] = useState(0);
@@ -72,66 +71,42 @@ const HomeScreen = () => {
     };
 
     return (
-        <div className={styles['home-scr']}>
-            <div className={styles.coins}>
-                <div className={styles['coinsamt-fr']}>
-                    <div className={styles['coin-icon']}></div>
-                    <div className={styles['coin-amt']}>{coins}</div>
-                </div>
+        <div className="flex flex-col items-center justify-center w-screen h-screen bg-black overflow-hidden">
+            <div className="flex items-center justify-center gap-2 mt-5">
+                <div className="w-4 h-4 bg-[url('/icons/gamecoin.svg')] bg-contain bg-no-repeat"></div>
+                <div className="font-sans font-bold text-4xl text-white">{coins}</div>
             </div>
 
-            <img src="/mainicon.gif" alt="Main Icon" className={styles.mainicon} />
+            <img src="/mainicon.gif" alt="Main Icon" className="w-screen max-h-[80vh] mt-5" />
 
             {!mining ? (
-                <button className={styles['mine-btn']} onClick={startMining}>
-                    <div className={styles.text}>Mine</div>
+                <button className="flex items-center justify-center w-[85vw] h-[5.5vh] rounded mt-5 bg-yellow-500" onClick={startMining}>
+                    <div className="font-sans font-semibold text-center text-base text-black">Mine</div>
                 </button>
             ) : timer > 0 ? (
-                <div className={styles['8h-tmr']}>
-                    <div className={styles.frame}>
-                        <div className={`${styles.text} ${styles.collecting}`}>
-                            Collecting {stone.toFixed(3)}
-                        </div>
-                        <div className={`${styles.text} ${styles.tmr}`}>
-                            {`${Math.floor(timer / 3600)}:${Math.floor(
-                                (timer % 3600) / 60
-                            )
-                                .toString()
-                                .padStart(2, '0')}:${(timer % 60)
-                                .toString()
-                                .padStart(2, '0')}`}
-                        </div>
+                <div className="flex justify-between items-center w-[85vw] h-[5.5vh] bg-gray-700 border border-gray-200 rounded p-2 mt-5">
+                    <div className="flex gap-2 font-sans font-semibold text-base text-gray-400">
+                        <div>Collecting {stone.toFixed(3)}</div>
+                        <div>{`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}</div>
                     </div>
                 </div>
             ) : (
-                <button className={styles['sell-btn']} onClick={handleSell}>
-                    <div className={styles.text}>
-                        Sell <img src="/icons/gamecoin.svg" alt="Coin Icon" /> +500
+                <button className="flex items-center justify-center w-[85vw] h-[5.5vh] rounded mt-5 bg-yellow-500" onClick={handleSell}>
+                    <div className="font-sans font-semibold text-center text-base text-white">
+                        Sell <img src="/icons/gamecoin.svg" alt="Coin Icon" className="inline-block w-4 h-4" /> +500
                     </div>
                 </button>
             )}
 
-            <div className={styles['tab-bar']}>
-                <button
-                    className={`${styles['tab-btn']} tab-rewards`}
-                    onClick={() => window.location.href = '/tasks'}
-                >
-                    <div className={styles.icon}></div>
-                    <div className={styles.text}>Rewards</div>
+            <div className="fixed bottom-0 flex justify-around w-screen p-2 bg-black">
+                <button className="flex-1 text-center font-sans font-semibold text-base text-white" onClick={() => window.location.href = '/tasks'}>
+                    Rewards
                 </button>
-                <button
-                    className={`${styles['tab-btn']} tab-site`}
-                    onClick={() => window.location.href = '/home'}
-                >
-                    <div className={styles.icon}></div>
-                    <div className={styles.text}>Site</div>
+                <button className="flex-1 text-center font-sans font-semibold text-base text-white" onClick={() => window.location.href = '/home'}>
+                    Site
                 </button>
-                <button
-                    className={`${styles['tab-btn']} tab-friends`}
-                    onClick={() => window.location.href = '/friends'}
-                >
-                    <div className={styles.icon}></div>
-                    <div className={styles.text}>Friends</div>
+                <button className="flex-1 text-center font-sans font-semibold text-base text-white" onClick={() => window.location.href = '/friends'}>
+                    Friends
                 </button>
             </div>
         </div>
