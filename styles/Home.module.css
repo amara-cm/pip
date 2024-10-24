@@ -7,12 +7,12 @@
 }
 
 .coins {
-  @apply flex items-center justify-center gap-2.5;
+  @apply flex items-center justify-center gap-[0.625rem];
   margin-top: 25%;
 }
 
 .coins .coin-icon {
-  @apply w-4 h-4 bg-contain bg-no-repeat;
+  @apply w-[1rem] h-[1rem] bg-contain bg-no-repeat;
   background-image: url('/icons/gamecoin.svg');
 }
 
@@ -42,11 +42,11 @@
 }
 
 .8h-tmr {
-  @apply flex justify-between bg-gray-700 border border-gray-200 rounded p-2;
+  @apply flex justify-between bg-gray-700 border border-gray-200 rounded p-[0.5rem];
 }
 
 .8h-tmr .frame {
-  @apply flex gap-2.5 font-sans font-semibold text-base;
+  @apply flex gap-[0.625rem] font-sans font-semibold text-base;
 }
 
 .8h-tmr .frame .text.collecting, 
@@ -64,22 +64,26 @@
 }
 
 .tab-bar {
-  @apply fixed bottom-0 w-screen flex justify-around p-2 bg-black;
+  @apply fixed bottom-0 w-screen flex justify-around p-[0.5rem] bg-black;
   border-top: 1px solid rgba(23, 23, 23, 0.5);
 }
 
 .tab-btn {
-  @apply flex-1 text-center font-sans font-semibold text-base text-white bg-none border-none outline-none p-2.5;
+  @apply flex-1 flex items-center justify-center font-sans font-semibold text-base text-white bg-none border-none outline-none p-[0.625rem];
 }
 
 .tab-btn .icon {
-  @apply w-[27px] h-[23px] mb-1;
+  @apply w-[1.6875rem] h-[1.4375rem];
 }
 
-.tab-btn .text {
-  @apply mt-1;
+.tab-rewards {
+  background-image: url('/public/icons/rewards.svg');
 }
 
 .tab-site {
-  @apply pointer-events-none text-white;
+  background-image: url('/public/icons/activated-site.svg');
+}
+
+.tab-friends {
+  background-image: url('/public/icons/friends.svg');
 }
