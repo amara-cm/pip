@@ -7,7 +7,8 @@
 }
 
 .coins {
-  @apply flex items-center justify-center gap-2.5 mt-5;
+  @apply flex items-center justify-center gap-2.5;
+  margin-top: 25%;
 }
 
 .coins .coin-icon {
@@ -21,6 +22,7 @@
 
 .mainicon {
   @apply w-auto h-auto max-h-[80vh] mt-5;
+  margin: 0 auto; /* Center mainicon.gif */
 }
 
 .mine-btn, 
@@ -63,6 +65,7 @@
 
 .tab-bar {
   @apply fixed bottom-0 w-screen flex justify-around p-2 bg-black;
+  border-top: 1px solid rgba(128, 128, 128, 0.07);
 }
 
 .tab-btn {
@@ -79,4 +82,5 @@
 
 .tab-site {
   @apply pointer-events-none;
+  @apply text-white;
 }
