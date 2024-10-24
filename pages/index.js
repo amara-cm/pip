@@ -5,7 +5,7 @@ import * as React from "react";
 function MiningButton() {
   return (
     <button 
-      className="overflow-hidden self-center px-16 py-4 mt-14 w-[84vw] text-base font-semibold leading-none whitespace-nowrap rounded-lg bg-neutral-100 text-stone-900"
+      className="overflow-hidden self-center px-16 py-4 mt-14 w-[85vw] text-base font-semibold leading-none whitespace-nowrap rounded-lg bg-neutral-100 text-stone-900"
       aria-label="Start mining"
     >
       Mine
@@ -50,7 +50,7 @@ function MiningStats() {
         loading="lazy" 
         src="/mainicon.gif" 
         alt="Mining visualization"
-        className="object-contain mt-6 w-full aspect-[0.92]" 
+        className="mainicon" 
       />
       <MiningButton />
       <section className="flex gap-2.5 justify-center items-center mt-14 bg-black">
@@ -138,7 +138,7 @@ const HomeScreen = () => {
     <div className="home-scr">
       <MiningStats />
       <div className="coins" style={{ marginTop: '25%' }}>
-        <div className="coin-icon" style={{ width: '35px', height: '35px' }}></div>
+        <div className="coin-icon"></div>
         <div className="coin-amt">{coins}</div>
       </div>
 
