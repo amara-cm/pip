@@ -1,6 +1,69 @@
 import { useState, useEffect } from 'react';
 import * as React from "react";
 
+// Including MiningStats components directly
+function MiningButton() {
+  return (
+    <button 
+      className="overflow-hidden self-center px-16 py-4 mt-14 w-[84vw] text-base font-semibold leading-none whitespace-nowrap rounded-lg bg-neutral-100 text-stone-900"
+      aria-label="Start mining"
+    >
+      Mine
+    </button>
+  );
+}
+
+function MiningSlot() {
+  return (
+    <div 
+      className="flex shrink-0 w-32 bg-black h-[68px]"
+      role="status"
+      aria-label="Mining slot"
+    />
+  );
+}
+
+function StatDisplay({ iconSrc, value }) {
+  return (
+    <div className="flex gap-2 justify-center items-center self-center text-4xl font-bold tracking-tighter leading-none text-white whitespace-nowrap">
+      <img 
+        loading="lazy" 
+        src={iconSrc} 
+        alt=""
+        className="object-contain shrink-0 self-stretch my-auto aspect-square w-[35px]" 
+      />
+      <p className="self-stretch my-auto">{value}</p>
+    </div>
+  );
+}
+
+function MiningStats() {
+  const slots = [1, 2, 3];
+
+  return (
+    <main className="flex overflow-hidden flex-col pt-44 mx-auto w-full bg-black max-w-[480px] h-screen justify-center">
+      <StatDisplay 
+        iconSrc="/icons/gamecoin.svg"
+        value="0"
+      />
+      <img 
+        loading="lazy" 
+        src="/mainicon.gif" 
+        alt="Mining visualization"
+        className="object-contain mt-6 w-full aspect-[0.92]" 
+      />
+      <MiningButton />
+      <section className="flex gap-2.5 justify-center items-center mt-14 bg-black">
+        <div className="flex overflow-hidden gap-2 self-stretch px-2 my-auto border-t border-zinc-500 border-opacity-10 w-[412px]">
+          {slots.map((slot) => (
+            <MiningSlot key={slot} />
+          ))}
+        </div>
+      </section>
+    </main>
+  );
+}
+
 const HomeScreen = () => {
   const [coins, setCoins] = useState(0);
   const [stone, setStone] = useState(0);
@@ -73,17 +136,11 @@ const HomeScreen = () => {
 
   return (
     <div className="home-scr">
-      <div className="coins">
+      <MiningStats />
+      <div className="coins" style={{ marginTop: '25%' }}>
         <div className="coin-icon" style={{ width: '35px', height: '35px' }}></div>
         <div className="coin-amt">{coins}</div>
       </div>
-
-      <img 
-        loading="lazy" 
-        src="/mainicon.gif" 
-        alt="Mining visualization"
-        className="mainicon" 
-      />
 
       {!mining ? (
         <button className="mine-btn" onClick={startMining}>
