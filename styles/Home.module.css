@@ -3,68 +3,68 @@
 @tailwind utilities;
 
 .home-scr {
-    @apply relative flex flex-col items-center justify-center w-screen h-screen bg-black overflow-x-hidden;
+  @apply relative flex flex-col items-center justify-center w-screen h-screen bg-black overflow-x-hidden;
 }
 
 .coins {
-    @apply flex items-center justify-center gap-2.5 mt-5;
+  @apply flex items-center justify-center gap-2.5 mt-5;
 }
 
 .coins .coin-icon {
-    @apply w-4 h-4 bg-contain bg-no-repeat;
-    background-image: url('/icons/gamecoin.svg');
+  @apply w-4 h-4 bg-contain bg-no-repeat;
+  background-image: url('/icons/gamecoin.svg');
 }
 
 .coins .coin-amt {
-    @apply font-sans font-bold text-4xl text-white;
+  @apply font-sans font-bold text-4xl text-white;
 }
 
 .mainicon {
-    @apply w-screen h-auto max-h-[80vh] mt-5;
+  @apply w-screen h-auto max-h-[80vh] mt-5;
 }
 
 .mine-btn, 
 .8h-tmr, 
 .sell-btn {
-    @apply flex items-center justify-center w-[85vw] h-[5.5vh] rounded mt-5;
+  @apply flex items-center justify-center w-[85vw] h-[5.5vh] rounded mt-5;
 }
 
 .mine-btn .text, 
 .8h-tmr .text, 
 .sell-btn .text {
-    @apply font-sans font-semibold text-center text-base;
+  @apply font-sans font-semibold text-center text-base;
 }
 
 .mine-btn .text {
-    @apply text-black;
+  @apply text-black;
 }
 
 .8h-tmr {
-    @apply flex justify-between bg-gray-700 border border-gray-200 rounded p-2;
+  @apply flex justify-between bg-gray-700 border border-gray-200 rounded p-2;
 }
 
 .8h-tmr .frame {
-    @apply flex gap-2.5 font-sans font-semibold text-base;
+  @apply flex gap-2.5 font-sans font-semibold text-base;
 }
 
 .8h-tmr .frame .text.collecting, 
 .8h-tmr .frame .text.stone-amt, 
 .8h-tmr .frame .text.tmr {
-    @apply text-gray-400;
+  @apply text-gray-400;
 }
 
 .sell-btn {
-    @apply bg-pink-500;
+  @apply bg-pink-500;
 }
 
 .sell-btn .text {
-    @apply text-white;
+  @apply text-white;
 }
 
 .tab-bar {
-    @apply fixed bottom-0 w-screen flex justify-around p-2 bg-black;
+  @apply fixed bottom-0 w-screen flex justify-around p-2 bg-black;
 }
 
 .tab-btn {
-    @apply flex-1 text-center font-sans font-semibold text-base text-white bg-none border-none outline-none p-2.5;
+  @apply flex-1 text-center font-sans font-semibold text-base text-white bg-none border-none outline-none p-2.5;
 }
