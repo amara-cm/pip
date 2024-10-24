@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import * as React from "react";
 
-// Including MiningStats components directly
 function MiningButton() {
   return (
     <button 
-      className="overflow-hidden self-center px-16 py-4 mt-14 w-[84vw] text-base font-semibold leading-none whitespace-nowrap rounded-lg bg-neutral-100 text-stone-900"
+      className="overflow-hidden self-center px-16 py-4 mt-14 w-[85vw] h-[5.5vh] text-base font-semibold leading-none whitespace-nowrap rounded-lg bg-neutral-100 text-stone-900"
       aria-label="Start mining"
     >
       Mine
