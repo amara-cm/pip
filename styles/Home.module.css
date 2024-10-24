@@ -1,124 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .home-scr {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 100vw;
-    height: 100vh;
-    background: var(--b);
-    overflow-x: hidden; /* Fix right-side overflow */
-    box-sizing: border-box; /* Include padding/borders in element size */
+    @apply relative flex flex-col items-center justify-center w-screen h-screen bg-black overflow-x-hidden;
 }
 
 .coins {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: var(--gap);
-    margin-top: 20px;
+    @apply flex items-center justify-center gap-2 mt-5;
 }
 
 .coins .coin-icon {
-    width: 0.9375rem;
-    height: 0.9375rem;
-    background: url('/icons/gamecoin.svg') no-repeat center;
-    background-size: contain;
+    @apply w-4 h-4 bg-contain bg-no-repeat;
+    background-image: url('/icons/gamecoin.svg');
 }
 
 .coins .coin-amt {
-    font-family: 'Outfit', sans-serif;
-    font-weight: 700;
-    font-size: 2.5rem;
-    letter-spacing: -0.02em;
-    color: #FFFEFD;
-    line-height: var(--lh);
+    @apply font-sans font-bold text-4xl text-white;
 }
 
 .mainicon {
-    width: 100vw;
-    height: auto;
-    max-height: 80vh; /* Preserve aspect ratio */
-    margin-top: 20px;
+    @apply w-screen h-auto max-h-[80vh] mt-5;
 }
 
 .mine-btn, 
 .8h-tmr, 
 .sell-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 84.87vw;
-    height: 5.45vh;
-    border-radius: var(--br);
-    margin-top: 20px;
+    @apply flex items-center justify-center w-[85vw] h-[5.5vh] rounded mt-5;
 }
 
 .mine-btn .text, 
 .8h-tmr .text, 
 .sell-btn .text {
-    font-family: var(--pf);
-    font-weight: 600;
-    text-align: center;
-    font-size: var(--fs-m);
-    line-height: var(--lh);
+    @apply font-sans font-semibold text-center text-base;
 }
 
 .mine-btn .text {
-    color: #1E1E1E;
+    @apply text-black;
 }
 
 .8h-tmr {
-    display: flex;
-    justify-content: space-between;
-    background: #383838;
-    border: 1px solid #E7E7E7;
-    border-radius: var(--br);
-    padding: 10px;
+    @apply flex justify-between bg-gray-700 border border-gray-200 rounded p-2;
 }
 
 .8h-tmr .frame {
-    display: flex;
-    gap: var(--gap);
-    font-family: 'Outfit';
-    font-weight: 600;
-    font-size: var(--fs-m);
+    @apply flex gap-2 font-sans font-semibold text-base;
 }
 
 .8h-tmr .frame .text.collecting, 
 .8h-tmr .frame .text.stone-amt, 
 .8h-tmr .frame .text.tmr {
-    color: #B3B3B3;
+    @apply text-gray-400;
 }
 
 .sell-btn {
-    background: var(--p);
+    @apply bg-pink-500;
 }
 
 .sell-btn .text {
-    color: #FFFFFF;
+    @apply text-white;
 }
 
 .tab-bar {
-    position: fixed;
-    bottom: 0;
-    width: 100vw;
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0;
-    background: var(--b);
+    @apply fixed bottom-0 w-screen flex justify-around p-2 bg-black;
 }
 
 .tab-btn {
-    flex: 1;
-    text-align: center;
-    font-family: var(--pf);
-    font-weight: 600;
-    font-size: var(--fs-m);
-    line-height: var(--lh);
-    color: #FFFFFF;
-    background: none;
-    border: none;
-    outline: none;
-    padding: 10px;
+    @apply flex-1 text-center font-sans font-semibold text-base text-white bg-none border-none outline-none p-2.5;
 }
