@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .home-scr {
-  @apply relative flex flex-col items-center justify-center w-screen h-screen bg-black overflow-x-hidden;
+  @apply relative flex flex-col items-center justify-center w-screen h-screen bg-black overflow-hidden;
 }
 
 .coins {
@@ -20,13 +20,13 @@
 }
 
 .mainicon {
-  @apply w-screen h-auto max-h-[80vh] mt-5;
+  @apply w-auto h-auto max-h-[80vh] mt-5;
 }
 
 .mine-btn, 
 .8h-tmr, 
 .sell-btn {
-  @apply flex items-center justify-center w-[85vw] h-[5.5vh] rounded mt-5;
+  @apply flex items-center justify-center w-[84vw] h-[5.5vh] rounded mt-5;
 }
 
 .mine-btn .text, 
@@ -67,4 +67,16 @@
 
 .tab-btn {
   @apply flex-1 text-center font-sans font-semibold text-base text-white bg-none border-none outline-none p-2.5;
+}
+
+.tab-btn .icon {
+  @apply w-[27px] h-[23px] mb-1;
+}
+
+.tab-btn .text {
+  @apply mt-1;
+}
+
+.tab-site {
+  @apply pointer-events-none;
 }
