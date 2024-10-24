@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .home-scr {
-  @apply fixed inset-0 flex flex-col items-center justify-center w-screen h-screen bg-black overflow-hidden;
+  @apply fixed inset-0 flex flex-col items-center justify-center w-screen h-full bg-black overflow-hidden;
 }
 
 .coins {
@@ -62,23 +62,37 @@
   @apply text-white;
 }
 
+/* Tailwind Tab Bar based on Figma CSS */
+
 .tab-bar {
-  @apply fixed bottom-0 w-screen flex justify-around p-2 bg-black;
-  border-top: 1px solid rgba(23, 23, 23, 0.5);
+  @apply fixed bottom-0 flex justify-between w-[412px] h-[68px] bg-black;
+  border-top: 1px solid #171717;
 }
 
 .tab-btn {
-  @apply flex-1 text-center font-sans font-semibold text-base text-white bg-none border-none outline-none p-2.5;
+  @apply relative w-[128px] h-full flex flex-col justify-center items-center bg-black;
 }
 
-.tab-btn .icon {
-  @apply w-[27px] h-[23px] mb-1;
+.tab-rewards .icon {
+  @apply w-[37px] h-[37px] mb-1 bg-[url('/icons/rewards.svg')] bg-no-repeat bg-center;
 }
 
-.tab-btn .text {
-  @apply mt-1;
+.tab-rewards .text {
+  @apply text-sm font-semibold text-gray-400;
 }
 
-.tab-site {
-  @apply pointer-events-none text-white;
+.tab-site .icon {
+  @apply w-[27px] h-[27px] mb-1 bg-[url('/icons/site.svg')] bg-no-repeat bg-center;
+}
+
+.tab-site .text {
+  @apply text-sm font-semibold text-white;
+}
+
+.tab-friends .icon {
+  @apply w-[27px] h-[27px] mb-1 bg-[url('/icons/friends.svg')] bg-no-repeat bg-center;
+}
+
+.tab-friends .text {
+  @apply text-sm font-semibold text-gray-400;
 }
