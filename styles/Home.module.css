@@ -82,5 +82,5 @@
 
 .tab-site {
   @apply pointer-events-none;
-  @apply text-white;
+  @apply text-white; /* Ensure the text color is white */
 }
