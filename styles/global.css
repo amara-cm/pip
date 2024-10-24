@@ -1,4 +1,7 @@
-/* Common Variables */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
     --b: #000000;
     --g: #808080;
@@ -13,41 +16,16 @@
     --gap: 0.5rem;
 }
 
-
-/* Tab Bar */
 .tab-bar {
-    position: fixed;
-    width: 100%;
-    height: 7.41vh;
-    background: var(--b);
-    bottom: 0;
-    border-top: 1px solid rgba(128, 128, 128, 0.07);
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    @apply fixed w-full h-[7.41vh] bg-black bottom-0 border-t border-gray-200 flex flex-row justify-between items-center;
 }
 
 .tab-bar .tab-btn {
-    width: 33.33%;
-    height: 100%;
-    background: var(--b);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    @apply w-1/3 h-full bg-black flex flex-col items-center justify-center;
 }
 
 .tab-bar .tab-btn .icon {
-    display: flex;
-    align-items: center;
-    background-size: contain;
-    width: 1.6875rem;
-    height: 1.4375rem;
-    display: inline-block;
-    background-repeat: no-repeat;
-    margin-bottom: 5px;
-    color: var(--g);
+    @apply flex items-center bg-contain bg-no-repeat w-6 h-6 mb-1 text-gray-400;
 }
 
 .tab-bar .tab-btn.tab-rewards .icon {
@@ -63,48 +41,22 @@
 }
 
 .tab-bar .tab-btn .text {
-    font-family: var(--pf);
-    font-weight: 600;
-    font-size: var(--fs-s);
-    text-align: center;
-    letter-spacing: 0.5px;
-    color: var(--g);
-    width: auto;
-    height: auto;
-    line-height: var(--lh);
+    @apply font-sans font-semibold text-xs text-center tracking-wide text-gray-400;
 }
 
-/* Coin Icon */
 .coin-icon {
-  display: flex;
-  width: 0.6875rem;
-  height: 0.6875rem;
-  background: url('/icons/gamecoin.svg') no-repeat center;
-  background-size: contain;
+    @apply flex w-2.5 h-2.5 bg-contain bg-no-repeat;
+    background-image: url('/icons/gamecoin.svg');
 }
 
 .coinsamt-fr {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0.1875rem;
-    height: 4.79vh;
-    width: auto;
+    @apply flex flex-row items-center justify-start gap-1 h-[4.79vh];
 }
 
 .coinsamt-fr .coin-icon {
-    width: 0.9375rem;
-    height: 0.9375rem;
+    @apply w-4 h-4;
 }
 
 .coinsamt-fr .text {
-    font-family: var(--pf);
-    font-weight: 600;
-    text-align: center;
-    font-size: var(--fs-m);
-    line-height: var(--lh);
-    width: auto;
-    height: 100%;
-    color: var(--w);
+    @apply font-sans font-semibold text-base text-center text-white;
 }
