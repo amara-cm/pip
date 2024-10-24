@@ -43,12 +43,12 @@ function MiningStats() {
   return (
     <main className="flex overflow-hidden flex-col pt-44 mx-auto w-full bg-black max-w-[480px]">
       <StatDisplay 
-        iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/cd88f82f60bbc428513e9f65dbc71f28e0869162e2a2a520a9c604ac7189c1c9?placeholderIfAbsent=true&apiKey=c7de70f57b014dd1a87bdc2dc51861a8"
+        iconSrc="/icons/gamecoin.svg"
         value="0"
       />
       <img 
         loading="lazy" 
-        src="https://cdn.builder.io/api/v1/image/assets/TEMP/5b4a910302e6f5cc2413e3860a6379ee1b26acf71b35272415262cad9b977e64?placeholderIfAbsent=true&apiKey=c7de70f57b014dd1a87bdc2dc51861a8" 
+        src="/mainicon.gif" 
         alt="Mining visualization"
         className="object-contain mt-6 w-full aspect-[0.92]" 
       />
@@ -137,12 +137,10 @@ const HomeScreen = () => {
   return (
     <div className="home-scr">
       <MiningStats />
-      <div className="coins">
-        <div className="coin-icon"></div>
+      <div className="coins" style={{ marginTop: '25%' }}>
+        <div className="coin-icon" style={{ width: '35px', height: '35px' }}></div>
         <div className="coin-amt">{coins}</div>
       </div>
-
-      <img src="/mainicon.gif" alt="Main Icon" className="mainicon" />
 
       {!mining ? (
         <button className="mine-btn" onClick={startMining}>
@@ -168,7 +166,7 @@ const HomeScreen = () => {
           <div className="icon"></div>
           <div className="text">Rewards</div>
         </button>
-        <button className="tab-btn tab-site" onClick={() => window.location.href = '/home'}>
+        <button className="tab-btn tab-site">
           <div className="icon"></div>
           <div className="text">Site</div>
         </button>
