@@ -7,7 +7,7 @@
 }
 
 .coins {
-    @apply flex items-center justify-center gap-2 mt-5;
+    @apply flex items-center justify-center gap-2.5 mt-5;
 }
 
 .coins .coin-icon {
@@ -44,7 +44,7 @@
 }
 
 .8h-tmr .frame {
-    @apply flex gap-2 font-sans font-semibold text-base;
+    @apply flex gap-2.5 font-sans font-semibold text-base;
 }
 
 .8h-tmr .frame .text.collecting, 
