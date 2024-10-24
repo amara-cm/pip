@@ -41,7 +41,7 @@ function MiningStats() {
   const slots = [1, 2, 3];
 
   return (
-    <main className="flex overflow-hidden flex-col pt-44 mx-auto w-full bg-black max-w-[480px]">
+    <main className="flex overflow-hidden flex-col pt-44 mx-auto w-full bg-black max-w-[480px] h-screen justify-center">
       <StatDisplay 
         iconSrc="/icons/gamecoin.svg"
         value="0"
