@@ -5,7 +5,7 @@ import * as React from "react";
 function MiningButton() {
   return (
     <button 
-      className="overflow-hidden self-center px-16 py-4 mt-14 w-full text-base font-semibold leading-none whitespace-nowrap rounded-lg bg-neutral-100 max-w-[350px] text-stone-900"
+      className="overflow-hidden self-center px-16 py-4 mt-14 w-[84vw] text-base font-semibold leading-none whitespace-nowrap rounded-lg bg-neutral-100 text-stone-900"
       aria-label="Start mining"
     >
       Mine
