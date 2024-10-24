@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import * as React from "react";
 
-// Including MiningStats components directly
-function MiningButton() {
+function MiningButton({ onClick }) {
   return (
     <button 
       className="overflow-hidden self-center px-16 py-4 mt-14 w-[85vw] text-base font-semibold leading-none whitespace-nowrap rounded-lg bg-neutral-100 text-stone-900"
       aria-label="Start mining"
+      onClick={onClick}
     >
       Mine
     </button>
@@ -30,7 +30,7 @@ function StatDisplay({ iconSrc, value }) {
         loading="lazy" 
         src={iconSrc} 
         alt=""
-        className="object-contain shrink-0 self-stretch my-auto aspect-square w-[35px]" 
+        className="object-contain shrink-0 self-stretch my-auto aspect-square w-[35px] h-[35px]" 
       />
       <p className="self-stretch my-auto">{value}</p>
     </div>
@@ -41,7 +41,7 @@ function MiningStats() {
   const slots = [1, 2, 3];
 
   return (
-    <main className="flex overflow-hidden flex-col pt-44 mx-auto w-full bg-black max-w-[480px] h-screen justify-center">
+    <main className="flex overflow-hidden flex-col pt-44 mx-auto w-full bg-black max-w-[480px] h-full justify-center">
       <StatDisplay 
         iconSrc="/icons/gamecoin.svg"
         value="0"
