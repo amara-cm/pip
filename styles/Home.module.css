@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .home-scr {
-  @apply relative flex flex-col items-center justify-center w-screen h-screen bg-black overflow-hidden;
+  @apply fixed inset-0 flex flex-col items-center justify-center w-screen h-screen bg-black overflow-hidden;
 }
 
 .coins {
@@ -12,7 +12,7 @@
 }
 
 .coins .coin-icon {
-  @apply w-4 h-4 bg-contain bg-no-repeat;
+  @apply w-[35px] h-[35px] bg-contain bg-no-repeat;
   background-image: url('/icons/gamecoin.svg');
 }
 
@@ -21,8 +21,7 @@
 }
 
 .mainicon {
-  @apply w-auto h-auto max-h-[80vh] mt-5;
-  margin: 0 auto; /* Center mainicon.gif */
+  @apply mx-auto w-auto max-h-[80vh] mt-5;
 }
 
 .mine-btn, 
@@ -81,6 +80,5 @@
 }
 
 .tab-site {
-  @apply pointer-events-none;
-  @apply text-white; /* Ensure the text color is white */
+  @apply pointer-events-none text-white;
 }
