@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .home-scr {
-  @apply fixed inset-0 flex flex-col items-center justify-center w-screen h-full bg-black overflow-hidden;
+  @apply relative flex flex-col items-center justify-center w-screen h-screen bg-black overflow-hidden;
 }
 
 .coins {
@@ -12,7 +12,7 @@
 }
 
 .coins .coin-icon {
-  @apply w-[35px] h-[35px] bg-contain bg-no-repeat;
+  @apply w-4 h-4 bg-contain bg-no-repeat;
   background-image: url('/icons/gamecoin.svg');
 }
 
@@ -21,7 +21,8 @@
 }
 
 .mainicon {
-  @apply mx-auto w-auto max-h-[80vh] mt-5;
+  @apply w-auto h-auto max-h-[80vh] mt-5;
+  margin: 0 auto; /* Center mainicon.gif */
 }
 
 .mine-btn, 
@@ -62,37 +63,23 @@
   @apply text-white;
 }
 
-/* Tailwind Tab Bar based on Figma CSS */
-
 .tab-bar {
-  @apply fixed bottom-0 flex justify-between w-[412px] h-[68px] bg-black;
-  border-top: 1px solid #171717;
+  @apply fixed bottom-0 w-screen flex justify-around p-2 bg-black;
+  border-top: 1px solid rgba(23, 23, 23, 0.5);
 }
 
 .tab-btn {
-  @apply relative w-[128px] h-full flex flex-col justify-center items-center bg-black;
+  @apply flex-1 text-center font-sans font-semibold text-base text-white bg-none border-none outline-none p-2.5;
 }
 
-.tab-rewards .icon {
-  @apply w-[37px] h-[23px] mb-1 bg-[url('/icons/rewards.svg')] bg-no-repeat bg-center;
+.tab-btn .icon {
+  @apply w-[27px] h-[23px] mb-1;
 }
 
-.tab-rewards .text {
-  @apply text-sm font-semibold text-gray-400;
+.tab-btn .text {
+  @apply mt-1;
 }
 
-.tab-site .icon {
-  @apply w-[27px] h-[23px] mb-1 bg-[url('/icons/site.svg')] bg-no-repeat bg-center;
-}
-
-.tab-site .text {
-  @apply text-sm font-semibold text-white;
-}
-
-.tab-friends .icon {
-  @apply w-[27px] h-[23px] mb-1 bg-[url('/icons/friends.svg')] bg-no-repeat bg-center;
-}
-
-.tab-friends .text {
-  @apply text-sm font-semibold text-gray-400;
+.tab-site {
+  @apply pointer-events-none text-white;
 }
