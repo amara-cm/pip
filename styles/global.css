@@ -29,19 +29,19 @@
 }
 
 .tab-bar .tab-btn.tab-rewards .icon {
-    background-image: url('/icons/task.svg');
+    background-image: url('/icons/rewards.svg');
 }
 
 .tab-bar .tab-btn.tab-site .icon {
-    background-image: url('/icons/home.svg');
+    background-image: url('/icons/site.svg');
 }
 
 .tab-bar .tab-btn.tab-friends .icon {
     background-image: url('/icons/friends.svg');
 }
 
-.tab-bar .tab-btn .text {
-    @apply font-sans font-semibold text-xs text-center tracking-wide text-gray-400;
+.tab-bar .tab-btn {
+    @apply font-sans font-semibold tracking-wide text-gray-400;
 }
 
 .coin-icon {
