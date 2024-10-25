@@ -53,10 +53,6 @@ function MiningStats({ startMining }) {
 
   return (
     <main className="flex overflow-hidden flex-col pt-[11rem] mx-auto w-full bg-black max-w-[30rem] h-full justify-center">
-      <StatDisplay 
-        iconSrc="/icons/gamecoin.svg"
-        value="0"
-      />
       <img 
         loading="lazy" 
         src="/mainicon.gif" 
