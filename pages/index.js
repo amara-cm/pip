@@ -4,11 +4,11 @@ import * as React from "react";
 function MiningButton({ onClick }) {
   return (
     <button 
-      className="overflow-hidden self-center px-[4rem] py-[1rem] mt-[3.5rem] w-[85vw] text-base font-semibold leading-none whitespace-nowrap rounded-lg bg-neutral-100 text-stone-900"
+      className="mine-btn"
       aria-label="Start mining"
       onClick={onClick}
     >
-      Mine
+      <div className="text">Mine</div>
     </button>
   );
 }
@@ -48,34 +48,7 @@ function StatDisplay({ iconSrc, value }) {
   );
 }
 
-function MiningStats() {
-  const slots = [1, 2, 3];
-
-  return (
-    <main className="flex overflow-hidden flex-col pt-[11rem] mx-auto w-full bg-black max-w-[30rem] h-full justify-center">
-      <StatDisplay 
-        iconSrc="/icons/gamecoin.svg"
-        value="0"
-      />
-      <img 
-        loading="lazy" 
-        src="/mainicon.gif" 
-        alt="Mining visualization"
-        className="mainicon" 
-      />
-      <MiningButton onClick={() => alert('Mine button clicked')} />
-      <section className="flex gap-[0.625rem] justify-center items-center mt-[3.5rem] bg-black">
-        <div className="flex overflow-hidden gap-[0.625rem] self-stretch px-[0.125rem] my-auto border-t border-zinc-500 border-opacity-10 w-[25.75rem]">
-          {slots.map((slot) => (
-            <MiningSlot key={slot} />
-          ))}
-        </div>
-      </section>
-    </main>
-  );
-}
-
-const HomeScreen = () => {
+function HomeScreen() {
   const [coins, setCoins] = useState(0);
   const [stone, setStone] = useState(0);
   const [timer, setTimer] = useState(28800); // 8 hours in seconds
@@ -147,25 +120,39 @@ const HomeScreen = () => {
 
   return (
     <div className="home-scr">
-      <MiningStats />
+      <main className="flex overflow-hidden flex-col pt-[11rem] mx-auto w-full bg-black max-w-[30rem] h-full justify-center">
+        <StatDisplay 
+          iconSrc="/icons/gamecoin.svg"
+          value="0"
+        />
+        <img 
+          loading="lazy" 
+          src="/mainicon.gif" 
+          alt="Mining visualization"
+          className="mainicon" 
+        />
+        {!mining ? (
+          <MiningButton onClick={startMining} />
+        ) : timer > 0 ? (
+          <CollectingButton timer={timer} stone={stone} />
+        ) : (
+          <button className="sell-btn" onClick={handleSell}>
+            <img src="/icons/sell-btn.svg" alt="Sell Button" className="inline-block" />
+          </button>
+        )}
+        <section className="flex gap-[0.625rem] justify-center items-center mt-[3.5rem] bg-black">
+          <div className="flex overflow-hidden gap-[0.625rem] self-stretch px-[0.125rem] my-auto border-t border-zinc-500 border-opacity-10 w-[25.75rem]">
+            {[1, 2, 3].map((slot) => (
+              <MiningSlot key={slot} />
+            ))}
+          </div>
+        </section>
+      </main>
       <div className="coins" style={{ marginTop: '25%' }}>
         <div className="coin-icon"></div>
         <div className="coin-amt">{coins}</div>
       </div>
-
-      {!mining ? (
-        <button className="mine-btn" onClick={startMining}>
-          <div className="text">Mine</div>
-        </button>
-      ) : timer > 0 ? (
-        <CollectingButton timer={timer} stone={stone} />
-      ) : (
-        <button className="sell-btn" onClick={handleSell}>
-          <img src="/icons/sell-btn.svg" alt="Sell Button" className="inline-block" />
-        </button>
-      )}
-
-      <div className="tab-bar fixed -bottom-full">
+      <div className="tab-bar fixed bottom-0">
         <button className="tab-btn tab-rewards" onClick={() => window.location.href = '/tasks'}>
           <div className="icon"></div>
         </button>
@@ -178,6 +165,6 @@ const HomeScreen = () => {
       </div>
     </div>
   );
-};
+}
 
 export default HomeScreen;
