@@ -36,7 +36,7 @@ function MiningSlot() {
 
 function StatDisplay({ iconSrc, value }) {
   return (
-    <div className="flex gap-[0.5rem] justify-center items-center self-center text-4xl font-bold tracking-tighter leading-none text-white whitespace-nowrap">
+    <div className="flex gap-[0.5rem] justify-center items-center self-center text-[2.5rem] font-bold tracking-tighter leading-none text-white whitespace-nowrap">
       <img 
         loading="lazy" 
         src={iconSrc} 
@@ -63,7 +63,7 @@ function MiningStats() {
         alt="Mining visualization"
         className="mainicon" 
       />
-      <MiningButton />
+      <MiningButton onClick={() => alert('Mine button clicked')} />
       <section className="flex gap-[0.625rem] justify-center items-center mt-[3.5rem] bg-black">
         <div className="flex overflow-hidden gap-[0.625rem] self-stretch px-[0.125rem] my-auto border-t border-zinc-500 border-opacity-10 w-[25.75rem]">
           {slots.map((slot) => (
@@ -161,21 +161,19 @@ const HomeScreen = () => {
         <CollectingButton timer={timer} stone={stone} />
       ) : (
         <button className="sell-btn" onClick={handleSell}>
-          <div className="text">
-            Sell <img src="/icons/gamecoin.svg" alt="Coin Icon" className="inline-block w-4 h-4" /> +500
-          </div>
+          <img src="/icons/sell-btn.svg" alt="Sell Button" className="inline-block" />
         </button>
       )}
 
-      <div className="tab-bar">
+      <div className="tab-bar fixed -bottom-full">
         <button className="tab-btn tab-rewards" onClick={() => window.location.href = '/tasks'}>
-          <div className="icon" style={{ backgroundImage: 'url(/icons/rewards.svg)' }}></div>
+          <div className="icon"></div>
         </button>
         <button className="tab-btn tab-site">
-          <div className="icon" style={{ backgroundImage: 'url(/icons/activated-site.svg)' }}></div>
+          <div className="icon"></div>
         </button>
         <button className="tab-btn tab-friends" onClick={() => window.location.href = '/friends'}>
-          <div className="icon" style={{ backgroundImage: 'url(/icons/friends.svg)' }}></div>
+          <div className="icon"></div>
         </button>
       </div>
     </div>
