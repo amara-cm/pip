@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import * as React from "react";
-import styles from '../styles/Home.module.css'; // Import the CSS module
 
 function MiningButton({ onClick }) {
   return (
