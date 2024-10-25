@@ -13,7 +13,7 @@
 
 .coins .coin-icon {
   @apply w-[8.75rem] h-[8.75rem] bg-contain bg-no-repeat;
-  background-image: url('/icons/gamecoin.svg');
+  background-image: url('data:image/svg+xml;base64,<gamecoin_svg_base64>');
 }
 
 .coins .coin-amt {
@@ -54,7 +54,7 @@
 }
 
 .sell-btn {
-  background-image: url('/icons/sell-btn.svg');
+  background-image: url('data:image/svg+xml;base64,<sell_btn_svg_base64>');
 }
 
 .tab-bar {
@@ -71,15 +71,15 @@
 
 .tab-btn.tab-rewards .icon {
   @apply w-[6.75rem] h-[8.75rem];
-  background-image: url('/icons/rewards.svg');
+  background-image: url('data:image/svg+xml;base64,<rewards_svg_base64>');
 }
 
 .tab-btn.tab-site .icon {
   @apply w-[10.75rem] h-[8.75rem];
-  background-image: url('/icons/activated-site.svg');
+  background-image: url('data:image/svg+xml;base64,<activated_site_svg_base64>');
 }
 
 .tab-btn.tab-friends .icon {
   @apply w-[9.25rem] h-[8.75rem];
-  background-image: url('/icons/friends.svg');
+  background-image: url('data:image/svg+xml;base64,<friends_svg_base64>');
 }
