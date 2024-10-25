@@ -1,24 +1,25 @@
 import { useState, useEffect } from 'react';
 import * as React from "react";
+import styles from '../styles/Home.module.css'; // Import the CSS module
 
 function MiningButton({ onClick }) {
   return (
     <button 
-      className="mine-btn"
+      className={styles.mineBtn} // Use CSS module class
       aria-label="Start mining"
       onClick={onClick}
     >
-      <div className="text">Mine</div>
+      <div className={styles.text}>Mine</div>
     </button>
   );
 }
 
 function CollectingButton({ timer, stone }) {
   return (
-    <div className="8h-tmr">
-      <div className="frame">
-        <div className="text collecting">Collecting {stone.toFixed(3)}</div>
-        <div className="text tmr">{`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}</div>
+    <div className={styles.mineTmr}>
+      <div className={styles.frame}>
+        <div className={`${styles.text} ${styles.Collect}`}>Collecting {stone.toFixed(3)}</div>
+        <div className={`${styles.text} ${styles.Timer}`}>{`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}</div>
       </div>
     </div>
   );
@@ -38,10 +39,10 @@ function StatDisplay({ iconSrc, value }) {
   return (
     <div className="flex gap-[0.5rem] justify-center items-center self-center text-4xl font-bold tracking-tighter leading-none text-white whitespace-nowrap">
       <img 
-        loading="lazy" 
-        src={iconSrc} 
+        loading="lazy"
+        src={iconSrc}
         alt=""
-        className="object-contain shrink-0 self-stretch my-auto aspect-square w-[2.1875rem] h-[2.1875rem]" 
+        className="object-contain shrink-0 self-stretch my-auto aspect-square w-[2.1875rem] h-[2.1875rem]"
       />
       <p className="self-stretch my-auto">{value}</p>
     </div>
@@ -119,24 +120,24 @@ function HomeScreen() {
   };
 
   return (
-    <div className="home-scr">
+    <div className={styles.homeScr}>
       <main className="flex overflow-hidden flex-col pt-[11rem] mx-auto w-full bg-black max-w-[30rem] h-full justify-center">
         <StatDisplay 
           iconSrc="/icons/gamecoin.svg"
           value="0"
         />
         <img 
-          loading="lazy" 
-          src="/mainicon.gif" 
+          loading="lazy"
+          src="/mainicon.gif"
           alt="Mining visualization"
-          className="mainicon" 
+          className={styles.mainIcon}
         />
         {!mining ? (
           <MiningButton onClick={startMining} />
         ) : timer > 0 ? (
           <CollectingButton timer={timer} stone={stone} />
         ) : (
-          <button className="sell-btn" onClick={handleSell}>
+          <button className={styles.sellBtn} onClick={handleSell}>
             <img src="/icons/sell-btn.svg" alt="Sell Button" className="inline-block" />
           </button>
         )}
@@ -148,19 +149,19 @@ function HomeScreen() {
           </div>
         </section>
       </main>
-      <div className="coins" style={{ marginTop: '25%' }}>
-        <div className="coin-icon"></div>
-        <div className="coin-amt">{coins}</div>
+      <div className={styles.coins}>
+        <div className={styles.coinIcon}></div>
+        <div className={styles.coinAmt}>{coins}</div>
       </div>
-      <div className="tab-bar fixed bottom-0 w-full max-w-[30rem] mx-auto">
-        <button className="tab-btn tab-rewards" onClick={() => window.location.href = '/tasks'}>
-          <div className="icon"></div>
+      <div className={styles.tabBar}>
+        <button className={`${styles.tabBtn} ${styles.tabRewards}`} onClick={() => window.location.href = '/tasks'}>
+          <div className={styles.icon}></div>
         </button>
-        <button className="tab-btn tab-site">
-          <div className="icon"></div>
+        <button className={styles.tabBtn}> ${styles.tabSite}`}
+          <div className={styles.icon}></div>
         </button>
-        <button className="tab-btn tab-friends" onClick={() => window.location.href = '/friends'}>
-          <div className="icon"></div>
+        <button className={`${styles.tabBtn} ${styles.tabFriends}`} onClick={() => window.location.href = '/friends'}>
+          <div className={styles.icon}></div>
         </button>
       </div>
     </div>
