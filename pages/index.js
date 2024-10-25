@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as React from "react";
+import styles from '../styles/Home.module.css'; // Ensure correct import of CSS module
 
 function MiningButton({ onClick }) {
   return (
@@ -123,7 +124,7 @@ function HomeScreen() {
       <main className="flex overflow-hidden flex-col pt-[11rem] mx-auto w-full bg-black max-w-[30rem] h-full justify-center">
         <StatDisplay 
           iconSrc="/icons/gamecoin.svg"
-          value="0"
+          value={coins} // Display the actual coin amount
         />
         <img 
           loading="lazy"
@@ -156,7 +157,7 @@ function HomeScreen() {
         <button className={`${styles.tabBtn} ${styles.tabRewards}`} onClick={() => window.location.href = '/tasks'}>
           <div className={styles.icon}></div>
         </button>
-        <button className={styles.tabBtn}> ${styles.tabSite}`}
+        <button className={styles.tabBtn}>
           <div className={styles.icon}></div>
         </button>
         <button className={`${styles.tabBtn} ${styles.tabFriends}`} onClick={() => window.location.href = '/friends'}>
