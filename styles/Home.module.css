@@ -54,7 +54,7 @@
 }
 
 .sell-btn {
-  background-image: url('/public/icons/sell-btn.svg');
+  background-image: url('/icons/sell-btn.svg');
 }
 
 .tab-bar {
@@ -71,13 +71,13 @@
 }
 
 .tab-rewards {
-  background-image: url('/public/icons/rewards.svg');
+  background-image: url('/icons/rewards.svg');
 }
 
 .tab-site {
-  background-image: url('/public/icons/activated-site.svg');
+  background-image: url('/icons/activated-site.svg');
 }
 
 .tab-friends {
-  background-image: url('/public/icons/friends.svg');
+  background-image: url('/icons/friends.svg');
 }
