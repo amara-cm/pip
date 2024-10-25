@@ -4,7 +4,7 @@ import * as React from "react";
 function MiningButton({ onClick }) {
   return (
     <button 
-      className="overflow-hidden self-center px-16 py-4 mt-14 w-[85vw] text-base font-semibold leading-none whitespace-nowrap rounded-lg bg-neutral-100 text-stone-900"
+      className="overflow-hidden self-center px-[4rem] py-[1rem] mt-[3.5rem] w-[85vw] text-base font-semibold leading-none whitespace-nowrap rounded-lg bg-neutral-100 text-stone-900"
       aria-label="Start mining"
       onClick={onClick}
     >
@@ -13,10 +13,21 @@ function MiningButton({ onClick }) {
   );
 }
 
+function CollectingButton({ timer, stone }) {
+  return (
+    <div className="8h-tmr">
+      <div className="frame">
+        <div className="text collecting">Collecting {stone.toFixed(3)}</div>
+        <div className="text tmr">{`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}</div>
+      </div>
+    </div>
+  );
+}
+
 function MiningSlot() {
   return (
     <div 
-      className="flex shrink-0 w-32 bg-black h-[68px]"
+      className="flex shrink-0 w-[8rem] bg-black h-[4.25rem]"
       role="status"
       aria-label="Mining slot"
     />
@@ -25,12 +36,12 @@ function MiningSlot() {
 
 function StatDisplay({ iconSrc, value }) {
   return (
-    <div className="flex gap-2 justify-center items-center self-center text-4xl font-bold tracking-tighter leading-none text-white whitespace-nowrap">
+    <div className="flex gap-[0.5rem] justify-center items-center self-center text-4xl font-bold tracking-tighter leading-none text-white whitespace-nowrap">
       <img 
         loading="lazy" 
         src={iconSrc} 
         alt=""
-        className="object-contain shrink-0 self-stretch my-auto aspect-square w-[35px] h-[35px]" 
+        className="object-contain shrink-0 self-stretch my-auto aspect-square w-[2.1875rem] h-[2.1875rem]" 
       />
       <p className="self-stretch my-auto">{value}</p>
     </div>
@@ -41,7 +52,7 @@ function MiningStats() {
   const slots = [1, 2, 3];
 
   return (
-    <main className="flex overflow-hidden flex-col pt-44 mx-auto w-full bg-black max-w-[480px] h-full justify-center">
+    <main className="flex overflow-hidden flex-col pt-[11rem] mx-auto w-full bg-black max-w-[30rem] h-full justify-center">
       <StatDisplay 
         iconSrc="/icons/gamecoin.svg"
         value="0"
@@ -53,8 +64,8 @@ function MiningStats() {
         className="mainicon" 
       />
       <MiningButton />
-      <section className="flex gap-2.5 justify-center items-center mt-14 bg-black">
-        <div className="flex overflow-hidden gap-2 self-stretch px-2 my-auto border-t border-zinc-500 border-opacity-10 w-[412px]">
+      <section className="flex gap-[0.625rem] justify-center items-center mt-[3.5rem] bg-black">
+        <div className="flex overflow-hidden gap-[0.625rem] self-stretch px-[0.125rem] my-auto border-t border-zinc-500 border-opacity-10 w-[25.75rem]">
           {slots.map((slot) => (
             <MiningSlot key={slot} />
           ))}
@@ -147,12 +158,7 @@ const HomeScreen = () => {
           <div className="text">Mine</div>
         </button>
       ) : timer > 0 ? (
-        <div className="8h-tmr">
-          <div className="frame">
-            <div className="text collecting">Collecting {stone.toFixed(3)}</div>
-            <div className="text tmr">{`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}</div>
-          </div>
-        </div>
+        <CollectingButton timer={timer} stone={stone} />
       ) : (
         <button className="sell-btn" onClick={handleSell}>
           <div className="text">
@@ -163,16 +169,13 @@ const HomeScreen = () => {
 
       <div className="tab-bar">
         <button className="tab-btn tab-rewards" onClick={() => window.location.href = '/tasks'}>
-          <div className="icon"></div>
-          <div className="text">Rewards</div>
+          <div className="icon" style={{ backgroundImage: 'url(/public/icons/rewards.svg)' }}></div>
         </button>
         <button className="tab-btn tab-site">
-          <div className="icon"></div>
-          <div className="text">Site</div>
+          <div className="icon" style={{ backgroundImage: 'url(/public/icons/activated-site.svg)' }}></div>
         </button>
         <button className="tab-btn tab-friends" onClick={() => window.location.href = '/friends'}>
-          <div className="icon"></div>
-          <div className="text">Friends</div>
+          <div className="icon" style={{ backgroundImage: 'url(/public/icons/friends.svg)' }}></div>
         </button>
       </div>
     </div>
