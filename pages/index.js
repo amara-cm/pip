@@ -152,7 +152,7 @@ function HomeScreen() {
         <div className="coin-icon"></div>
         <div className="coin-amt">{coins}</div>
       </div>
-      <div className="tab-bar fixed bottom-0">
+      <div className="tab-bar fixed bottom-0 w-full max-w-[30rem] mx-auto">
         <button className="tab-btn tab-rewards" onClick={() => window.location.href = '/tasks'}>
           <div className="icon"></div>
         </button>
