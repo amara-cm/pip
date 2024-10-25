@@ -169,13 +169,13 @@ const HomeScreen = () => {
 
       <div className="tab-bar">
         <button className="tab-btn tab-rewards" onClick={() => window.location.href = '/tasks'}>
-          <div className="icon" style={{ backgroundImage: 'url(/public/icons/rewards.svg)' }}></div>
+          <div className="icon" style={{ backgroundImage: 'url(/icons/rewards.svg)' }}></div>
         </button>
         <button className="tab-btn tab-site">
-          <div className="icon" style={{ backgroundImage: 'url(/public/icons/activated-site.svg)' }}></div>
+          <div className="icon" style={{ backgroundImage: 'url(/icons/activated-site.svg)' }}></div>
         </button>
         <button className="tab-btn tab-friends" onClick={() => window.location.href = '/friends'}>
-          <div className="icon" style={{ backgroundImage: 'url(/public/icons/friends.svg)' }}></div>
+          <div className="icon" style={{ backgroundImage: 'url(/icons/friends.svg)' }}></div>
         </button>
       </div>
     </div>
