@@ -48,7 +48,7 @@ function StatDisplay({ iconSrc, value }) {
   );
 }
 
-function MiningStats() {
+function MiningStats({ startMining }) {
   const slots = [1, 2, 3];
 
   return (
@@ -63,7 +63,7 @@ function MiningStats() {
         alt="Mining visualization"
         className="mainicon" 
       />
-      <MiningButton onClick={() => startMining()} />
+      <MiningButton onClick={startMining} />
       <section className="flex gap-[0.625rem] justify-center items-center mt-[3.5rem] bg-black">
         <div className="flex overflow-hidden gap-[0.625rem] self-stretch px-[0.125rem] my-auto border-t border-zinc-500 border-opacity-10 w-[25.75rem]">
           {slots.map((slot) => (
@@ -136,7 +136,7 @@ const HomeScreen = () => {
     if (!mining) {
       setMining(true);
       setTimer(28800); // Reset timer
-      setStone(0.000); // Reset stone collected
+      setStone(0); // Reset stone collected
     }
   };
 
@@ -147,8 +147,8 @@ const HomeScreen = () => {
 
   return (
     <div className="home-scr">
-      <MiningStats />
-      <div className="coins" style={{ marginTop: '25%' }}>
+      <MiningStats startMining={startMining} />
+      <div className="coins">
         <div className="coin-icon"></div>
         <div className="coin-amt">{coins}</div>
       </div>
@@ -163,7 +163,7 @@ const HomeScreen = () => {
         </button>
       )}
 
-      <div className="tab-bar fixed -bottom-full">
+      <div className="tab-bar fixed bottom-0">
         <button className="tab-btn tab-rewards" onClick={() => window.location.href = '/tasks'}>
           <div className="icon"></div>
         </button>
