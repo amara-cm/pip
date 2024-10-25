@@ -4,11 +4,11 @@ import * as React from "react";
 function MiningButton({ onClick }) {
   return (
     <button 
-      className="mine-btn"
+      className="overflow-hidden self-center px-[4rem] py-[1rem] mt-[3.5rem] w-[85vw] text-base font-semibold leading-none whitespace-nowrap rounded-lg bg-neutral-100 text-stone-900"
       aria-label="Start mining"
       onClick={onClick}
     >
-      <div className="text">Mine</div>
+      Mine
     </button>
   );
 }
@@ -36,7 +36,7 @@ function MiningSlot() {
 
 function StatDisplay({ iconSrc, value }) {
   return (
-    <div className="flex gap-[0.5rem] justify-center items-center self-center text-[2.5rem] font-bold tracking-tighter leading-none text-white whitespace-nowrap">
+    <div className="flex gap-[0.5rem] justify-center items-center self-center text-4xl font-bold tracking-tighter leading-none text-white whitespace-nowrap">
       <img 
         loading="lazy" 
         src={iconSrc} 
@@ -48,18 +48,22 @@ function StatDisplay({ iconSrc, value }) {
   );
 }
 
-function MiningStats({ startMining }) {
+function MiningStats() {
   const slots = [1, 2, 3];
 
   return (
     <main className="flex overflow-hidden flex-col pt-[11rem] mx-auto w-full bg-black max-w-[30rem] h-full justify-center">
+      <StatDisplay 
+        iconSrc="/icons/gamecoin.svg"
+        value="0"
+      />
       <img 
         loading="lazy" 
         src="/mainicon.gif" 
         alt="Mining visualization"
         className="mainicon" 
       />
-      <MiningButton onClick={startMining} />
+      <MiningButton onClick={() => alert('Mine button clicked')} />
       <section className="flex gap-[0.625rem] justify-center items-center mt-[3.5rem] bg-black">
         <div className="flex overflow-hidden gap-[0.625rem] self-stretch px-[0.125rem] my-auto border-t border-zinc-500 border-opacity-10 w-[25.75rem]">
           {slots.map((slot) => (
@@ -143,14 +147,16 @@ const HomeScreen = () => {
 
   return (
     <div className="home-scr">
-      <MiningStats startMining={startMining} />
-      <div className="coins">
+      <MiningStats />
+      <div className="coins" style={{ marginTop: '25%' }}>
         <div className="coin-icon"></div>
         <div className="coin-amt">{coins}</div>
       </div>
 
       {!mining ? (
-        <MiningButton onClick={startMining} />
+        <button className="mine-btn" onClick={startMining}>
+          <div className="text">Mine</div>
+        </button>
       ) : timer > 0 ? (
         <CollectingButton timer={timer} stone={stone} />
       ) : (
@@ -159,7 +165,7 @@ const HomeScreen = () => {
         </button>
       )}
 
-      <div className="tab-bar fixed bottom-0">
+      <div className="tab-bar fixed -bottom-full">
         <button className="tab-btn tab-rewards" onClick={() => window.location.href = '/tasks'}>
           <div className="icon"></div>
         </button>
