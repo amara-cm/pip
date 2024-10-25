@@ -12,12 +12,12 @@
 }
 
 .coins .coin-icon {
-  @apply w-[1rem] h-[1rem] bg-contain bg-no-repeat;
+  @apply w-[8.75rem] h-[8.75rem] bg-contain bg-no-repeat;
   background-image: url('/icons/gamecoin.svg');
 }
 
 .coins .coin-amt {
-  @apply font-sans font-bold text-4xl text-white;
+  @apply font-sans font-bold text-[2.5rem] text-white;
 }
 
 .mainicon {
@@ -58,26 +58,28 @@
 }
 
 .tab-bar {
-  @apply fixed bottom-0 w-screen flex justify-around p-[0.5rem] bg-black;
-  border-top: 1px solid rgba(23, 23, 23, 0.5);
+  @apply fixed bottom-0 w-screen flex justify-around p-[0.5rem] bg-black h-[17.5vh];
 }
 
 .tab-btn {
-  @apply flex-1 flex items-center justify-center font-sans font-semibold text-base text-white bg-none border-none outline-none p-[0.625rem];
+  @apply flex-1 flex items-center justify-center font-sans font-semibold text-base text-white bg-none border-none outline-none w-[32rem] h-[17.5vh];
 }
 
 .tab-btn .icon {
-  @apply w-[1.6875rem] h-[1.4375rem];
+  @apply bg-contain bg-center;
 }
 
-.tab-rewards {
+.tab-btn.tab-rewards .icon {
+  @apply w-[6.75rem] h-[8.75rem];
   background-image: url('/icons/rewards.svg');
 }
 
-.tab-site {
+.tab-btn.tab-site .icon {
+  @apply w-[10.75rem] h-[8.75rem];
   background-image: url('/icons/activated-site.svg');
 }
 
-.tab-friends {
+.tab-btn.tab-friends .icon {
+  @apply w-[9.25rem] h-[8.75rem];
   background-image: url('/icons/friends.svg');
 }
