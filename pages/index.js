@@ -4,11 +4,11 @@ import * as React from "react";
 function MiningButton({ onClick }) {
   return (
     <button 
-      className="overflow-hidden self-center px-[4rem] py-[1rem] mt-[3.5rem] w-[85vw] text-base font-semibold leading-none whitespace-nowrap rounded-lg bg-neutral-100 text-stone-900"
+      className="mine-btn"
       aria-label="Start mining"
       onClick={onClick}
     >
-      Mine
+      <div className="text">Mine</div>
     </button>
   );
 }
@@ -63,7 +63,7 @@ function MiningStats() {
         alt="Mining visualization"
         className="mainicon" 
       />
-      <MiningButton onClick={() => alert('Mine button clicked')} />
+      <MiningButton onClick={() => startMining()} />
       <section className="flex gap-[0.625rem] justify-center items-center mt-[3.5rem] bg-black">
         <div className="flex overflow-hidden gap-[0.625rem] self-stretch px-[0.125rem] my-auto border-t border-zinc-500 border-opacity-10 w-[25.75rem]">
           {slots.map((slot) => (
@@ -136,7 +136,7 @@ const HomeScreen = () => {
     if (!mining) {
       setMining(true);
       setTimer(28800); // Reset timer
-      setStone(0); // Reset stone collected
+      setStone(0.000); // Reset stone collected
     }
   };
 
@@ -154,9 +154,7 @@ const HomeScreen = () => {
       </div>
 
       {!mining ? (
-        <button className="mine-btn" onClick={startMining}>
-          <div className="text">Mine</div>
-        </button>
+        <MiningButton onClick={startMining} />
       ) : timer > 0 ? (
         <CollectingButton timer={timer} stone={stone} />
       ) : (
