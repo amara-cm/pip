@@ -97,7 +97,7 @@ const Tasks = () => {
         />
         <TaskList tasks={tasks} handleGo={handleGo} />
       </div>
-      <footer className="flex justify-around p-4 bg-gray-800 fixed bottom-0 w-full max-w-[30rem]">
+      <footer className="flex justify-around p-4 bg-black fixed bottom-0 w-full max-w-[30rem] gap-[0.4375rem]">
         <button className="tab-btn tab-rewards cursor-not-allowed">
           <img src="/icons/arewards.svg" alt="Rewards" />
         </button>
