@@ -1,5 +1,45 @@
 import { useState, useEffect } from 'react';
 
+// DailyLogin Component
+const DailyLogin = ({ currentDay, loginTimer, handleClaim }) => {
+  return (
+    <div className="text-center mb-4">
+      <div className="text-2xl mb-4">Daily Login</div>
+      <div className="flex justify-around mb-4">
+        {[...Array(7)].map((_, index) => (
+          <div key={index} className="text-xl">{index + 1}</div>
+        ))}
+      </div>
+      {loginTimer <= 0 ? (
+        <button onClick={handleClaim} className="px-4 py-2 bg-green-500 rounded text-xl">
+          Claim
+        </button>
+      ) : (
+        <div>{new Date(loginTimer * 1000).toISOString().substr(11, 8)}</div>
+      )}
+    </div>
+  );
+};
+
+// TaskList Component
+const TaskList = ({ tasks, handleGo }) => {
+  return (
+    <div className="text-center">
+      <div className="text-2xl mb-4">Tasks</div>
+      <div className="flex flex-col gap-4">
+        {tasks.map(task => (
+          <div key={task.id} className="flex justify-between items-center bg-gray-700 p-4 rounded">
+            <span>{task.name}</span>
+            <button onClick={() => handleGo(task)} className="px-4 py-2 bg-blue-500 rounded text-xl">
+              Go
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const tasksList = [
   { id: 1, name: 'Subscribe to Pink channel', reward: 200, link: 'https://t.me/pinkchannel' },
   { id: 2, name: 'Join Pink Community', reward: 100, link: 'https://t.me/pinkcommunity' },
