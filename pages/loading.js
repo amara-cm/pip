@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import styles from '../styles/Loading.module.css';
 
 const Loading = () => {
   const [progress, setProgress] = useState(0);
@@ -15,13 +14,13 @@ const Loading = () => {
         }
         return prev + 1;
       });
-    }, 100); // Adjust the time as needed
+    }, 10); // 10ms delay for each percent
     return () => clearInterval(interval);
   }, [router]);
 
   return (
-    <div className={styles['loading-scr']}>
-      <div className={styles.text}>Loading... {progress}%</div>
+    <div className="flex justify-center items-center w-full h-screen bg-black font-outfit font-semibold text-white">
+      <div className="text-2xl">Loading... {progress}%</div>
     </div>
   );
 };
