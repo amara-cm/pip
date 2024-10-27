@@ -55,11 +55,7 @@
 }
 
 .sell-btn {
-  @apply bg-pink-500;
-}
-
-.sell-btn .text {
-  @apply text-white;
+  bg-[url('sell-btn.svg')];
 }
 
 /* Tailwind Tab Bar based on Figma CSS */
@@ -74,25 +70,13 @@
 }
 
 .tab-rewards .icon {
-  @apply w-[37px] h-[37px] mb-1 bg-[url('/icons/rewards.svg')] bg-no-repeat bg-center;
-}
-
-.tab-rewards .text {
-  @apply text-sm font-semibold text-gray-400;
+  @apply w-[37px] h-[37px] mb-1 bg-[url('/icons/brewards.svg')] bg-no-repeat bg-center;
 }
 
 .tab-site .icon {
-  @apply w-[27px] h-[27px] mb-1 bg-[url('/icons/site.svg')] bg-no-repeat bg-center;
-}
-
-.tab-site .text {
-  @apply text-sm font-semibold text-white;
+  @apply w-[27px] h-[27px] mb-1 bg-[url('/icons/asite.svg')] bg-no-repeat bg-center;
 }
 
 .tab-friends .icon {
-  @apply w-[27px] h-[27px] mb-1 bg-[url('/icons/friends.svg')] bg-no-repeat bg-center;
-}
-
-.tab-friends .text {
-  @apply text-sm font-semibold text-gray-400;
+  @apply w-[27px] h-[27px] mb-1 bg-[url('/icons/bfriends.svg')] bg-no-repeat bg-center;
 }
