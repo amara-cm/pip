@@ -1,8 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const Friends = () => {
   const [referrals, setReferrals] = useState([]);
   const [newReferralId, setNewReferralId] = useState('');
+
+  // Preload footer icons to ensure they're ready immediately
+  useEffect(() => {
+    const preloadImages = ['/icons/brewards.svg', '/icons/bsite.svg', '/icons/afriends.svg'];
+    preloadImages.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
 
   const handleInvite = () => {
     setReferrals([...referrals, newReferralId]);
@@ -32,14 +41,28 @@ const Friends = () => {
           ))}
         </div>
       </div>
+
       <footer className="flex justify-around p-4 bg-black fixed bottom-0 w-full max-w-[30rem] gap-[0.4375rem]">
-        <button onClick={() => window.location.href = '/tasks'} onTouchStart={(e) => e.preventDefault()}>
+        <button 
+          onClick={() => window.location.href = '/tasks'} 
+          onTouchStart={(e) => e.preventDefault()} 
+          style={{ WebkitTapHighlightColor: 'transparent' }}
+        >
           <img src="/icons/brewards.svg" alt="Rewards" />
         </button>
-        <button onClick={() => window.location.href = '/'} onTouchStart={(e) => e.preventDefault()}>
+
+        <button 
+          onClick={() => window.location.href = '/'} 
+          onTouchStart={(e) => e.preventDefault()} 
+          style={{ WebkitTapHighlightColor: 'transparent' }}
+        >
           <img src="/icons/bsite.svg" alt="Home" />
         </button>
-        <button className="tab-btn tab-friends cursor-not-allowed" onTouchStart={(e) => e.preventDefault()}>
+        <button 
+          className="cursor-not-allowed" 
+          onTouchStart={(e) => e.preventDefault()} 
+          style={{ WebkitTapHighlightColor: 'transparent' }}
+        >
           <img src="/icons/afriends.svg" alt="Friends" />
         </button>
       </footer>
