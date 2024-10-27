@@ -16,7 +16,6 @@
     --gap: 0.5rem;
 }
 
-/* Tailwind Tab Bar Styles */
 .tab-bar {
     @apply fixed w-full h-[7.41vh] bg-black bottom-0 border-t border-gray-200 flex flex-row justify-between items-center;
 }
@@ -41,18 +40,15 @@
     background-image: url('/icons/bfriends.svg');
 }
 
-/* Tab Button Text Styling */
 .tab-bar .tab-btn {
     @apply font-sans font-semibold tracking-wide text-gray-400;
 }
 
-/* Coin Icon Styling */
 .coin-icon {
     @apply flex w-2.5 h-2.5 bg-contain bg-no-repeat;
     background-image: url('/icons/gamecoin.svg');
 }
 
-/* Coin Amount Frame */
 .coinsamt-fr {
     @apply flex flex-row items-center justify-start gap-1 h-[4.79vh];
 }
