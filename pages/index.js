@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as React from "react";
+import Loading from './loading'; // Import the Loading component
 
 function MiningButton({ onClick }) {
   return (
@@ -53,8 +54,10 @@ function HomeScreen() {
   const [stone, setStone] = useState(0);
   const [timer, setTimer] = useState(28800); // 8 hours in seconds
   const [mining, setMining] = useState(false);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
+    setLoading(true); // Set loading to true initially
     const savedState = localStorage.getItem('gameState');
     if (savedState) {
       const { coins, stone, timer, mining, lastUpdate } = JSON.parse(savedState);
@@ -72,6 +75,7 @@ function HomeScreen() {
         }
       }
     }
+    setLoading(false); // Set loading to false after state is restored
   }, []);
 
   useEffect(() => {
@@ -117,6 +121,10 @@ function HomeScreen() {
     setCoins((prevCoins) => prevCoins + 500);
     setStone(0);
   };
+
+  if (loading) {
+    return <Loading />; // Show loading screen while loading is true
+  }
 
   return (
     <div className="home-scr">
