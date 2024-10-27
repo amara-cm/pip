@@ -32,10 +32,16 @@ const Friends = () => {
           ))}
         </div>
       </div>
-      <footer className="flex justify-around p-4 bg-gray-800 fixed bottom-0 w-full max-w-[30rem]">
-        <button onClick={() => window.location.href = '/tasks'} className="text-white">Rewards</button>
-        <button onClick={() => window.location.href = '/'} className="text-white">Home</button>
-        <button onClick={() => window.location.href = '/friends'} className="text-white">Friends</button>
+      <footer className="flex justify-around p-4 bg-black fixed bottom-0 w-full max-w-[30rem] gap-[0.4375rem]">
+        <button onClick={() => window.location.href = '/tasks'}>
+          <img src="/icons/brewards.svg" alt="Rewards" />
+        </button>
+        <button onClick={() => window.location.href = '/'}>
+          <img src="/icons/bsite.svg" alt="Home" />
+        </button>
+        <button className="tab-btn tab-friends cursor-not-allowed">
+          <img src="/icons/afriends.svg" alt="Friends" />
+        </button>
       </footer>
     </div>
   );
