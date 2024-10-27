@@ -46,6 +46,7 @@ const Friends = () => {
         <button 
           onClick={() => window.location.href = '/tasks'} 
           onTouchStart={(e) => e.preventDefault()} 
+          onContextMenu={(e) => e.preventDefault()} 
           style={{ WebkitTapHighlightColor: 'transparent' }}
         >
           <img src="/icons/brewards.svg" alt="Rewards" />
@@ -54,6 +55,7 @@ const Friends = () => {
         <button 
           onClick={() => window.location.href = '/'} 
           onTouchStart={(e) => e.preventDefault()} 
+          onContextMenu={(e) => e.preventDefault()} 
           style={{ WebkitTapHighlightColor: 'transparent' }}
         >
           <img src="/icons/bsite.svg" alt="Home" />
@@ -61,6 +63,7 @@ const Friends = () => {
         <button 
           className="cursor-not-allowed" 
           onTouchStart={(e) => e.preventDefault()} 
+          onContextMenu={(e) => e.preventDefault()}
           style={{ WebkitTapHighlightColor: 'transparent' }}
         >
           <img src="/icons/afriends.svg" alt="Friends" />
