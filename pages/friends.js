@@ -45,7 +45,7 @@ const Friends = () => {
       <footer className="flex justify-around p-4 bg-black fixed bottom-0 w-full max-w-[30rem] gap-[0.4375rem]">
         <button onClick={() => window.location.href = '/tasks'}>
           <div style={{ pointerEvents: 'none' }}>
-            <img src="/icons/arewards.svg" alt="Rewards" />
+            <img src="/icons/brewards.svg" alt="Rewards" />
           </div>
         </button>
         <button onClick={() => window.location.href = '/'}>
