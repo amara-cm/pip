@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react';
-import styles from '../styles/Tasks.module.css';
 
 const tasksList = [
-  // Task list as before
+  { id: 1, name: 'Subscribe to Pink channel', reward: 200, link: 'https://t.me/pinkchannel' },
+  { id: 2, name: 'Join Pink Community', reward: 100, link: 'https://t.me/pinkcommunity' },
+  { id: 3, name: 'Follow us on X', reward: 200, link: 'https://twitter.com/pink' },
+  { id: 4, name: 'Follow us on Instagram', reward: 200, link: 'https://instagram.com/pink' },
+  { id: 5, name: 'Subscribe to our YouTube channel', reward: 100, link: 'https://youtube.com/pink' },
+  { id: 6, name: 'Invite a friend', reward: 50, link: 'https://t.me/pinkbot?start=invite1' },
+  { id: 7, name: 'Invite 3 friends', reward: 150, link: 'https://t.me/pinkbot?start=invite3' },
+  { id: 8, name: 'Invite 10 friends', reward: 500, link: 'https://t.me/pinkbot?start=invite10' },
 ];
 
 const Tasks = () => {
@@ -42,33 +48,38 @@ const Tasks = () => {
   }, []);
 
   return (
-    <div className={styles['tasks-scr']}>
-      <div className={styles['login-fr']}>
-        <div className={styles['login-text']}>Daily Login</div>
-        <div className={styles.days}>
+    <div className="flex flex-col items-center w-full h-screen bg-black text-white font-outfit font-semibold">
+      <div className="w-full max-w-[30rem]">
+        <div className="text-2xl mb-4">Daily Login</div>
+        <div className="flex justify-around mb-4">
           {[...Array(7)].map((_, index) => (
-            <div key={index} className={styles.day}>{index + 1}</div>
+            <div key={index} className="text-xl">{index + 1}</div>
           ))}
         </div>
         {loginTimer <= 0 ? (
-          <button className={styles['claim-btn']} onClick={handleClaim}>Claim</button>
+          <button onClick={handleClaim} className="px-4 py-2 bg-green-500 rounded text-xl">
+            Claim
+          </button>
         ) : (
           <div>{new Date(loginTimer * 1000).toISOString().substr(11, 8)}</div>
         )}
+        <div className="text-2xl mb-4">Tasks</div>
+        <div className="flex flex-col gap-4">
+          {tasks.map(task => (
+            <div key={task.id} className="flex justify-between items-center">
+              <span>{task.name}</span>
+              <button onClick={() => handleGo(task)} className="px-4 py-2 bg-blue-500 rounded text-xl">
+                Go
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className={styles['tasks-list']}>
-        {tasks.map(task => (
-          <div key={task.id} className={styles.task}>
-            <span className={styles.text}>{task.name}</span>
-            <button className={styles['go-btn']} onClick={() => handleGo(task)}>Go</button>
-          </div>
-        ))}
-      </div>
-      <div className={styles['tab-bar']}>
-        <button className={`${styles['tab-btn']} ${styles['tab-rewards']} active`} onClick={() => window.location.href = '/tasks'}>Rewards</button>
-        <button className={styles['tab-btn']} onClick={() => window.location.href = '/home'}>Site</button>
-        <button className={styles['tab-btn']} onClick={() => window.location.href = '/friends'}>Friends</button>
-      </div>
+      <footer className="flex justify-around p-4 bg-gray-800 fixed bottom-0 w-full max-w-[30rem]">
+        <button onClick={() => window.location.href = '/tasks'} className="text-white">Rewards</button>
+        <button onClick={() => window.location.href = '/'} className="text-white">Home</button>
+        <button onClick={() => window.location.href = '/friends'} className="text-white">Friends</button>
+      </footer>
     </div>
   );
 };
