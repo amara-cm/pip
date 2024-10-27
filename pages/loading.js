@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import ProgressIndicator from '../components/loading';
 
 const Loading = () => {
   const [progress, setProgress] = useState(0);
@@ -18,11 +19,7 @@ const Loading = () => {
     return () => clearInterval(interval);
   }, [router]);
 
-  return (
-    <div className="flex justify-center items-center w-full h-screen bg-black font-outfit font-semibold text-white">
-      <div className="text-2xl">Loading... {progress}%</div>
-    </div>
-  );
+  return <ProgressIndicator />;
 };
 
 export default Loading;
