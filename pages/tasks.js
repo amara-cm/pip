@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import DailyLogin from '../components/tasks/DailyLogin';
+import TaskList from '../components/tasks/TaskList';
 
 const tasksList = [
   { id: 1, name: 'Subscribe to Pink channel', reward: 200, link: 'https://t.me/pinkchannel' },
@@ -50,35 +52,23 @@ const Tasks = () => {
   return (
     <div className="flex flex-col items-center w-full h-screen bg-black text-white font-outfit font-semibold">
       <div className="w-full max-w-[30rem]">
-        <div className="text-2xl mb-4">Daily Login</div>
-        <div className="flex justify-around mb-4">
-          {[...Array(7)].map((_, index) => (
-            <div key={index} className="text-xl">{index + 1}</div>
-          ))}
-        </div>
-        {loginTimer <= 0 ? (
-          <button onClick={handleClaim} className="px-4 py-2 bg-green-500 rounded text-xl">
-            Claim
-          </button>
-        ) : (
-          <div>{new Date(loginTimer * 1000).toISOString().substr(11, 8)}</div>
-        )}
-        <div className="text-2xl mb-4">Tasks</div>
-        <div className="flex flex-col gap-4">
-          {tasks.map(task => (
-            <div key={task.id} className="flex justify-between items-center">
-              <span>{task.name}</span>
-              <button onClick={() => handleGo(task)} className="px-4 py-2 bg-blue-500 rounded text-xl">
-                Go
-              </button>
-            </div>
-          ))}
-        </div>
+        <DailyLogin
+          currentDay={currentDay}
+          loginTimer={loginTimer}
+          handleClaim={handleClaim}
+        />
+        <TaskList tasks={tasks} handleGo={handleGo} />
       </div>
       <footer className="flex justify-around p-4 bg-gray-800 fixed bottom-0 w-full max-w-[30rem]">
-        <button onClick={() => window.location.href = '/tasks'} className="text-white">Rewards</button>
-        <button onClick={() => window.location.href = '/'} className="text-white">Home</button>
-        <button onClick={() => window.location.href = '/friends'} className="text-white">Friends</button>
+        <button className="tab-btn tab-rewards cursor-not-allowed">
+          <img src="/icons/arewards.svg" alt="Rewards" />
+        </button>
+        <button onClick={() => window.location.href = '/'}>
+          <img src="/icons/bsite.svg" alt="Home" />
+        </button>
+        <button onClick={() => window.location.href = '/friends'}>
+          <img src="/icons/bfriends.svg" alt="Friends" />
+        </button>
       </footer>
     </div>
   );
