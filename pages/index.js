@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as React from "react";
+import styles from '../styles/Home.module.css'; // Ensure you import the styles
 
 function MiningButton({ onClick }) {
   return (
