@@ -33,13 +33,13 @@ const Friends = () => {
         </div>
       </div>
       <footer className="flex justify-around p-4 bg-black fixed bottom-0 w-full max-w-[30rem] gap-[0.4375rem]">
-        <button onClick={() => window.location.href = '/tasks'}>
+        <button onClick={() => window.location.href = '/tasks'} onTouchStart={(e) => e.preventDefault()}>
           <img src="/icons/brewards.svg" alt="Rewards" />
         </button>
-        <button onClick={() => window.location.href = '/'}>
+        <button onClick={() => window.location.href = '/'} onTouchStart={(e) => e.preventDefault()}>
           <img src="/icons/bsite.svg" alt="Home" />
         </button>
-        <button className="tab-btn tab-friends cursor-not-allowed">
+        <button className="tab-btn tab-friends cursor-not-allowed" onTouchStart={(e) => e.preventDefault()}>
           <img src="/icons/afriends.svg" alt="Friends" />
         </button>
       </footer>
