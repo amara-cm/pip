@@ -43,24 +43,20 @@ const Friends = () => {
       </div>
 
       <footer className="flex justify-around p-4 bg-black fixed bottom-0 w-full max-w-[30rem] gap-[0.4375rem]">
-        <button 
-          onClick={() => window.location.href = '/tasks'} 
-            <div style={{ pointerEvents: 'none' }}>
-              <img src="/icons/arewards.svg" alt="Rewards" />
-            </div>
+        <button onClick={() => window.location.href = '/tasks'} 
+          <div style={{ pointerEvents: 'none' }}>
+            <img src="/icons/arewards.svg" alt="Rewards" />
+          </div>
         </button>
-
-        <button 
-          onClick={() => window.location.href = '/'} 
-            <div style={{ pointerEvents: 'none' }}>
-              <img src="/icons/bsite.svg" alt="Home" />
-            </div>
+        <button onClick={() => window.location.href = '/'} 
+          <div style={{ pointerEvents: 'none' }}>
+            <img src="/icons/bsite.svg" alt="Home" />
+          </div>
         </button>
-        <button 
-          className="cursor-not-allowed" 
-            <div style={{ pointerEvents: 'none' }}>
-               <img src="/icons/bfriends.svg" alt="Friends" />
-            </div>
+        <button className="cursor-not-allowed" 
+          <div style={{ pointerEvents: 'none' }}>
+           <img src="/icons/bfriends.svg" alt="Friends" />
+          </div>
         </button>
       </footer>
     </div>
