@@ -162,13 +162,19 @@ function HomeScreen() {
       </div>
       <footer className="flex justify-around p-4 bg-black fixed bottom-0 w-full max-w-[30rem] gap-[0.4375rem]">
         <button onClick={() => window.location.href = '/tasks'}>
-          <img src="/icons/brewards.svg" alt="Rewards" />
+          <div style={{ pointerEvents: 'none' }}>
+            <img src="/icons/brewards.svg" alt="Rewards" />
+          </div>
         </button>
-        <button className="tab-btn tab-site cursor-not-allowed">
-          <img src="/icons/asite.svg" alt="Home" />
+        <button className="cursor-not-allowed">
+          <div style={{ pointerEvents: 'none' }}>
+            <img src="/icons/bsite.svg" alt="Home" />
+          </div>
         </button>
         <button onClick={() => window.location.href = '/friends'}>
-          <img src="/icons/bfriends.svg" alt="Friends" />
+          <div style={{ pointerEvents: 'none' }}>
+            <img src="/icons/afriends.svg" alt="Friends" />
+          </div>
         </button>
       </footer>
     </div>
