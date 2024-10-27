@@ -45,28 +45,22 @@ const Friends = () => {
       <footer className="flex justify-around p-4 bg-black fixed bottom-0 w-full max-w-[30rem] gap-[0.4375rem]">
         <button 
           onClick={() => window.location.href = '/tasks'} 
-          onTouchStart={(e) => e.preventDefault()} 
-          onContextMenu={(e) => e.preventDefault()} 
-          style={{ WebkitTapHighlightColor: 'transparent' }}
-        >
-          <img src="/icons/brewards.svg" alt="Rewards" />
+            <div style={{ pointerEvents: 'none' }}>
+              <img src="/icons/arewards.svg" alt="Rewards" />
+            </div>
         </button>
 
         <button 
           onClick={() => window.location.href = '/'} 
-          onTouchStart={(e) => e.preventDefault()} 
-          onContextMenu={(e) => e.preventDefault()} 
-          style={{ WebkitTapHighlightColor: 'transparent' }}
-        >
-          <img src="/icons/bsite.svg" alt="Home" />
+            <div style={{ pointerEvents: 'none' }}>
+              <img src="/icons/bsite.svg" alt="Home" />
+            </div>
         </button>
         <button 
           className="cursor-not-allowed" 
-          onTouchStart={(e) => e.preventDefault()} 
-          onContextMenu={(e) => e.preventDefault()}
-          style={{ WebkitTapHighlightColor: 'transparent' }}
-        >
-          <img src="/icons/afriends.svg" alt="Friends" />
+            <div style={{ pointerEvents: 'none' }}>
+               <img src="/icons/bfriends.svg" alt="Friends" />
+            </div>
         </button>
       </footer>
     </div>
