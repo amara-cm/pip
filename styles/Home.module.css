@@ -31,8 +31,7 @@
 }
 
 .mine-btn .text, 
-.8h-tmr .text, 
-.sell-btn .text {
+.8h-tmr .text {
   @apply font-sans font-semibold text-center text-base;
 }
 
@@ -55,7 +54,7 @@
 }
 
 .sell-btn {
-  bg-[url('sell-btn.svg')];
+  background-image: url('/icons/sell-btn.svg');
 }
 
 /* Tailwind Tab Bar based on Figma CSS */
@@ -70,13 +69,16 @@
 }
 
 .tab-rewards .icon {
-  @apply w-[37px] h-[37px] mb-1 bg-[url('/icons/brewards.svg')] bg-no-repeat bg-center;
+  @apply w-[37px] h-[37px] mb-1 bg-no-repeat bg-center;
+  background-image: url('/icons/brewards.svg');
 }
 
 .tab-site .icon {
-  @apply w-[27px] h-[27px] mb-1 bg-[url('/icons/asite.svg')] bg-no-repeat bg-center;
+  @apply w-[27px] h-[27px] mb-1 bg-no-repeat bg-center;
+  background-image: url('/icons/asite.svg');
 }
 
 .tab-friends .icon {
-  @apply w-[27px] h-[27px] mb-1 bg-[url('/icons/bfriends.svg')] bg-no-repeat bg-center;
+  @apply w-[27px] h-[27px] mb-1 bg-no-repeat bg-center;
+  background-image: url('/icons/bfriends.svg');
 }
