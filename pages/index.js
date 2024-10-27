@@ -160,17 +160,17 @@ function HomeScreen() {
         <div className="coin-icon"></div>
         <div className="coin-amt">{coins}</div>
       </div>
-      <div className="tab-bar fixed bottom-0 w-full max-w-[30rem] mx-auto">
-        <button className="tab-btn tab-rewards" onClick={() => window.location.href = '/tasks'}>
-          <div className="icon"></div>
+      <footer className="flex justify-around p-4 bg-black fixed bottom-0 w-full max-w-[30rem] gap-[0.4375rem]">
+        <button onClick={() => window.location.href = '/tasks'}>
+          <img src="/icons/brewards.svg" alt="Rewards" />
         </button>
-        <button className="tab-btn tab-site">
-          <div className="icon"></div>
+        <button className="tab-btn tab-rewards cursor-not-allowed">
+          <img src="/icons/asite.svg" alt="Home" />
         </button>
-        <button className="tab-btn tab-friends" onClick={() => window.location.href = '/friends'}>
-          <div className="icon"></div>
+        <button onClick={() => window.location.href = '/friends'}>
+          <img src="/icons/bfriends.svg" alt="Friends" />
         </button>
-      </div>
+      </footer>
     </div>
   );
 }
