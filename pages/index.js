@@ -168,12 +168,12 @@ function HomeScreen() {
         </button>
         <button className="cursor-not-allowed">
           <div style={{ pointerEvents: 'none' }}>
-            <img src="/icons/bsite.svg" alt="Home" />
+            <img src="/icons/asite.svg" alt="Home" />
           </div>
         </button>
         <button onClick={() => window.location.href = '/friends'}>
           <div style={{ pointerEvents: 'none' }}>
-            <img src="/icons/afriends.svg" alt="Friends" />
+            <img src="/icons/bfriends.svg" alt="Friends" />
           </div>
         </button>
       </footer>
