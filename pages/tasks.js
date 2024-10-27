@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import TaskList from '../components/tasks/TaskList';
 
 const tasksList = [
   { id: 1, name: 'Subscribe to Pink channel', reward: 200, link: 'https://t.me/pinkchannel' },
