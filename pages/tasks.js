@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import DailyLogin from '../components/tasks/DailyLogin';
 import TaskList from '../components/tasks/TaskList';
 
 const tasksList = [
