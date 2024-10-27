@@ -164,7 +164,7 @@ function HomeScreen() {
         <button onClick={() => window.location.href = '/tasks'}>
           <img src="/icons/brewards.svg" alt="Rewards" />
         </button>
-        <button className="tab-btn tab-rewards cursor-not-allowed">
+        <button className="tab-btn tab-site cursor-not-allowed">
           <img src="/icons/asite.svg" alt="Home" />
         </button>
         <button onClick={() => window.location.href = '/friends'}>
