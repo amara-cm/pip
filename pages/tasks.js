@@ -98,14 +98,20 @@ const Tasks = () => {
         <TaskList tasks={tasks} handleGo={handleGo} />
       </div>
       <footer className="flex justify-around p-4 bg-black fixed bottom-0 w-full max-w-[30rem] gap-[0.4375rem]">
-        <button className="tab-btn tab-rewards cursor-not-allowed">
-          <img src="/icons/arewards.svg" alt="Rewards" />
+        <button className="cursor-not-allowed">
+          <div style={{ pointerEvents: 'none' }}>
+            <img src="/icons/arewards.svg" alt="Rewards" />
+          </div>
         </button>
         <button onClick={() => window.location.href = '/'}>
-          <img src="/icons/bsite.svg" alt="Home" />
+          <div style={{ pointerEvents: 'none' }}>
+            <img src="/icons/bsite.svg" alt="Home" />
+          </div>
         </button>
         <button onClick={() => window.location.href = '/friends'}>
-          <img src="/icons/bfriends.svg" alt="Friends" />
+          <div style={{ pointerEvents: 'none' }}>
+            <img src="/icons/bfriends.svg" alt="Friends" />
+          </div>
         </button>
       </footer>
     </div>
