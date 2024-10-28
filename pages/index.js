@@ -131,6 +131,8 @@ function HomeScreen() {
       <main className="flex overflow-hidden flex-col pt-[11rem] mx-auto w-full bg-black max-w-[30rem] h-full justify-center">
         <StatDisplay 
           iconSrc="/icons/gamecoin.svg"
+          onContextMenu={(e) => e.preventDefault()} 
+          onTouchStart={(e) => e.preventDefault()}
           style={{ pointerEvents: 'none' }}
           value="0"
         />
@@ -160,8 +162,8 @@ function HomeScreen() {
           </div>
         </section>
       </main>
-      <div className="coins" style={{ marginTop: '25%' }}>
-        <div className="coin-icon" style={{ pointerEvents: 'none' }}></div>
+      <div className="coins" style={{ marginTop: '25%', pointerEvents: 'none' }}>
+        <div className="coin-icon"></div>
         <div className="coin-amt">{coins}</div>
       </div>
       <footer className="flex justify-around p-4 bg-black fixed bottom-0 w-full max-w-[30rem] gap-[0.4375rem]">
