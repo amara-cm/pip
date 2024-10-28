@@ -41,14 +41,14 @@ const TaskList = ({ tasks, handleGo }) => {
 };
 
 const tasksList = [
-  { id: 1, name: 'Subscribe to Pinx channel', reward: 200, link: 'https://t.me/thepinx' },
-  { id: 2, name: 'Boost Pinx channel', reward: 300, link: 'https://t.me/boost/thepinx' },
+  { id: 1, name: 'Subscribe to Pinx channel', reward: 200, link: 'https://t.me/pinxann' },
+  { id: 2, name: 'Boost Pinx channel', reward: 300, link: 'https://t.me/boost/pinxann' },
   { id: 3, name: 'Follow us on X', reward: 200, link: 'https://x.com/thepinxhouse' },
   { id: 4, name: 'Follow us on Instagram', reward: 200, link: 'https://www.instagram.com/realpinxhouse' },
   { id: 5, name: 'Subscribe to our YouTube channel', reward: 500, link: 'https://youtube.com/pink' },
-  { id: 6, name: 'Invite a friend', reward: 50, link: 'https://t.me/pinkbot?start=invite1' },
-  { id: 7, name: 'Invite 3 friends', reward: 150, link: 'https://t.me/pinkbot?start=invite3' },
-  { id: 8, name: 'Invite 10 friends', reward: 500, link: 'https://t.me/pinkbot?start=invite10' },
+  { id: 6, name: 'Invite a friend', reward: 50, link: 'https://t.me/pinxhousebot?start=invite1' },
+  { id: 7, name: 'Invite 3 friends', reward: 150, link: 'https://t.me/pinxhousebot?start=invite3' },
+  { id: 8, name: 'Invite 10 friends', reward: 500, link: 'https://t.me/pinxhousebot?start=invite10' },
 ];
 
 const Tasks = () => {
