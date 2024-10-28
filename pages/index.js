@@ -160,7 +160,7 @@ function HomeScreen() {
         </section>
       </main>
       <div className="coins" style={{ marginTop: '25%' }}>
-        <div className="coin-icon"></div>
+        <div className="coin-icon" style={{ pointerEvents: 'none' }}></div>
         <div className="coin-amt">{coins}</div>
       </div>
       <footer className="flex justify-around p-4 bg-black fixed bottom-0 w-full max-w-[30rem] gap-[0.4375rem]">
