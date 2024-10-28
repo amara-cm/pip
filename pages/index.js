@@ -139,7 +139,7 @@ function HomeScreen() {
           alt="Mining visualization"
           onContextMenu={(e) => e.preventDefault()} 
           onTouchStart={(e) => e.preventDefault()} 
-          <div style={{ pointerEvents: 'none' }}>
+          style={{ pointerEvents: 'none' }}
           className="mainicon" 
         />
         {!mining ? (
