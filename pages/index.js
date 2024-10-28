@@ -54,7 +54,6 @@ function HomeScreen() {
   const [stone, setStone] = useState(0);
   const [mining, setMining] = useState(false);
   const [timer, setTimer] = useState(28800); // 8 hours in seconds
-  const [mining, setMining] = useState(true);
   const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
