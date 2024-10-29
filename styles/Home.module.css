@@ -21,7 +21,7 @@
 }
 
 .mainicon {
-  @apply mx-auto w-auto max-h-[80vh] mt-5;
+  @apply mx-auto w-[25.75rem] h-[25.75rem] mt-5;
 }
 
 .mine-btn {
