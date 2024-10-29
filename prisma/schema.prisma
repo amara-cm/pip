@@ -33,3 +33,15 @@ model Task {
   completed Boolean  @default(false)
   reward    Int
 }
+
+model device_logs {
+    id          Int      @id @default(autoincrement())
+    user_agent  String
+    access_time DateTime @default(now())
+}
+
+model desktop_access_logs {
+    id          Int      @id @default(autoincrement())
+    user_agent  String
+    access_time DateTime @default(now())
+}
