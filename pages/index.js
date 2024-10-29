@@ -33,16 +33,6 @@ function CollectingButton({ timer, stone }) {
   );
 }
 
-function MiningSlot() {
-  return (
-    <div 
-      className="flex shrink-0 w-[8rem] bg-black h-[4.25rem]"
-      role="status"
-      aria-label="Mining slot"
-    />
-  );
-}
-
 function StatDisplay({ iconSrc, value }) {
   return (
     <div className="flex gap-[0.5rem] justify-center items-center self-center text-4xl font-bold tracking-tighter leading-none text-white whitespace-nowrap">
@@ -163,13 +153,6 @@ function HomeScreen() {
             <img src="/icons/sell-btn.svg" alt="Sell Button" className="inline-block" />
           </button>
         )}
-        <section className="flex gap-[0.625rem] justify-center items-center mt-[3.5rem] bg-black">
-          <div className="flex overflow-hidden gap-[0.625rem] self-stretch px-[0.125rem] my-auto border-t border-zinc-500 border-opacity-10 w-[25.75rem]">
-            {[1, 2, 3].map((slot) => (
-              <MiningSlot key={slot} />
-            ))}
-          </div>
-        </section>
       </div>
       <div className="coins" style={{ marginTop: '25%', pointerEvents: 'none' }}>
         <div className="coin-icon"></div>
