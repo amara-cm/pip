@@ -1,26 +1,19 @@
 import { useState, useEffect } from 'react';
 import * as React from "react";
-import Loading from './loading';
-
-function HomeScreen() {
-  const [coins, setCoins] = useState(0);
-  const [stone, setStone] = useState(0);
-  const [mining, setMining] = useState(false);
-  const [timer, setTimer] = useState(28800); // 8 hours in seconds
-  const [loading, setLoading] = useState(true);
-}
+import Loading from './loading'; // Import the Loading component
 
 function MiningButton({ onClick }) {
   return (
-    <button 
-      className="flex items-center justify-center w-[85vw] h-[6vh] rounded mt-5 bg-black mine-btn"
+    <img 
+      src="/icons/mine-btn.svg" 
+      alt="Mine Button"
+      className="object-contain w-[85vw] h-[6vh] mine-btn"
       aria-label="Start mining"
       onClick={onClick}
-    >
-      <div className="font-sans font-semibold text-center text-base text-black">
-        Mine
-      </div>
-    </button>
+      onContextMenu={(e) => e.preventDefault()}  // Prevent context menu (right-click/long-press)
+      onTouchStart={(e) => e.preventDefault()}   // Prevent touch interaction triggering the link
+      style={{ cursor: 'pointer' }}              // Indicate it's clickable
+    />
   );
 }
 
@@ -59,6 +52,13 @@ function StatDisplay({ iconSrc, value }) {
     </div>
   );
 }
+
+function HomeScreen() {
+  const [coins, setCoins] = useState(0);
+  const [stone, setStone] = useState(0);
+  const [mining, setMining] = useState(false);
+  const [timer, setTimer] = useState(28800); // 8 hours in seconds
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     setLoading(true); // Set loading to true initially
