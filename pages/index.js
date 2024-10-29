@@ -129,8 +129,8 @@ function HomeScreen() {
   }
 
   return (
-    <div className="home-scr">
-      <main className="flex overflow-hidden flex-col pt-[11rem] mx-auto w-full bg-black max-w-[30rem] h-full justify-center">
+    <div className="flex flex-col items-center w-full h-screen bg-black text-white font-outfit font-semibold">
+      <div className="w-full max-w-[30rem]">
         <StatDisplay 
           iconSrc="/icons/gamecoin.svg"
           onContextMenu={(e) => e.preventDefault()} 
