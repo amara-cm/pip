@@ -10,7 +10,8 @@ function MiningButton({ onClick }) {
         aria-label="Start mining"
         onClick={onClick}  // Handle click here
         onContextMenu={(e) => e.preventDefault()}  // Prevent context menu (right-click/long-press)
-        onTouchStart={(e) => e.preventDefault()}   // Prevent touch interaction triggering the link
+        onTouchStart={(e) => e.preventDefault()}
+        style={{ bottom: '20%' }}
       >
         <img 
           src="/icons/mine-btn.svg" 
