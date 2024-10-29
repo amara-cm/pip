@@ -43,19 +43,19 @@ const Friends = () => {
       </div>
 
       <footer className="flex justify-around p-4 bg-black fixed bottom-0 w-full max-w-[30rem] gap-[0.4375rem]">
-        <button onClick={() => window.location.href = '/tasks'}>
+        <button onClick={() => window.location.href = '/tasks'} className="flex justify-center items-center">
           <div style={{ pointerEvents: 'none' }}>
-            <img src="/icons/brewards.svg" alt="Rewards" />
+            <img src="/icons/brewards.svg" alt="Rewards" className="mx-auto my-0" />
           </div>
         </button>
-        <button onClick={() => window.location.href = '/'}>
+        <button onClick={() => window.location.href = '/'} className="flex justify-center items-center">
           <div style={{ pointerEvents: 'none' }}>
-            <img src="/icons/bsite.svg" alt="Home" />
+            <img src="/icons/bsite.svg" alt="Home" className="mx-auto my-0" />
           </div>
         </button>
-        <button className="cursor-not-allowed">
+        <button className="cursor-not-allowed flex justify-center items-center">
           <div style={{ pointerEvents: 'none' }}>
-            <img src="/icons/afriends.svg" alt="Friends" />
+            <img src="/icons/afriends.svg" alt="Friends" className="mx-auto my-0" />
           </div>
         </button>
       </footer>
