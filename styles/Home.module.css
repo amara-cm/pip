@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .home-scr {
-  @apply fixed inset-0 flex flex-col items-center justify-center w-screen h-full bg-black overflow-hidden;
+  @apply flex flex-col items-center w-full h-screen bg-black text-white font-outfit font-semibold items-center justify-center;
 }
 
 .coins {
@@ -21,7 +21,7 @@
 }
 
 .mainicon {
-  @apply mx-auto w-[25.75rem] h-[25.75rem];
+  @apply mx-auto w-[25.75rem] h-[25.75rem] object-contain;
 }
 
 .mine-btn {
