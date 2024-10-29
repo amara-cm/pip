@@ -130,7 +130,7 @@ function HomeScreen() {
 
   return (
     <div className="flex flex-col items-center w-full h-screen bg-black text-white font-outfit font-semibold">
-      <div className="w-full max-w-[30rem] mt-[15%]">
+      <div className="w-full max-w-[30rem] mt-[20%]">
         <StatDisplay 
           iconSrc="/icons/gamecoin.svg"
           onContextMenu={(e) => e.preventDefault()} 
