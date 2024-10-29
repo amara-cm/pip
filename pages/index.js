@@ -5,11 +5,13 @@ import Loading from './loading'; // Import the Loading component
 function MiningButton({ onClick }) {
   return (
     <button 
-      className="mine-btn"
+      className="flex items-center justify-center w-[85vw] h-[6vh] rounded mt-5 bg-black mine-btn"
       aria-label="Start mining"
       onClick={onClick}
     >
-      <div className="text">Mine</div>
+      <div className="font-sans font-semibold text-center text-base text-black">
+        Mine
+      </div>
     </button>
   );
 }
