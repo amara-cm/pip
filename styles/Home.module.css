@@ -31,8 +31,7 @@
 }
 
 .mine-btn .text, 
-.8h-tmr .text, 
-.sell-btn .text {
+.8h-tmr .text {
   @apply font-sans font-semibold text-center text-base;
 }
 
