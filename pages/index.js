@@ -4,12 +4,12 @@ import Loading from './loading'; // Import the Loading component
 
 function MiningButton({ onClick }) {
   return (
-    <div className="flex justify-center mt-[74vh]">
+    <div className="flex justify-center">
       <div 
         className="object-contain w-[85vw] h-[6vh] mine-btn cursor-pointer" 
         aria-label="Start mining"
         onClick={onClick}
-        onContextMenu={(e) => e.preventDefault()}  // Prevent context menu (right-click/long-press)
+        onContextMenu={(e) => e.preventDefault()}
         onTouchStart={(e) => e.preventDefault()}
       >
         <img 
