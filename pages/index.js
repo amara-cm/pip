@@ -165,9 +165,6 @@ function HomeScreen() {
           </div>
         </section>
       </div>
-      <div className="coins" style={{ marginTop: '25%', pointerEvents: 'none' }}>
-        <div className="coin-icon"></div>
-        <div className="coin-amt">{coins}</div>
       </div>
       <footer className="flex justify-around p-4 bg-black fixed bottom-0 w-full max-w-[30rem] gap-[0.4375rem]">
         <button onClick={() => window.location.href = '/tasks'} className="flex justify-center items-center">
