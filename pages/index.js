@@ -169,17 +169,17 @@ function HomeScreen() {
         <div className="coin-amt">{coins}</div>
       </div>
       <footer className="flex justify-around p-4 bg-black fixed bottom-0 w-full max-w-[30rem] gap-[0.4375rem]">
-        <button onClick={() => window.location.href = '/tasks'}>
+        <button onClick={() => window.location.href = '/tasks'} className="flex justify-center items-center">
           <div style={{ pointerEvents: 'none' }}>
             <img src="/icons/brewards.svg" alt="Rewards" className="mx-auto my-0" />
           </div>
         </button>
-        <button className="cursor-not-allowed">
+        <button className="cursor-not-allowed flex justify-center items-center">
           <div style={{ pointerEvents: 'none' }}>
             <img src="/icons/asite.svg" alt="Home" className="mx-auto my-0" />
           </div>
         </button>
-        <button onClick={() => window.location.href = '/friends'}>
+        <button onClick={() => window.location.href = '/friends'} className="flex justify-center items-center">
           <div style={{ pointerEvents: 'none' }}>
             <img src="/icons/bfriends.svg" alt="Friends" className="mx-auto my-0" />
           </div>
