@@ -1,6 +1,14 @@
 import { useState, useEffect } from 'react';
 import * as React from "react";
-import Loading from './loading'; // Import the Loading component
+import Loading from './loading';
+
+function HomeScreen() {
+  const [coins, setCoins] = useState(0);
+  const [stone, setStone] = useState(0);
+  const [mining, setMining] = useState(false);
+  const [timer, setTimer] = useState(28800); // 8 hours in seconds
+  const [loading, setLoading] = useState(true);
+}
 
 function MiningButton({ onClick }) {
   return (
@@ -51,13 +59,6 @@ function StatDisplay({ iconSrc, value }) {
     </div>
   );
 }
-
-function HomeScreen() {
-  const [coins, setCoins] = useState(0);
-  const [stone, setStone] = useState(0);
-  const [mining, setMining] = useState(false);
-  const [timer, setTimer] = useState(28800); // 8 hours in seconds
-  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     setLoading(true); // Set loading to true initially
