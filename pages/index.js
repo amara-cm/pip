@@ -4,16 +4,18 @@ import Loading from './loading'; // Import the Loading component
 
 function MiningButton({ onClick }) {
   return (
-    <img 
-      src="/icons/mine-btn.svg" 
-      alt="Mine Button"
-      className="object-contain w-[85vw] h-[6vh] mine-btn"
-      aria-label="Start mining"
-      onClick={onClick}
-      onContextMenu={(e) => e.preventDefault()}  // Prevent context menu (right-click/long-press)
-      onTouchStart={(e) => e.preventDefault()}   // Prevent touch interaction triggering the link
-      style={{ cursor: 'pointer' }}              // Indicate it's clickable
-    />
+    <div className="flex justify-center">
+      <img 
+        src="/icons/mine-btn.svg" 
+        alt="Mine Button"
+        className="object-contain w-[85vw] h-[6vh] mine-btn"
+        aria-label="Start mining"
+        onClick={onClick}
+        onContextMenu={(e) => e.preventDefault()}  // Prevent context menu (right-click/long-press)
+        onTouchStart={(e) => e.preventDefault()}   // Prevent touch interaction triggering the link
+        style={{ pointerEvents: 'none' }}              // Indicate it's clickable
+      />
+    </div>
   );
 }
 
