@@ -4,7 +4,7 @@ import Loading from './loading'; // Import the Loading component
 
 function MiningButton({ onClick }) {
   return (
-    <div className="flex justify-center relative h-full">
+    <div className="flex justify-center relative h-full overflow-hidden">
       <div 
         className="absolute bottom-[20%] object-contain w-[85vw] h-[6vh] mine-btn cursor-pointer" 
         aria-label="Start mining"
