@@ -45,6 +45,7 @@ function StatDisplay({ iconSrc, value }) {
         src={iconSrc} 
         alt=""
         className="object-contain shrink-0 self-stretch my-auto aspect-square w-[2.1875rem] h-[2.1875rem]" 
+        style={{ pointerEvents: 'none' }}
       />
       <p className="self-stretch my-auto">{value}</p>
     </div>
