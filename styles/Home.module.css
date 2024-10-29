@@ -24,19 +24,16 @@
   @apply mx-auto w-auto max-h-[80vh] mt-5;
 }
 
-.mine-btn, 
-.8h-tmr, 
-.sell-btn {
+.mine-btn {
+  background-image: url('/icons/mine-btn.svg');
+}
+
+.8h-tmr {
   @apply flex items-center justify-center w-[85vw] h-[6vh] rounded mt-5;
 }
 
-.mine-btn .text, 
 .8h-tmr .text {
   @apply font-sans font-semibold text-center text-base;
-}
-
-.mine-btn .text {
-  @apply text-black;
 }
 
 .8h-tmr {
@@ -54,7 +51,7 @@
 }
 
 .sell-btn {
-  @apply bg-pink-500;
+  background-image: url('/icons/sell-btn.svg');
 }
 
 /* Tailwind Tab Bar based on Figma CSS */
