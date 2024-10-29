@@ -163,7 +163,7 @@ function HomeScreen() {
             ))}
           </div>
         </section>
-      </main>
+      </div>
       <div className="coins" style={{ marginTop: '25%', pointerEvents: 'none' }}>
         <div className="coin-icon"></div>
         <div className="coin-amt">{coins}</div>
@@ -185,7 +185,6 @@ function HomeScreen() {
           </div>
         </button>
       </footer>
-      </div>
     </div>
   );
 }
