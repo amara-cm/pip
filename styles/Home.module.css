@@ -21,7 +21,7 @@
 }
 
 .mainicon {
-  @apply mx-auto w-[25.75rem] h-[25.75rem] object-contain;
+  @apply mx-auto w-[25.75rem] h-[25.75rem] bg-contain bg-no-repeat;
 }
 
 .mine-btn {
