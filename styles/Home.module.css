@@ -29,15 +29,11 @@
 }
 
 .8h-tmr {
-  @apply flex items-center justify-center w-[85vw] h-[6vh] rounded;
+  @apply flex justify-between items-center w-[85vw] h-[6vh] rounded bg-gray-700 border border-gray-200 rounded p-2;
 }
 
 .8h-tmr .text {
   @apply font-sans font-semibold text-center text-base;
-}
-
-.8h-tmr {
-  @apply flex justify-between bg-gray-700 border border-gray-200 rounded p-2;
 }
 
 .8h-tmr .frame {
@@ -47,7 +43,7 @@
 .8h-tmr .frame .text.collecting, 
 .8h-tmr .frame .text.stone-amt, 
 .8h-tmr .frame .text.tmr {
-  @apply text-gray-400;
+  @apply text-gray-200;
 }
 
 .sell-btn {
