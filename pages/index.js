@@ -148,8 +148,8 @@ function HomeScreen() {
           alt="Mining visualization"
           onContextMenu={(e) => e.preventDefault()} 
           onTouchStart={(e) => e.preventDefault()} 
-          style={{ pointerEvents: 'none', width: '25.75rem', height: '25.75rem' }}
-          className="mainicon" 
+          style={{ pointerEvents: 'none' }}
+          className="mainicon w-[100vw] h-auto aspect-square mx-auto" 
         />
         {!mining ? (
           <MiningButton onClick={startMining} />
