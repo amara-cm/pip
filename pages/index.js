@@ -185,6 +185,7 @@ function HomeScreen() {
           </div>
         </button>
       </footer>
+      </div>
     </div>
   );
 }
