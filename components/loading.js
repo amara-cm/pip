@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 
 const Loading = () => {
   const [progress, setProgress] = useState(1); // Start at 1%
-  const [isLoading, setIsLoading] = useState(true); // Track loading state
   const router = useRouter();
 
   useEffect(() => {
@@ -38,41 +37,45 @@ const Loading = () => {
     };
 
     // Start preloading assets
-    preloadAllAssets()
-      .then(() => {
-        // After all assets are preloaded, start incrementing progress
-        let currentProgress = 1; // Start at 1%
+    const preloadAndUpdateProgress = async () => {
+      try {
+        await preloadAllAssets(); // Preload assets
+
+        // Total duration for the loading screen
+        const totalDuration = 2000; // 2 seconds
+        const intervalDuration = 20; // 20ms interval
+        const totalSteps = totalDuration / intervalDuration; // Number of steps to reach 100%
+        
+        const increment = 100 / totalSteps; // Increment value for each step
+        let currentProgress = 1; // Initialize current progress
+
         const interval = setInterval(() => {
           if (currentProgress < 100) {
-            setProgress((prev) => prev + 1); // Increment progress by 1%
-            currentProgress += 1; // Move to the next progress point
+            currentProgress += increment; // Increment progress
+            setProgress(Math.min(Math.floor(currentProgress), 100)); // Set progress, ensuring it doesn't exceed 100
           } else {
-            clearInterval(interval); // Clear the interval once we reach 100%
-            setIsLoading(false); // Set loading to false to trigger redirect
+            clearInterval(interval); // Clear the interval when we reach 100%
           }
-        }, 20); // Smooth progress increment every 20ms
+        }, intervalDuration); // Increment every 20ms
 
-        // This timeout ensures we don't redirect too soon
-        setTimeout(() => {
-          if (currentProgress >= 100) {
-            clearInterval(interval); // Ensure to clear the interval
-            setIsLoading(false); // Mark loading as complete
-          }
-        }, 2000); // Total time to keep loading screen open
-      })
-      .catch((error) => {
+        // Redirect after total duration
+        const redirectTimeout = setTimeout(() => {
+          clearInterval(interval); // Cleanup interval
+          router.push('/home'); // Redirect to Home page
+        }, totalDuration);
+
+        return () => {
+          clearInterval(interval); // Cleanup on unmount
+          clearTimeout(redirectTimeout); // Cleanup timeout on unmount
+        };
+      } catch (error) {
         console.error('Error preloading assets:', error);
-        // Fallback: Redirect even if there's a preload error
-        router.push('/home'); 
-      });
-  }, [router]);
+        router.push('/home'); // Fallback: Redirect even if there's a preload error
+      }
+    };
 
-  useEffect(() => {
-    // Redirect to Home page when loading is complete
-    if (!isLoading) {
-      router.push('/home');
-    }
-  }, [isLoading, router]);
+    preloadAndUpdateProgress(); // Start the preloading and progress update
+  }, [router]);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-black">
