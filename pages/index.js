@@ -155,7 +155,7 @@ function HomeScreen() {
   }
 
   return (
-    <div className="flex flex-col items-center w-full h-screen bg-black text-white font-outfit font-semibold">
+    <div className="flex flex-col justify-between items-center w-full h-screen bg-black text-white font-outfit font-semibold">
       <div className="w-full max-w-[30rem] mt-[28%]">
         <StatDisplay 
           iconSrc="/icons/gamecoin.svg"
@@ -171,7 +171,7 @@ function HomeScreen() {
           onContextMenu={(e) => e.preventDefault()} 
           onTouchStart={(e) => e.preventDefault()} 
           style={{ pointerEvents: 'none' }}
-          className="mainicon w-[100vw] h-auto aspect-square mx-auto" 
+          className="mainicon w-[100vw] h-auto aspect-square mx-auto mb-4" 
         />
         {mining ? (
           timer > 0 ? (
