@@ -32,49 +32,31 @@ const Loading = () => {
       });
     };
 
-    const preloadAllAssets = () => {
-      return Promise.all(assets.map(preloadAsset));
-    };
-
-    // Start preloading assets
-    const preloadAndUpdateProgress = async () => {
+    const preloadAllAssets = async () => {
       try {
-        await preloadAllAssets(); // Preload assets
-
-        // Total duration for the loading screen
-        const totalDuration = 2000; // 2 seconds
-        const intervalDuration = 20; // 20ms interval
-        const totalSteps = totalDuration / intervalDuration; // Number of steps to reach 100%
-        
-        const increment = 100 / totalSteps; // Increment value for each step
-        let currentProgress = 1; // Initialize current progress
-
-        const interval = setInterval(() => {
-          if (currentProgress < 100) {
-            currentProgress += increment; // Increment progress
-            setProgress(Math.min(Math.floor(currentProgress), 100)); // Set progress, ensuring it doesn't exceed 100
-          } else {
-            clearInterval(interval); // Clear the interval when we reach 100%
-          }
-        }, intervalDuration); // Increment every 20ms
-
-        // Redirect after total duration
-        const redirectTimeout = setTimeout(() => {
-          clearInterval(interval); // Cleanup interval
-          router.push('/home'); // Redirect to Home page
-        }, totalDuration);
-
-        return () => {
-          clearInterval(interval); // Cleanup on unmount
-          clearTimeout(redirectTimeout); // Cleanup timeout on unmount
-        };
+        await Promise.all(assets.map(preloadAsset));
+        // Start progress increment after assets are preloaded
+        incrementProgress();
       } catch (error) {
         console.error('Error preloading assets:', error);
-        router.push('/home'); // Fallback: Redirect even if there's a preload error
+        router.push('/home'); // Fallback to home on error
       }
     };
 
-    preloadAndUpdateProgress(); // Start the preloading and progress update
+    const incrementProgress = () => {
+      let currentProgress = 1;
+      const interval = setInterval(() => {
+        if (currentProgress < 100) {
+          setProgress((prev) => Math.min(prev + 1, 100));
+          currentProgress += 1;
+        } else {
+          clearInterval(interval);
+          router.push('/home'); // Redirect after reaching 100%
+        }
+      }, 20); // Smooth progress increment every 20ms
+    };
+
+    preloadAllAssets(); // Start preloading assets
   }, [router]);
 
   return (
