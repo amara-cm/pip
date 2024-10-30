@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as React from "react";
 import Loading from './loading'; // Import the Loading component
-import Footer from './Footer';
+import Footer from '../components/Footer';
 
 function MiningButton({ onClick }) {
   return (
