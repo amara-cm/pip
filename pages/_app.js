@@ -5,6 +5,7 @@ import GameError from '../components/GameError'; // Import your GameError compon
 
 function MyApp({ Component, pageProps }) {
   const [hasError, setHasError] = useState(false); // State to track error
+  const [isLoading, setIsLoading] = useState(true); // State to track loading
 
   useEffect(() => {
     // This function will handle the loading process and error handling
@@ -37,6 +38,7 @@ function MyApp({ Component, pageProps }) {
 
       try {
         await Promise.all(assets.map(preloadAsset)); // Preload assets
+        setIsLoading(false); // Set loading to false after assets are preloaded
       } catch (error) {
         console.error('Error preloading assets:', error);
         setHasError(true); // Set error state if any asset fails to load
@@ -47,7 +49,7 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   // Render loading component while loading assets
-  if (!hasError) {
+  if (isLoading) {
     return <Loading />; // Show loading component
   }
 
