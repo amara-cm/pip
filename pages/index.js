@@ -173,14 +173,14 @@ function HomeScreen() {
           style={{ pointerEvents: 'none' }}
           className="mainicon w-[100vw] h-auto aspect-square mx-auto" 
         />
-        {timer === 0 ? (
-          <MiningButton onClick={startMining} />
-        ) : timer > 0 ? (
-          <CollectingButton timer={timer} stone={stone} />
+        {mining ? (
+          timer > 0 ? (
+            <CollectingButton timer={timer} stone={stone} />
+          ) : (
+            <SellButton onClick={handleSell} />
+          )
         ) : (
-          <button className="sell-btn" onClick={handleSell}>
-            <img src="/icons/sell-btn.svg" alt="Sell Button" />
-          </button>
+          <MiningButton onClick={startMining} />
         )}
       </div>
       <footer className="flex justify-around p-4 bg-black fixed bottom-0 w-full max-w-[30rem] gap-[0.4375rem]">
