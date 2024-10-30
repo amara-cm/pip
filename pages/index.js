@@ -24,10 +24,34 @@ function MiningButton({ onClick }) {
 
 function CollectingButton({ timer, stone }) {
   return (
-    <div className="8h-tmr">
-      <div className="frame">
-        <div className="text collecting">Collecting {stone.toFixed(3)}</div>
-        <div className="text tmr">{`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}</div>
+    <div className="flex justify-center">
+      <div className="w-[85vw] h-[6vh] bg-[#383838] border border-[#E7E7E7] rounded-lg flex items-center justify-between px-4 box-border">
+        <div className="font-outfit font-semibold text-[1rem] text-[#B3B3B3]">
+          Collecting {stone.toFixed(3)}
+        </div>
+        <div className="font-outfit font-semibold text-[1rem] text-[#B3B3B3]">
+          {`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SellButton({ onClick }) {
+  return (
+    <div className="flex justify-center">
+      <div 
+        className="object-contain w-[85vw] h-[6vh] sell-btn cursor-pointer" 
+        aria-label="Sell stone"
+        onClick={onClick}
+        onContextMenu={(e) => e.preventDefault()}
+        onTouchStart={(e) => e.preventDefault()}
+      >
+        <img 
+          src="/icons/sell-btn.svg" 
+          alt="Sell Button"
+          style={{ pointerEvents: 'none' }}  // Disable pointer events for the image
+        />
       </div>
     </div>
   );
@@ -53,7 +77,7 @@ function HomeScreen() {
   const [stone, setStone] = useState(0);
   const [mining, setMining] = useState(false);
   const [timer, setTimer] = useState(28800); // 8 hours in seconds
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [isCollectingActive, setIsCollectingActive] = useState(false);
 
   useEffect(() => {
     setLoading(true); // Set loading to true initially
@@ -83,6 +107,7 @@ function HomeScreen() {
         setTimer((prev) => {
           if (prev <= 1) {
             clearInterval(interval);
+            setIsCollectingActive(false); // Timer ends, stop collecting
             setMining(false);
             return 0;
           }
@@ -113,12 +138,15 @@ function HomeScreen() {
       setMining(true);
       setTimer(28800); // Reset timer
       setStone(0); // Reset stone collected
+      setIsCollectingActive(true); // Activate Collecting button
     }
   };
 
   const handleSell = () => {
-    setCoins((prevCoins) => prevCoins + 500);
-    setStone(0);
+    setCoins((prevCoins) => prevCoins + 500); // Add coins after selling
+    setStone(0); // Reset stone
+    setIsCollectingActive(false); // Deactivate Collecting button
+    setMining(false); // Go back to mining
   };
 
   if (loading) {
@@ -144,13 +172,13 @@ function HomeScreen() {
           style={{ pointerEvents: 'none' }}
           className="mainicon w-[100vw] h-auto aspect-square mx-auto" 
         />
-        {!mining ? (
+        {timer === 0 ? (
           <MiningButton onClick={startMining} />
         ) : timer > 0 ? (
           <CollectingButton timer={timer} stone={stone} />
         ) : (
           <button className="sell-btn" onClick={handleSell}>
-            <img src="/icons/sell-btn.svg" alt="Sell Button" className="inline-block" />
+            <img src="/icons/sell-btn.svg" alt="Sell Button" />
           </button>
         )}
       </div>
