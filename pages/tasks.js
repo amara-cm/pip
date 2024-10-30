@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Footer from './Footer';
+import Footer from '../components/Footer';
 
 // DailyLogin Component
 const DailyLogin = ({ currentDay, loginTimer, handleClaim }) => {
