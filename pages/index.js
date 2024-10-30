@@ -171,7 +171,7 @@ function HomeScreen() {
           onContextMenu={(e) => e.preventDefault()} 
           onTouchStart={(e) => e.preventDefault()} 
           style={{ pointerEvents: 'none' }}
-          className="mainicon w-[100vw] h-auto aspect-square mx-auto mb-8" 
+          className="mainicon w-[100vw] h-auto aspect-square mx-auto mb-16" 
         />
         {mining ? (
           timer > 0 ? (
