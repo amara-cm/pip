@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import ProgressIndicator from '../components/loading'; // Keep your existing ProgressIndicator
 
 const Loading = () => {
   const [progress, setProgress] = useState(1); // Start at 1%
@@ -65,7 +64,6 @@ const Loading = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-black">
       <p className="text-white mb-4">Loading {progress}%</p>
-      <ProgressIndicator progress={progress} />
     </div>
   );
 };
