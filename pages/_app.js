@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import '../styles/global.css';
-import Loading from './loading'; // Import your Loading component
-import GameError from './GameError'; // Import your GameError component
+import Loading from '../components/loading'; // Import your Loading component
+import GameError from '../components/GameError'; // Import your GameError component
 
 function MyApp({ Component, pageProps }) {
   const [loading, setLoading] = useState(true); // Start with loading true
