@@ -6,9 +6,9 @@ import GameError from '../components/GameError'; // Import your GameError compon
 function MyApp({ Component, pageProps }) {
   const [hasError, setHasError] = useState(false); // State to track error
   const [isLoading, setIsLoading] = useState(true); // State to track loading
+  const [reloadCount, setReloadCount] = useState(0); // Track reload attempts
 
   useEffect(() => {
-    // This function will handle the loading process and error handling
     const preloadAssets = async () => {
       const assets = [
         '/icons/arewards.svg',
@@ -48,14 +48,25 @@ function MyApp({ Component, pageProps }) {
     preloadAssets(); // Start the preloading process
   }, []);
 
+  useEffect(() => {
+    // Limit the number of reload attempts
+    if (hasError && reloadCount < 2) {
+      setReloadCount(reloadCount + 1);
+      window.location.reload(); // Reload the page when there's an error
+    } else if (hasError && reloadCount >= 2) {
+      console.error('Error persists after multiple reload attempts.');
+      // Optionally, you can provide a fallback here or notify the user that the issue persists.
+    }
+  }, [hasError, reloadCount]);
+
   // Render loading component while loading assets
   if (isLoading) {
     return <Loading />; // Show loading component
   }
 
-  // Render error component if there's an error
-  if (hasError) {
-    return <GameError />; // Show error component
+  // Render error component if there's an error and reload attempts are exceeded
+  if (hasError && reloadCount >= 2) {
+    return <GameError />; // Show error component only if reload attempts fail
   }
 
   // Render the main component if loading is complete and no errors occurred
