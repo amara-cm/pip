@@ -16,7 +16,7 @@ const Friends = ({ updateCoins, showReward }) => {
   }, []);
 
   const handleInvite = () => {
-    const referralLink = `https://t.me/yourbotname?start=${telegramUID}`;
+    const referralLink = `https://t.me/pinxhousebot?start=${telegramUID}`;
     setReferrals([...referrals, referralLink]);
 
     window.open(`https://t.me/share/url?url=${encodeURIComponent(referralLink)}`, '_blank');
@@ -45,9 +45,11 @@ const Friends = ({ updateCoins, showReward }) => {
   }, []);
 
   return (
-    <div className="flex justify-center items-start flex-col w-screen h-screen bg-black">
-      <div className="flex flex-col justify-center items-center w-screen h-[21.77vh] gap-[30px]">
-        <div className="w-[64.55%] font-outfit font-semibold text-[1.5rem] leading-none text-center text-white">Invite Friends to join and earn rewards together!</div>
+    <div className="relative flex flex-col w-screen h-screen bg-black">
+      <div className="flex flex-col justify-center items-center w-screen h-[21.77vh] gap-[30px] p-4">
+        <div className="w-[80%] font-outfit font-semibold text-[1.5rem] leading-none text-center text-white">
+          Invite Friends to join and earn rewards together!
+        </div>
         <div className="flex flex-row justify-center items-center gap-[5px]">
           <button onClick={handleInvite} className="w-[100px] h-[35px] flex justify-center items-center">
             <img
@@ -56,7 +58,7 @@ const Friends = ({ updateCoins, showReward }) => {
               style={{ pointerEvents: 'none' }} // Disable pointer events for the image
             />
           </button>
-          <button onClick={() => handleCopy(`https://t.me/yourbotname?start=${telegramUID}`)} className="w-[50px] h-[35px] flex justify-center items-center">
+          <button onClick={() => handleCopy(`https://t.me/pinxhousebot?start=${telegramUID}`)} className="w-[50px] h-[35px] flex justify-center items-center">
             <img
               src="/icons/copy-btn.svg"
               alt="Copy Referral Link"
@@ -65,9 +67,10 @@ const Friends = ({ updateCoins, showReward }) => {
           </button>
         </div>
       </div>
-
-      <div className="flex flex-col justify-center items-start w-screen h-[21.77vh] gap-[30px]">
-        <div className="w-[64.55%] font-semibold text-[1.5rem] leading-none text-center text-white">Referrals</div>
+      <div className="flex flex-col justify-start items-start w-screen h-[21.77vh] gap-[30px] p-4">
+        <div className="w-[80%] font-semibold text-[1.5rem] leading-none text-left text-white">
+          Friends
+        </div>
         <div className="flex flex-col gap-2">
           {referrals.map((ref, index) => (
             <div key={index} className="text-xl text-white">{ref}</div>
