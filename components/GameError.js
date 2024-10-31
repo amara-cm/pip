@@ -1,12 +1,18 @@
-// components/GameError.js
-
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 const GameError = () => {
   const router = useRouter();
+  const [reloadCount, setReloadCount] = useState(0);
 
   const handleRefresh = () => {
-    router.reload(); // Reload the current page
+    // Prevent infinite reload loop by limiting the number of reload attempts
+    if (reloadCount < 2) { // Set a limit for reload attempts
+      setReloadCount(reloadCount + 1); 
+      router.reload(); // Reload the current page
+    } else {
+      console.error('Error persists after multiple reload attempts.'); // Optional: Add a fallback error message
+    }
   };
 
   return (
