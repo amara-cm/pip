@@ -47,9 +47,9 @@ const Friends = ({ updateCoins, showReward }) => {
   return (
     <div className="relative flex justify-center items-start flex-col w-screen h-screen bg-black">
       <div className="flex flex-col justify-center items-start w-screen h-[21.77vh] gap-[30px]">
-        <div className="w-[64.55%] font-semibold text-[1.5rem] leading-none text-center text-white">Invite Friends</div>
-        <div className="flex flex-row justify-start items-center gap-[5px]">
-          <button onClick={handleInvite} className="w-[64px] h-[64px] flex justify-center items-center">
+        <div className="w-[64.55%] font-outfit font-semibold text-[1.5rem] leading-none text-center text-white">Invite Friends to join and earn rewards together!</div>
+        <div className="flex flex-row justify-center items-center gap-[5px]">
+          <button onClick={handleInvite} className="w-[100px] h-[35px] flex justify-center items-center">
             <img
               src="/icons/sendinv-btn.svg"
               alt="Send Invite"
@@ -57,7 +57,7 @@ const Friends = ({ updateCoins, showReward }) => {
               style={{ pointerEvents: 'none' }} // Disable pointer events for the image
             />
           </button>
-          <button onClick={() => handleCopy(`https://t.me/yourbotname?start=${telegramUID}`)} className="w-[64px] h-[64px] flex justify-center items-center">
+          <button onClick={() => handleCopy(`https://t.me/yourbotname?start=${telegramUID}`)} className="w-[50px] h-[35px] flex justify-center items-center">
             <img
               src="/icons/copy-btn.svg"
               alt="Copy Referral Link"
