@@ -8,7 +8,6 @@ const Friends = ({ updateCoins, showReward }) => {
   useEffect(() => {
     // Simulate fetching user's Telegram UID
     const fetchTelegramUID = () => {
-      // Replace this with actual fetching logic from Telegram API
       const uid = '123456789'; // Example UID, replace with actual UID
       setTelegramUID(uid);
     };
@@ -20,10 +19,8 @@ const Friends = ({ updateCoins, showReward }) => {
     const referralLink = `https://t.me/yourbotname?start=${telegramUID}`;
     setReferrals([...referrals, referralLink]);
 
-    // Simulate sending the referral link within Telegram
     window.open(`https://t.me/share/url?url=${encodeURIComponent(referralLink)}`, '_blank');
 
-    // Reward inviter with 100 coins
     updateCoins(100);
     showReward("+100 coins for successful invite!");
   };
@@ -34,38 +31,48 @@ const Friends = ({ updateCoins, showReward }) => {
   };
 
   const handleNewInviteeReward = () => {
-    // Simulate rewarding the new invitee (you can replace this with actual logic)
     updateCoins(50); // Reward 50 coins to the new invitee
     showReward("+50 coins for joining through a referral!");
   };
 
   useEffect(() => {
-    // Logic to check if the current user is an invitee (when they use a referral link)
-    // For example, if you check URL parameters for ?start=inviterUID
     const urlParams = new URLSearchParams(window.location.search);
     const inviterUID = urlParams.get('start');
 
     if (inviterUID) {
-      // If the invitee joins through a referral link, reward them
       handleNewInviteeReward();
     }
   }, []);
 
   return (
-    <div className="friends-scr">
-      <div className="frame">
-        <div className="inv-text">Invite Friends</div>
-        <div className="frame2">
-          <button onClick={handleInvite} className="send-btn w-[64px] h-[64px]"></button>
-          <button onClick={() => handleCopy(`https://t.me/yourbotname?start=${telegramUID}`)} className="copy-btn w-[64px] h-[64px]"></button>
+    <div className="relative flex justify-center items-start flex-col w-screen h-screen bg-black">
+      <div className="flex flex-col justify-center items-start w-screen h-[21.77vh] gap-[30px]">
+        <div className="w-[64.55%] font-semibold text-[1.5rem] leading-none text-center text-white">Invite Friends</div>
+        <div className="flex flex-row justify-start items-center gap-[5px]">
+          <button onClick={handleInvite} className="w-[64px] h-[64px] flex justify-center items-center">
+            <img
+              src="/icons/sendinv-btn.svg"
+              alt="Send Invite"
+              className="w-full h-full"
+              style={{ pointerEvents: 'none' }} // Disable pointer events for the image
+            />
+          </button>
+          <button onClick={() => handleCopy(`https://t.me/yourbotname?start=${telegramUID}`)} className="w-[64px] h-[64px] flex justify-center items-center">
+            <img
+              src="/icons/copy-btn.svg"
+              alt="Copy Referral Link"
+              className="w-full h-full"
+              style={{ pointerEvents: 'none' }} // Disable pointer events for the image
+            />
+          </button>
         </div>
       </div>
 
-      <div className="frame">
-        <div className="inv-text">Referrals</div>
+      <div className="flex flex-col justify-center items-start w-screen h-[21.77vh] gap-[30px]">
+        <div className="w-[64.55%] font-semibold text-[1.5rem] leading-none text-center text-white">Referrals</div>
         <div className="flex flex-col gap-2">
           {referrals.map((ref, index) => (
-            <div key={index} className="text-xl">{ref}</div>
+            <div key={index} className="text-xl text-white">{ref}</div>
           ))}
         </div>
       </div>
