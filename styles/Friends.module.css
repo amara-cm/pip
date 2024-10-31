@@ -1,92 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .friends-scr {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-direction: column;
-    width: 100vw;
-    height: 100vh;
-    background: var(--b);
+    @apply relative flex justify-center items-start flex-col w-screen h-screen bg-[var(--b)];
 }
 
 .friends-scr .frame {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    height: auto;
-    width: 100vw;
-    height: 21.77vh;
-    gap: 30px;
+    @apply flex flex-col justify-center items-start w-screen h-[21.77vh] gap-[30px];
 }
 
 .friends-scr .frame .inv-text {
-    width: 64.55%;
-    height: auto;
-    font-family: var(--pf);
-    font-weight: 600;
-    font-size: 1.5rem;
-    line-height: var(--lh);
-    text-align: center;
-    color: var(--w);
+    @apply w-[64.55%] font-[var(--pf)] font-semibold text-[1.5rem] leading-[var(--lh)] text-center text-[var(--w)];
 }
 
 .friends-scr .frame .frame2 {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 5px;
-    width: auto;
-    height: auto;
-}
-
-.friends-scr .frame .frame2 .send-btn, .friends-scr .frame .frame2 .copy-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: var(--p);
-    border-radius: 10px;
+    @apply flex flex-row justify-start items-center gap-[5px];
 }
 
 .friends-scr .frame .frame2 .send-btn {
-    position: absolute;
-    width: 100px;
-    height: 35px;
-    left: calc(50% - 100px/2);
-    top: calc(50% - 35px/2);
-}
-
-.friends-scr .frame .frame2 .send-btn .text {
-    position: absolute;
-    width: 41px;
-    height: 16px;
-    left: 29.5px;
-    top: 9.5px;
-    font-family: 'Outfit';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 100%;
-    color: #FFFFFF;
+    @apply bg-[url('sendinv-btn.svg')];
 }
 
 .friends-scr .frame .frame2 .copy-btn {
-    position: absolute;
-    width: 50px;
-    height: 35px;
-    left: calc(50% - 50px/2);
-    top: calc(50% - 35px/2);
-    background: #FF2361;
-    border-radius: 10px;
-}
-
-.friends-scr .frame .frame2 .copy-btn .icon {
-    background: url('/icons/copy.svg') no-repeat center;
-    background-size: contain;
-}
-
-.friends-scr .tab-bar .tab-btn.tab-friends .icon,
-.friends-scr .tab-bar .tab-btn.tab-friends .text {
-    color: #FFFFFF;
+    @apply bg-[url('copy-btn.svg')];
 }
