@@ -4,11 +4,11 @@ import Loading from '../components/loading'; // Import your Loading component
 import GameError from '../components/GameError'; // Import your GameError component
 
 function MyApp({ Component, pageProps }) {
-  const [hasError, setHasError] = useState(false); // State to track error
   const [isLoading, setIsLoading] = useState(true); // State to track loading
-  const [reloadCount, setReloadCount] = useState(0); // Track reload attempts
+  const [hasLoadingError, setHasLoadingError] = useState(false); // State to track loading errors
 
   useEffect(() => {
+    // This function will handle the asset preloading process
     const preloadAssets = async () => {
       const assets = [
         '/icons/arewards.svg',
@@ -41,35 +41,24 @@ function MyApp({ Component, pageProps }) {
         setIsLoading(false); // Set loading to false after assets are preloaded
       } catch (error) {
         console.error('Error preloading assets:', error);
-        setHasError(true); // Set error state if any asset fails to load
+        setHasLoadingError(true); // Set loading error state
       }
     };
 
     preloadAssets(); // Start the preloading process
   }, []);
 
-  useEffect(() => {
-    // Limit the number of reload attempts
-    if (hasError && reloadCount < 2) {
-      setReloadCount(reloadCount + 1);
-      window.location.reload(); // Reload the page when there's an error
-    } else if (hasError && reloadCount >= 2) {
-      console.error('Error persists after multiple reload attempts.');
-      // Optionally, you can provide a fallback here or notify the user that the issue persists.
-    }
-  }, [hasError, reloadCount]);
-
-  // Render loading component while loading assets
+  // Render the loading screen while assets are preloading
   if (isLoading) {
-    return <Loading />; // Show loading component
+    return <Loading />;
   }
 
-  // Render error component if there's an error and reload attempts are exceeded
-  if (hasError && reloadCount >= 2) {
-    return <GameError />; // Show error component only if reload attempts fail
+  // Render the GameError component if there's a loading error
+  if (hasLoadingError) {
+    return <GameError />;
   }
 
-  // Render the main component if loading is complete and no errors occurred
+  // Render the main app component if everything is loaded successfully
   return <Component {...pageProps} />;
 }
 
