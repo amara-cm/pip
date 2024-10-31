@@ -19,9 +19,9 @@
 }
 
 .friends-scr .frame .frame2 .send-btn {
-    @apply bg-[url('sendinv-btn.svg')];
+    @apply bg-[url('/icons/sendinv-btn.svg')];
 }
 
 .friends-scr .frame .frame2 .copy-btn {
-    @apply bg-[url('copy-btn.svg')];
+    @apply bg-[url('/icons/copy-btn.svg')];
 }
