@@ -4,19 +4,44 @@ import Footer from '../components/Footer';
 // DailyLogin Component
 const DailyLogin = ({ currentDay, loginTimer, handleClaim }) => {
   return (
-    <div className="text-center mb-4">
-      <div className="text-2xl mb-4">Daily Login</div>
-      <div className="flex justify-around mb-4">
+    <div className="relative flex flex-col justify-start items-center w-screen h-[21.56vh] overflow-y-scroll px-[2%] pt-[1%] gap-[2%]">
+      <div className="self-start font-semibold text-[1rem] text-white tracking-[0.5px] leading-[100%]">
+        Daily Login
+      </div>
+      <div className="flex flex-row justify-start items-center w-[90.29vw] h-[27.78vh] gap-[0.5rem]">
         {[...Array(7)].map((_, index) => (
-          <div key={index} className="text-xl">{index + 1}</div>
+          <div
+            key={index}
+            className="relative flex flex-col justify-center items-center p-[1%] gap-[0.5rem] w-[13.04%] h-full bg-black border border-white rounded-[0.5rem]"
+            style={{
+              backgroundImage: `url('/icons/d${index + 1}.svg')`, // Dynamically setting the background image
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              backgroundSize: 'contain',
+            }}
+          >
+            <span className="font-semibold text-[0.625rem] text-white leading-[0.625rem] tracking-[0.03125rem]">
+              Day {index + 1}
+            </span>
+            <div className="w-[68.01%] h-[20%]">
+              <img src="/path/to/coins-icon.svg" alt="coins" />
+            </div>
+          </div>
         ))}
       </div>
       {loginTimer <= 0 ? (
-        <button onClick={handleClaim} className="px-4 py-2 bg-green-500 rounded text-xl">
-          Claim
+        <button
+          onClick={handleClaim}
+          className="absolute w-[85%] h-[20.2%] bg-gray-100 rounded-[0.5rem] bottom-[31.8%] flex justify-center items-center"
+        >
+          <span className="font-semibold text-[1rem] text-black">Claim</span>
         </button>
       ) : (
-        <div>{new Date(loginTimer * 1000).toISOString().substr(11, 8)}</div>
+        <div className="absolute w-[85%] h-[20.2%] bg-gray-600 border border-gray-300 rounded-[0.5rem] bottom-[31.8%] flex justify-center items-center">
+          <span className="font-semibold text-[1rem] text-gray-400">
+            {new Date(loginTimer * 1000).toISOString().substr(11, 8)}
+          </span>
+        </div>
       )}
     </div>
   );
