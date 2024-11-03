@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Footer from '../components/Footer';
 
 // DailyLogin Component
-const DailyLogin = ({ currentDay, loginTimer, handleClaim }) => {
+const DailyLogin = ({ currentDay, loginTimer, handleClaim, coins }) => {
   return (
     <div className="relative flex flex-col justify-start items-center w-screen h-[21.56vh] overflow-y-scroll px-[2%] pt-[1%] gap-[2%]">
       <div className="self-start font-semibold text-[1rem] text-white tracking-[0.5px] leading-[100%]">
@@ -14,7 +14,7 @@ const DailyLogin = ({ currentDay, loginTimer, handleClaim }) => {
             key={index}
             className="relative flex flex-col justify-center items-center p-[1%] gap-[0.5rem] w-[13.04%] h-full bg-black border border-white rounded-[0.5rem]"
             style={{
-              backgroundImage: `url('/icons/d${index + 1}.svg')`, // Dynamically setting the background image
+              backgroundImage: `url('/d${index + 1}.svg')`, // Dynamically setting the background image
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center',
               backgroundSize: 'contain',
