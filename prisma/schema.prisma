@@ -8,29 +8,35 @@ datasource db {
 }
 
 model User {
-  id               String     @id @default(cuid())
-  telegramUsername String      @unique
-  uid              String      @unique
-  referrals        Referral[]
-  tasks            Task[]
-}
-
-model Referral {
-  id        String @id @default(cuid())
-  userId    String
-  user      User   @relation(fields: [userId], references: [id]) // Updated to refer to userId
-  referredBy String
-  reward    Int
+  id          Int      @id @default(autoincrement())
+  telegramId  String   @unique  // User ID from Telegram
+  username    String?  // Telegram Username (can be null if not set)
+  ipAddress   String?  // User's IP Address for anti-cheating
+  coins       Int      @default(0)
+  diamonds    Int      @default(0)  // Pink Star Diamonds collected
+  referrerId  Int?     // Referral data (who invited whom)
+  referrer    User?    @relation("UserReferrals", fields: [referrerId], references: [id])
+  referrals   User[]   @relation("UserReferrals")
+  tasks       Task[]   // Tasks tracking for the user
+  gameHistory GameHistory[] // Store game-related actions
+  createdAt   DateTime @default(now())
 }
 
 model Task {
-  id        String @id @default(cuid())
-  userId    String
-  user      User   @relation(fields: [userId], references: [id]) // Updated to refer to userId
-  taskId    String
-  taskName  String
+  id        Int      @id @default(autoincrement())
+  title     String   // Task description
   completed Boolean  @default(false)
-  reward    Int
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model GameHistory {
+  id        Int      @id @default(autoincrement())
+  action    String   // Describes action ("mine", "sell", etc.)
+  amount    Int      // Amount of mined or sold items
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
 }
 
 model device_logs {
