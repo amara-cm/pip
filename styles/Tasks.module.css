@@ -22,18 +22,39 @@
 }
 
 /* Each Day */
-.tasks-scr .days .day {
-    @apply flex flex-col justify-center items-center p-0 px-[1%] gap-[0.625rem] absolute w-[13.04%] h-full bg-[var(--b)] border border-white rounded-[0.625rem];
+.tasks-scr .days .day:nth-child(1) {
+    @apply bg-no-repeat bg-center bg-contain;
+    background-image: url('/icons/d1.svg');
 }
 
-/* Day Text */
-.tasks-scr .days .day .text {
-    @apply font-pf font-semibold text-[0.6875rem] leading-[0.625rem] tracking-[0.03125rem] text-white;
+.tasks-scr .days .day:nth-child(2) {
+    @apply bg-no-repeat bg-center bg-contain;
+    background-image: url('/icons/d2.svg');
 }
 
-/* Coins Amount Frame in Day */
-.tasks-scr .days .day .coinsamt-fr {
-    @apply w-[68.01%] h-[20%];
+.tasks-scr .days .day:nth-child(3) {
+    @apply bg-no-repeat bg-center bg-contain;
+    background-image: url('/icons/d3.svg');
+}
+
+.tasks-scr .days .day:nth-child(4) {
+    @apply bg-no-repeat bg-center bg-contain;
+    background-image: url('/icons/d4.svg');
+}
+
+.tasks-scr .days .day:nth-child(5) {
+    @apply bg-no-repeat bg-center bg-contain;
+    background-image: url('/icons/d5.svg');
+}
+
+.tasks-scr .days .day:nth-child(6) {
+    @apply bg-no-repeat bg-center bg-contain;
+    background-image: url('/icons/d6.svg');
+}
+
+.tasks-scr .days .day:nth-child(7) {
+    @apply bg-no-repeat bg-center bg-contain;
+    background-image: url('/icons/d7.svg');
 }
 
 /* Claim Button */
@@ -42,7 +63,7 @@
 }
 
 .tasks-scr .login-fr .claim-btn .text {
-    @apply w-auto h-4 font-pf font-semibold text-[var(--fs-m)] leading-[var(--lh)] text-[#1E1E1E];
+    @apply w-auto h-4 font-outfit font-semibold text-[var(--fs-m)] leading-[var(--lh)] text-[#1E1E1E];
 }
 
 /* 24h Timer */
