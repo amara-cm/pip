@@ -1,38 +1,35 @@
-import prisma from '../../lib/db';
+import prisma, { connectToDatabase } from './db';
 
 export default async function handler(req, res) {
-  // Ensure that only POST requests are handled
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method Not Allowed' });
-  }
+  await connectToDatabase();
 
-  const { telegramId } = req.body;
+  const { userId } = req.body;
 
-  // Validate the input
-  if (!telegramId) {
-    return res.status(400).json({ error: 'Telegram ID is required' });
-  }
+  if (req.method === 'POST') {
+    try {
+      // Example logic for mining Pink Star Diamonds
+      const miningProgress = await prisma.miningProgress.create({
+        data: {
+          userId,
+          diamondsMined: 1, // Example increment, should be calculated based on time or other logic
+          timestamp: new Date(),
+        },
+      });
 
-  try {
-    // Fetch the user based on telegramId
-    const user = await prisma.user.findUnique({ where: { telegramId } });
-    
-    // Check if the user exists
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      // Update user's total diamonds
+      await prisma.user.update({
+        where: { userId },
+        data: {
+          diamonds: { increment: 1 }, // Update the diamonds count
+        },
+      });
+
+      return res.status(200).json(miningProgress);
+    } catch (error) {
+      console.error('Error during mining operation:', error);
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
-
-    const stonesMined = 1; // Define the amount of stones mined
-    // Update the user's points by adding the mined stones
-    const updatedUser = await prisma.user.update({
-      where: { telegramId },
-      data: { points: user.points + stonesMined },
-    });
-
-    // Respond with success and the updated points
-    return res.status(200).json({ success: true, points: updatedUser.points });
-  } catch (error) {
-    console.error('Error in mine.js:', error);
-    return res.status(500).json({ error: 'Something went wrong' });
+  } else {
+    return res.status(405).json({ message: 'Method Not Allowed' });
   }
 }
