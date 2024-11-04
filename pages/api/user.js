@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { telegramId, telegramUsername, ipAddress } = req.body;
+  const { telegramId, telegramUsername, ipAddress, referrerId } = req.body;
 
   if (!telegramId || !telegramUsername) {
     return res.status(400).json({ error: 'Telegram ID and username are required' });
@@ -26,6 +26,7 @@ export default async function handler(req, res) {
           telegramId,
           username: telegramUsername,
           ipAddress,
+          referrerId, // Store referrer ID if provided
         },
       });
     } else {
