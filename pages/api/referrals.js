@@ -1,24 +1,36 @@
-// pages/api/referrals.js
-import { connectDB } from '../../lib/db';
+import prisma, { connectToDatabase } from './db';
 
 export default async function handler(req, res) {
-  const client = await connectDB();
+  await connectToDatabase();
+
+  const { inviterId, inviteeId } = req.body;
 
   if (req.method === 'POST') {
-    const { inviterId, inviteeId } = req.body;
-
     try {
-      // Logic for handling referrals
-      await client.query(
-        'INSERT INTO referrals (inviter_id, invitee_id) VALUES ($1, $2)',
-        [inviterId, inviteeId]
-      );
-      return res.status(200).json({ success: true, message: 'Referral recorded.' });
-    } catch (error) {
-      console.error('Error recording referral:', error);
-      return res.status(500).json({ success: false, message: 'Database error' });
-    }
-  }
+      // Logic to handle friend invitation
+      const referral = await prisma.referral.create({
+        data: {
+          inviterId,
+          inviteeId,
+        },
+      });
+      
+      // Example: Update coins for both inviter and invitee
+      await prisma.user.updateMany({
+        where: {
+          userId: { in: [inviterId, inviteeId] },
+        },
+        data: {
+          coins: { increment: 100 }, // Example increment
+        },
+      });
 
-  return res.status(405).json({ success: false, message: 'Method not allowed' });
+      return res.status(200).json(referral);
+    } catch (error) {
+      console.error('Error handling referral:', error);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  } else {
+    return res.status(405).json({ message: 'Method Not Allowed' });
+  }
 }
