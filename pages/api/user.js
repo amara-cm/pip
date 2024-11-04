@@ -1,41 +1,32 @@
-// pages/api/user.js
-import prisma from '../../lib/db';
+import { connectToDatabase } from '../../lib/db';
 
 export default async function handler(req, res) {
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method Not Allowed' });
-    }
+  const client = await connectToDatabase();
 
-    const { telegramId, telegramUsername, ipAddress, referrerId } = req.body;
-
-    if (!telegramId || !telegramUsername) {
-        return res.status(400).json({ error: 'Telegram ID and username are required' });
-    }
+  if (req.method === 'POST') {
+    const { userId, username } = req.body;
 
     try {
-        let user = await prisma.user.findUnique({
-            where: { telegramId },
-        });
-
-        if (!user) {
-            user = await prisma.user.create({
-                data: {
-                    telegramId,
-                    username: telegramUsername,
-                    ipAddress,
-                    referrerId,
-                },
-            });
-        } else {
-            user = await prisma.user.update({
-                where: { telegramId },
-                data: { ipAddress },
-            });
-        }
-
-        res.status(200).json(user);
+      await client.query(
+        'INSERT INTO users (user_id, username) VALUES ($1, $2) ON CONFLICT (user_id) DO NOTHING',
+        [userId, username]
+      );
+      return res.status(201).json({ message: 'User added or already exists.' });
     } catch (error) {
-        console.error('Error processing request:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+      console.error('Error inserting user:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
+  } else if (req.method === 'GET') {
+    const { userId } = req.query;
+
+    try {
+      const { rows } = await client.query('SELECT * FROM users WHERE user_id = $1', [userId]);
+      return res.status(200).json(rows);
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  } else {
+    return res.status(405).json({ error: 'Method Not Allowed' });
+  }
 }
