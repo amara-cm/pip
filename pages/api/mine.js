@@ -13,15 +13,20 @@ export default async function handler(req, res) {
     }
 
     try {
+        // Fetch the user based on telegramId
         const user = await prisma.user.findUnique({ where: { telegramId } });
-        if (!user) return res.status(404).json({ error: 'User not found' });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
 
-        const stonesMined = 1; 
+        const stonesMined = 1; // Define the amount of stones mined
+        // Update the user's points by adding the mined stones
         const updatedUser = await prisma.user.update({
             where: { telegramId },
             data: { points: user.points + stonesMined },
         });
 
+        // Respond with success and updated points
         res.status(200).json({ success: true, points: updatedUser.points });
     } catch (error) {
         console.error('Error in mine.js:', error);
