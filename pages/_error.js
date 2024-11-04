@@ -1,10 +1,17 @@
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-const Error = () => {
+const Error = ({ statusCode }) => {
   const router = useRouter();
 
+  useEffect(() => {
+    // You can log the error or notify someone here if needed
+    console.error(`Error occurred: ${statusCode}`);
+  }, [statusCode]);
+
   const handleRefresh = () => {
-    router.reload(); // Reload the current page
+    // Instead of just reloading, we could do a safer navigation
+    router.push('/'); // Redirect to the home page or any safe fallback
   };
 
   return (
@@ -22,6 +29,12 @@ const Error = () => {
       </button>
     </div>
   );
+};
+
+// This function will be called on the server-side
+Error.getInitialProps = ({ res, err }) => {
+  const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
+  return { statusCode };
 };
 
 export default Error;
