@@ -1,4 +1,3 @@
-import 'tailwindcss/tailwind.css'; // Importing Tailwind CSS
 import Loading from '../components/loading';
 import GameError from '../components/GameError';
 
