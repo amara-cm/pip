@@ -5,7 +5,6 @@ import GameError from './GameError'; // Import the error component
 const Loading = () => {
   const [progress, setProgress] = useState(1); // Start at 1%
   const [loadingError, setLoadingError] = useState(false); // Track if there's an error during preloading
-  const [isPreloadingComplete, setIsPreloadingComplete] = useState(false); // Ensure we finish preloading
   const router = useRouter();
 
   useEffect(() => {
@@ -44,8 +43,7 @@ const Loading = () => {
 
     const preloadAllAssets = async () => {
       try {
-        await Promise.all(assets.map(preloadAsset));
-        setIsPreloadingComplete(true); // Mark preloading complete
+        await Promise.all(assets.map(preloadAsset)); // Preload all assets
       } catch (error) {
         console.error('Error preloading assets:', error);
         setLoadingError(true); // Set error state if there's an issue preloading assets
@@ -53,39 +51,38 @@ const Loading = () => {
     };
 
     const incrementProgress = () => {
-      let currentProgress = 1;
-      const totalDuration = 3000; // 3 seconds
-      const intervalTime = 30; // 30ms per increment
-      const totalIncrements = totalDuration / intervalTime; // How many increments to 100%
+      return new Promise((resolve) => {
+        let currentProgress = 1;
+        const totalDuration = 3000; // 3 seconds
+        const intervalTime = 30; // 30ms per increment
+        const totalIncrements = totalDuration / intervalTime; // How many increments to 100%
 
-      const interval = setInterval(() => {
-        if (currentProgress < 100) {
-          setProgress((prev) => Math.min(prev + (100 / totalIncrements), 100)); // Smoothly increment
-          currentProgress += 100 / totalIncrements;
-        } else {
-          clearInterval(interval);
-          if (isPreloadingComplete) {
-            router.push('/home'); // Only route to home if preloading is also done
+        const interval = setInterval(() => {
+          if (currentProgress < 100) {
+            setProgress((prev) => Math.min(prev + (100 / totalIncrements), 100)); // Smoothly increment
+            currentProgress += 100 / totalIncrements;
+          } else {
+            clearInterval(interval);
+            resolve(); // Resolve the promise after reaching 100%
           }
-        }
-      }, intervalTime);
+        }, intervalTime);
+      });
     };
 
-    // Wait for both preloading and the 3 seconds to complete
     const startLoading = async () => {
-      await preloadAllAssets(); // Start preloading
-      setTimeout(() => {
-        if (isPreloadingComplete) {
-          router.push('/home'); // Ensure we only route to home after both preloading and timing are done
-        }
-      }, 3000); // Force a minimum of 3 seconds wait
+      const preloadPromise = preloadAllAssets(); // Start preloading assets
+      const progressPromise = incrementProgress(); // Start progress bar
+
+      // Wait for both promises to complete (3 seconds + preloading)
+      await Promise.all([preloadPromise, progressPromise]);
+
+      // After both are done, navigate to home
+      router.push('/home');
     };
 
     startLoading(); // Start the loading process
-    incrementProgress(); // Increment progress over 3 seconds
 
-    return () => clearInterval(incrementProgress); // Clean up interval on unmount
-  }, [router, isPreloadingComplete]);
+  }, [router]);
 
   // If there's an error in preloading, show the GameError component
   if (loadingError) {
