@@ -82,6 +82,15 @@ function HomeScreen() {
   const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
+    // Simulate loading time of 3 seconds
+    const loadingTimeout = setTimeout(() => {
+      setLoading(false); // Set loading to false after 3 seconds
+    }, 3000);
+
+    return () => clearTimeout(loadingTimeout); // Cleanup timeout
+  }, []);
+
+  useEffect(() => {
     setLoading(true); // Set loading to true initially
     const savedState = localStorage.getItem('gameState');
     if (savedState) {
