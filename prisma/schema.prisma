@@ -39,15 +39,3 @@ model GameHistory {
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
 }
-
-model device_logs {
-    id          Int      @id @default(autoincrement())
-    user_agent  String
-    access_time DateTime @default(now())
-}
-
-model desktop_access_logs {
-    id          Int      @id @default(autoincrement())
-    user_agent  String
-    access_time DateTime @default(now())
-}
