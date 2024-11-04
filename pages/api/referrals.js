@@ -1,32 +1,61 @@
-import prisma from '../../lib/db';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method Not Allowed' });
-  }
+  if (req.method === 'POST') {
+    const { referrerId, referredUserId } = req.body;
 
-  const { inviterId, inviteeId } = req.body;
+    if (!referrerId || !referredUserId) {
+      return res.status(400).json({ error: 'Both referrer ID and referred user ID are required' });
+    }
 
-  if (!inviterId || !inviteeId) {
-    return res.status(400).json({ error: 'Inviter ID and Invitee ID are required' });
-  }
+    try {
+      // Check if the referred user exists
+      const referredUser = await prisma.user.findUnique({
+        where: { id: referredUserId },
+      });
 
-  try {
-    const inviter = await prisma.user.findUnique({ where: { telegramId: inviterId } });
-    if (!inviter) return res.status(404).json({ error: 'Inviter not found' });
+      if (!referredUser) {
+        return res.status(404).json({ error: 'Referred user not found' });
+      }
 
-    const invitee = await prisma.user.create({
-      data: { telegramId: inviteeId, username: 'InviteeUsername' }
-    });
+      // Update the referred user with the referrer ID
+      const updatedUser = await prisma.user.update({
+        where: { id: referredUserId },
+        data: { referrerId },
+      });
 
-    await prisma.user.update({
-      where: { telegramId: inviterId },
-      data: { referrals: inviter.referrals + 1, points: inviter.points + 1000 },
-    });
+      // Optionally, you can log this referral action or calculate bonuses here.
 
-    res.status(200).json({ success: true, referralId: invitee.telegramId });
-  } catch (error) {
-    console.error('Error in referrals.js:', error);
-    res.status(500).json({ error: 'Something went wrong' });
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      console.error('Error processing referral:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } finally {
+      await prisma.$disconnect();
+    }
+  } else if (req.method === 'GET') {
+    const { userId } = req.query;
+
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+
+    try {
+      // Fetch all users referred by the specified user
+      const referrals = await prisma.user.findMany({
+        where: { referrerId: Number(userId) },
+      });
+
+      res.status(200).json(referrals);
+    } catch (error) {
+      console.error('Error fetching referrals:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } finally {
+      await prisma.$disconnect();
+    }
+  } else {
+    res.status(405).json({ error: 'Method Not Allowed' });
   }
 }
