@@ -21,6 +21,13 @@ const Loading = () => {
       '/icons/sell-btn.svg',
       '/icons/sendinv-btn.svg',
       '/mainicon.gif',
+      '/icons/d1.svg',
+      '/icons/d2.svg',
+      '/icons/d3.svg',
+      '/icons/d4.svg',
+      '/icons/d5.svg',
+      '/icons/d6.svg',
+      '/icons/d7.svg',
     ];
 
     const preloadAsset = (src) => {
