@@ -1,35 +1,25 @@
-import prisma, { connectToDatabase } from './db';
+import prisma from '../../lib/db'; // Importing Prisma client
 
 export default async function handler(req, res) {
-  await connectToDatabase();
-
-  const { userId } = req.body;
+  const { userId } = req.body; // Assuming userId comes from the request body
 
   if (req.method === 'POST') {
     try {
-      // Example logic for mining Pink Star Diamonds
-      const miningProgress = await prisma.miningProgress.create({
+      // Update mining progress and coins
+      const user = await prisma.user.update({
+        where: { user_id: userId },
         data: {
-          userId,
-          diamondsMined: 1, // Example increment, should be calculated based on time or other logic
-          timestamp: new Date(),
+          // Assuming you have a field for tracking mining progress and coins
+          miningProgress: { increment: 1 }, // Increment mining progress
+          coins: { increment: 500 }, // Add 500 coins after mining
         },
       });
-
-      // Update user's total diamonds
-      await prisma.user.update({
-        where: { userId },
-        data: {
-          diamonds: { increment: 1 }, // Update the diamonds count
-        },
-      });
-
-      return res.status(200).json(miningProgress);
+      return res.status(200).json({ message: 'Mining successful!', user });
     } catch (error) {
-      console.error('Error during mining operation:', error);
-      return res.status(500).json({ message: 'Internal Server Error' });
+      console.error('Error during mining:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
   } else {
-    return res.status(405).json({ message: 'Method Not Allowed' });
+    return res.status(405).json({ error: 'Method Not Allowed' });
   }
 }
