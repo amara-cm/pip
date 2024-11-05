@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import * as React from "react";
-import Loading from '../components/loading'; // Import the Loading component
 import Footer from '../components/Footer';
 
 function MiningButton({ onClick }) {
@@ -78,8 +77,6 @@ function HomeScreen() {
   const [stone, setStone] = useState(0);
   const [mining, setMining] = useState(false);
   const [timer, setTimer] = useState(28800); // 8 hours in seconds
-  const [isCollectingActive, setIsCollectingActive] = useState(false);
-  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const fetchData = async () => {
@@ -102,7 +99,6 @@ function HomeScreen() {
       } else {
         console.error("Error fetching game state");
       }
-      setLoading(false);
     };
 
     fetchData(); // Call fetchData to load user's game state
@@ -134,33 +130,23 @@ function HomeScreen() {
     }
   };
 
-
   const handleSell = () => {
     setCoins((prevCoins) => prevCoins + 500); // Add coins after selling
     setStone(0); // Reset stone
     setMining(false); // Go back to mining
   };
 
-  if (loading) {
-    return <Loading />; // Show loading screen while loading is true
-  }
-
   return (
     <div className="flex flex-col justify-between items-center w-full h-screen bg-black text-white font-outfit font-semibold">
       <div className="w-full max-w-[30rem] mt-[28%]">
         <StatDisplay 
           iconSrc="/icons/gamecoin.svg"
-          onContextMenu={(e) => e.preventDefault()} 
-          onTouchStart={(e) => e.preventDefault()}
-          style={{ pointerEvents: 'none' }}
-          value="0"
+          value={coins} // Display actual coins
         />
         <img 
           loading="lazy" 
           src="/mainicon.gif" 
           alt="Mining visualization"
-          onContextMenu={(e) => e.preventDefault()} 
-          onTouchStart={(e) => e.preventDefault()} 
           style={{ pointerEvents: 'none' }}
           className="mainicon w-[100vw] h-auto aspect-square mx-auto mb-16" 
         />
