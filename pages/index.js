@@ -82,34 +82,30 @@ function HomeScreen() {
   const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
-    // Simulate loading time of 3 seconds
-    const loadingTimeout = setTimeout(() => {
-      setLoading(false); // Set loading to false after 3 seconds
-    }, 3000);
+    const fetchData = async () => {
+      const userId = ''; // Fetch user ID from Telegram context or other means
+      const savedState = await fetch(`/api/mine`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId }), // Make sure to pass the userId here
+      });
 
-    return () => clearTimeout(loadingTimeout); // Cleanup timeout
-  }, []);
-
-  useEffect(() => {
-    setLoading(true); // Set loading to true initially
-    const savedState = localStorage.getItem('gameState');
-    if (savedState) {
-      const { coins, stone, timer, mining, lastUpdate } = JSON.parse(savedState);
-      setCoins(coins);
-      setStone(stone);
-      const elapsed = Math.floor((Date.now() - lastUpdate) / 1000);
-      if (mining) {
-        if (elapsed < timer) {
-          setTimer(timer - elapsed);
-          setStone(stone + ((1 / 28800) * elapsed));
-        } else {
-          setTimer(0);
-          setStone(1);
-          setMining(false);
-        }
+      if (savedState.ok) {
+        const result = await savedState.json();
+        const { coins, stone, timer, mining } = result;
+        setCoins(coins);
+        setStone(stone);
+        setTimer(timer);
+        setMining(mining);
+      } else {
+        console.error("Error fetching game state");
       }
-    }
-    setLoading(false); // Set loading to false after state is restored
+      setLoading(false);
+    };
+
+    fetchData(); // Call fetchData to load user's game state
   }, []);
 
   useEffect(() => {
@@ -118,7 +114,6 @@ function HomeScreen() {
         setTimer((prev) => {
           if (prev <= 1) {
             clearInterval(interval);
-            setIsCollectingActive(false); // Timer ends, stop collecting
             setMining(false);
             return 0;
           }
@@ -127,36 +122,21 @@ function HomeScreen() {
         setStone((prevStone) => prevStone + (1 / 28800)); // Increment stone amount
       }, 1000);
 
-      return () => clearInterval(interval); // Clear interval on unmount
+      return () => clearInterval(interval);
     }
   }, [mining]);
-
-  useEffect(() => {
-    localStorage.setItem(
-      'gameState',
-      JSON.stringify({
-        coins,
-        stone,
-        timer,
-        mining,
-        lastUpdate: Date.now(),
-      })
-    );
-  }, [coins, stone, timer, mining]);
 
   const startMining = () => {
     if (!mining) {
       setMining(true);
       setTimer(28800); // Reset timer
       setStone(0); // Reset stone collected
-      setIsCollectingActive(true); // Activate Collecting button
     }
   };
 
   const handleSell = () => {
     setCoins((prevCoins) => prevCoins + 500); // Add coins after selling
     setStone(0); // Reset stone
-    setIsCollectingActive(false); // Deactivate Collecting button
     setMining(false); // Go back to mining
   };
 
