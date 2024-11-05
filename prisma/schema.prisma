@@ -10,7 +10,7 @@ datasource db {
 
 model User {
   id             String           @id @default(cuid())
-  telegramId     String           @unique
+  userId     String           @unique
   username       String?
   firstName      String?
   earnedCoins    Int              @default(0)
