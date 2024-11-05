@@ -62,7 +62,7 @@ setTimeout(() => {
 
 return (
 <div className="flex flex-col items-center justify-center h-screen bg-black">
-<p className="text-white mb-4">Loading {progress}%</p>
+<p className="font-outfit font-semibold text-white mb-4">{progress}%</p>
 </div>
 );
 };
