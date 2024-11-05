@@ -23,19 +23,17 @@ model User {
   createdAt   DateTime @default(now())              // Timestamp when the user was created
 }
 
-model Task {
-  id        Int      @id @default(autoincrement()) // Primary key
-  title     String   // Task description
-  completed Boolean  @default(false)                // Task completion status
-  userId    Int                                      // Foreign key reference to User
-  user      User     @relation(fields: [userId], references: [id]) // User relation
+model MiningSession {
+  id          String   @id @default(cuid())
+  userId      String
+  startTime   DateTime
+  duration    Int
+  status      String
 }
 
 model GameHistory {
-  id        Int      @id @default(autoincrement()) // Primary key
-  action    String   // Describes action ("mine", "sell", etc.)
-  amount    Int      // Amount of mined or sold items
-  userId    Int                                      // Foreign key reference to User
-  user      User     @relation(fields: [userId], references: [id]) // User relation
-  createdAt DateTime @default(now())                // Timestamp when the action occurred
+  id        String   @id @default(cuid())
+  userId    String
+  action    String
+  timestamp DateTime @default(now())
 }
