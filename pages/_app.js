@@ -1,30 +1,24 @@
 import { useEffect, useState } from 'react';
 import '../styles/global.css';
-import Loading from '../components/loading';
-import GameError from '../components/GameError';
+import Loading from '../components/Loading';
 
 function MyApp({ Component, pageProps }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasLoadingError, setHasLoadingError] = useState(false);
+const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const preloadAssets = async () => {
-      try {
-        // Preload your assets
-        setIsLoading(false); // Set loading to false if successful
-      } catch (error) {
-        console.error('Error preloading assets:', error);
-        setHasLoadingError(true);
-      }
-    };
+useEffect(() => {
+const timeoutId = setTimeout(() => {
+setIsLoading(false);
+}, 3000);
 
-    preloadAssets();
-  }, []);
+return () => clearTimeout(timeoutId);
 
-  if (isLoading) return <Loading />;
-  if (hasLoadingError) return <GameError />;
+}, []);
 
-  return <Component {...pageProps} />;
+return (
+<>
+{isLoading ? <Loading /> : <Component {...pageProps} />}
+</>
+);
 }
 
 export default MyApp;
