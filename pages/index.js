@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import * as React from "react";
 import Footer from '../components/Footer';
 
 function MiningButton({ onClick }) {
@@ -15,7 +14,7 @@ function MiningButton({ onClick }) {
         <img 
           src="/icons/mine-btn.svg" 
           alt="Mine Button"
-          style={{ pointerEvents: 'none' }}  // Disable pointer events for the image
+          style={{ pointerEvents: 'none' }}  
         />
       </div>
     </div>
@@ -50,7 +49,7 @@ function SellButton({ onClick }) {
         <img 
           src="/icons/sell-btn.svg" 
           alt="Sell Button"
-          style={{ pointerEvents: 'none' }}  // Disable pointer events for the image
+          style={{ pointerEvents: 'none' }}  
         />
       </div>
     </div>
@@ -76,40 +75,38 @@ function HomeScreen() {
   const [coins, setCoins] = useState(0);
   const [stone, setStone] = useState(0);
   const [mining, setMining] = useState(false);
-  const [timer, setTimer] = useState(28800); // 8 hours in seconds
+  const [timer, setTimer] = useState(0); // Initialize to 0
 
-  // Fetch saved state from the server (for example, when page reloads)
   useEffect(() => {
     const fetchData = async () => {
-      const userId = ''; // Fetch user ID from Telegram context or other means
-      const savedState = await fetch(`/api/mine`, {
+      const userId = ''; // Fetch user ID from your context or other means
+      const response = await fetch(`/api/mine`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId }),
+        body: JSON.stringify({ userId, action: 'get-mining-session' }),
       });
 
-      if (savedState.ok) {
-        const result = await savedState.json();
-        const { startTime, duration } = result; // Get startTime and duration from the server
+      if (response.ok) {
+        const miningSession = await response.json();
         const currentTime = new Date();
-        const elapsedTime = Math.floor((currentTime - new Date(startTime)) / 1000); // in seconds
+        const elapsedTime = Math.floor((currentTime - new Date(miningSession.startTime)) / 1000);
+        const remainingTime = Math.max(0, miningSession.duration - elapsedTime);
 
-        const remainingTime = Math.max(0, duration - elapsedTime); // calculate remaining time
-        setTimer(remainingTime);
-        setMining(elapsedTime < duration); // Check if mining is still active
-        setCoins(result.coins); // Set coins
-        setStone(result.stone); // Set stone
+        if (remainingTime > 0) {
+          setTimer(remainingTime);
+          setMining(true);
+          setStone(0); // You can adjust stone based on previous data if needed
+        }
       } else {
-        console.error("Error fetching game state");
+        console.error("Error fetching mining session");
       }
     };
 
     fetchData();
   }, []);
 
-  // Handle the mining countdown
   useEffect(() => {
     if (mining) {
       const interval = setInterval(() => {
@@ -128,18 +125,44 @@ function HomeScreen() {
     }
   }, [mining]);
 
-  const startMining = () => {
+  const startMining = async () => {
     if (!mining) {
-      setMining(true);
-      setTimer(28800); // Reset timer
-      setStone(0); // Reset stone collected
+      const userId = ''; // Fetch user ID from your context or other means
+      const response = await fetch(`/api/mine`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, action: 'start-mining' }),
+      });
+
+      if (response.ok) {
+        setMining(true);
+        setTimer(28800); // Reset timer to 8 hours
+        setStone(0); // Reset stone collected
+      } else {
+        console.error("Error starting mining session");
+      }
     }
   };
 
-  const handleSell = () => {
-    setCoins((prevCoins) => prevCoins + 500); // Add coins after selling
-    setStone(0); // Reset stone
-    setMining(false); // End mining
+  const handleSell = async () => {
+    const userId = ''; // Fetch user ID from your context or other means
+    const response = await fetch(`/api/mine`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, action: 'sell-stone' }),
+    });
+
+    if (response.ok) {
+      setCoins((prevCoins) => prevCoins + 500); // Add coins after selling
+      setStone(0); // Reset stone
+      setMining(false); // End mining
+    } else {
+      console.error("Error selling stone");
+    }
   };
 
   return (
@@ -147,7 +170,7 @@ function HomeScreen() {
       <div className="w-full max-w-[30rem] mt-[28%]">
         <StatDisplay 
           iconSrc="/icons/gamecoin.svg"
-          value={coins} // Display actual coins
+          value={coins} 
         />
         <img 
           loading="lazy" 
@@ -159,14 +182,13 @@ function HomeScreen() {
         {mining ? (
           timer > 0 ? (
             <CollectingButton timer={timer} stone={stone} />
-          ) : (
-            <SellButton onClick={handleSell} />
-          )
+          ) : null
         ) : (
           <MiningButton onClick={startMining} />
         )}
+        {mining && timer === 0 && <SellButton onClick={handleSell} />}
       </div>
-      <Footer currentPage="home" />
+      <Footer />
     </div>
   );
 }
