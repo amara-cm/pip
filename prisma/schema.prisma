@@ -10,10 +10,10 @@ datasource db {
 
 model User {
   id           String        @id @default(cuid())
-  user_id      String        @unique
+  telegramId   String        @unique  // Changed `user_id` to `telegramId` for clarity
   username     String?
-  first_name   String?
-  earned_coins Int           @default(0)
+  firstName    String?       // Changed to `firstName` for consistency with camelCase
+  earnedCoins  Int           @default(0) // Changed to camelCase
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   gameSessions GameSession[] // Reverse relation for GameSession
@@ -23,8 +23,8 @@ model User {
 
 model GameSession {
   id            String   @id @default(cuid())
-  user          User     @relation(fields: [user_id], references: [id])
-  user_id       String
+  user          User     @relation(fields: [userId], references: [id]) // Changed to `userId`
+  userId        String
   claimStreak   Int      @default(0) // Keeps track of the current streak (e.g., 1 for Day 1, 2 for Day 2, etc.)
   lastClaimedAt DateTime? // When the user last claimed the reward
   createdAt     DateTime  @default(now())
@@ -33,16 +33,27 @@ model GameSession {
 
 model GameHistory {
   id          String   @id @default(cuid())
-  user        User     @relation(fields: [user_id], references: [id])
-  user_id     String
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
   action      String   // Example: "mine_started", "task_completed", "friend_referred"
   timestamp   DateTime @default(now())
 }
 
 model Referral {
   id          String   @id @default(cuid())
-  user        User     @relation(fields: [user_id], references: [id])
-  user_id     String
-  referred_id String   // The user_id of the friend who was referred
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  referredId  String   // Changed `referred_id` to camelCase
   createdAt   DateTime @default(now())
+}
+
+model MiningSession {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  startTime  DateTime
+  duration   Int      @default(28800) // 8 hours
+  status     String   // "in_progress", "completed", etc.
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
