@@ -92,11 +92,15 @@ function HomeScreen() {
 
       if (savedState.ok) {
         const result = await savedState.json();
-        const { coins, stone, timer, mining } = result;
-        setCoins(coins);
-        setStone(stone);
-        setTimer(timer);
-        setMining(mining);
+        const { startTime, duration } = result; // Get startTime and duration from the server
+        const currentTime = new Date();
+        const elapsedTime = Math.floor((currentTime - new Date(startTime)) / 1000); // in seconds
+
+        const remainingTime = Math.max(0, duration - elapsedTime); // calculate remaining time
+        setTimer(remainingTime);
+        setMining(elapsedTime < duration); // Check if mining is still active
+        setCoins(result.coins); // Set coins
+        setStone(result.stone); // Set stone
       } else {
         console.error("Error fetching game state");
       }
