@@ -2,10 +2,16 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  switch (req.method) {
+export default async function handler(req, res) {
+  const { method, body } = req;
+
+  switch (method) {
     case 'POST':
-      const userId = req.body.userId;
+      const userId = body.userId;
+
+      // ...
+  }
+}
 
       // Start mining session
       if (req.body.action === 'start-mining') {
