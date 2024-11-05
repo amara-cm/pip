@@ -9,12 +9,8 @@ export default async function handler(req, res) {
     case 'POST':
       const userId = body.userId;
 
-      // ...
-  }
-}
-
       // Start mining session
-      if (req.body.action === 'start-mining') {
+      if (body.action === 'start-mining') {
         const miningSession = await prisma.miningSession.create({
           data: {
             user_id: userId,
@@ -27,8 +23,8 @@ export default async function handler(req, res) {
       }
 
       // Sell stone
-      if (req.body.action === 'sell-stone') {
-        const miningSession = await prisma.miningSession.updateMany({
+      if (body.action === 'sell-stone') {
+        await prisma.miningSession.updateMany({
           where: { user_id: userId, status: 'active' },
           data: { status: 'completed' },
         });
@@ -40,7 +36,7 @@ export default async function handler(req, res) {
       }
 
       // Get mining session
-      if (req.body.action === 'get-mining-session') {
+      if (body.action === 'get-mining-session') {
         const miningSession = await prisma.miningSession.findFirst({
           where: { user_id: userId, status: 'active' },
         });
@@ -48,6 +44,7 @@ export default async function handler(req, res) {
       }
 
       return res.status(400).json({ error: 'Invalid action' });
+    
     default:
       return res.status(405).json({ error: 'Method Not Allowed' });
   }
