@@ -11,11 +11,20 @@ export default async function handler(req, res) {
 
       // Start mining session
       if (body.action === 'start-mining') {
+        // Check if there's already an active mining session
+        const existingSession = await prisma.miningSession.findFirst({
+          where: { user_id: userId, status: 'active' },
+        });
+
+        if (existingSession) {
+          return res.status(400).json({ error: 'Mining session already active' });
+        }
+
         const miningSession = await prisma.miningSession.create({
           data: {
             user_id: userId,
             startTime: new Date(),
-            duration: 28800,
+            duration: 28800, // 8 hours
             status: 'active',
           },
         });
