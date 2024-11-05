@@ -1,5 +1,5 @@
 import prisma from '../../lib/db';
-import schedule from 'node-schedule');
+import schedule from 'node-schedule';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
