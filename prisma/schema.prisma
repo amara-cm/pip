@@ -9,13 +9,16 @@ datasource db {
 }
 
 model User {
-id       String   @id @default(cuid())
-user_id  String   @unique
-username String?
-first_name String?
-earned_coins Int @default(0)
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
+  id           String        @id @default(cuid())
+  user_id      String        @unique
+  username     String?
+  first_name   String?
+  earned_coins Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  gameSessions GameSession[] // Reverse relation for GameSession
+  gameHistory  GameHistory[] // Reverse relation for GameHistory
+  referrals    Referral[]    // Reverse relation for Referral
 }
 
 model GameSession {
