@@ -4,38 +4,38 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = env("PINK_PRISMA_URL") // uses connection pooling
+  url      = env("PINK_PRISMA_URL") // uses connection pooling
   directUrl = env("PINK_URL_NON_POOLING") // uses a direct connection
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  telegramId  String   @unique  // User ID from Telegram
+  id          Int      @id @default(autoincrement()) // Primary key
+  telegramId  String   @unique                     // User ID from Telegram (string for compatibility)
   username    String?  // Telegram Username (can be null if not set)
   ipAddress   String?  // User's IP Address for anti-cheating
-  coins       Int      @default(0)
-  diamonds    Int      @default(0)  // Pink Star Diamonds collected
+  coins       Int      @default(0)                 // Total coins earned
+  diamonds    Int      @default(0)                 // Pink Star Diamonds collected
   referrerId  Int?     // Referral data (who invited whom)
-  referrer    User?    @relation("UserReferrals", fields: [referrerId], references: [id])
-  referrals   User[]   @relation("UserReferrals")
+  referrer    User?    @relation("UserReferrals", fields: [referrerId], references: [id]) // Referrer relation
+  referrals   User[]   @relation("UserReferrals")  // Referrals array
   tasks       Task[]   // Tasks tracking for the user
   gameHistory GameHistory[] // Store game-related actions
-  createdAt   DateTime @default(now())
+  createdAt   DateTime @default(now())              // Timestamp when the user was created
 }
 
 model Task {
-  id        Int      @id @default(autoincrement())
+  id        Int      @id @default(autoincrement()) // Primary key
   title     String   // Task description
-  completed Boolean  @default(false)
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  completed Boolean  @default(false)                // Task completion status
+  userId    Int                                      // Foreign key reference to User
+  user      User     @relation(fields: [userId], references: [id]) // User relation
 }
 
 model GameHistory {
-  id        Int      @id @default(autoincrement())
+  id        Int      @id @default(autoincrement()) // Primary key
   action    String   // Describes action ("mine", "sell", etc.)
   amount    Int      // Amount of mined or sold items
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
+  userId    Int                                      // Foreign key reference to User
+  user      User     @relation(fields: [userId], references: [id]) // User relation
+  createdAt DateTime @default(now())                // Timestamp when the action occurred
 }
