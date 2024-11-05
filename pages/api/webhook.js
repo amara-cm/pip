@@ -17,15 +17,13 @@ export default async function handler(req, res) {
 
 async function handleTelegramUser(req, res) {
   try {
-    const { id, username, first_name } = req.body;
-
-    await prisma.user.upsert({
-      where: { user_id: String(id) },
-      update: { username, first_name },
-      create: { user_id: String(id), username, first_name },
+    const response = await fetch('/api/telegram', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(req.body),
     });
-
-    return res.status(200).json({ user_id: id, username, first_name });
+    const data = await response.json();
+    return res.status(200).json(data);
   } catch (error) {
     console.error('Error handling Telegram data:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
@@ -33,22 +31,10 @@ async function handleTelegramUser(req, res) {
 }
 
 async function handleUserFetch(req, res) {
-  const { userId } = req.query;
-
-  if (!userId) {
-    return res.status(400).json({ error: 'User ID is required' });
-  }
-
   try {
-    const user = await prisma.user.findUnique({
-      where: { user_id: userId },
-    });
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    return res.status(200).json(user);
+    const response = await fetch(/api/userProfile?userId=${req.query.userId});
+    const data = await response.json();
+    return res.status(200).json(data);
   } catch (error) {
     console.error('Error fetching user:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
