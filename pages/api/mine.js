@@ -1,5 +1,4 @@
 import prisma from '../../lib/db';
-import schedule from 'node-schedule';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -12,71 +11,59 @@ export default async function handler(req, res) {
 async function handleMining(req, res) {
   const { userId } = req.body;
 
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID is required' });
+  }
+
   try {
-    const user = await prisma.user.findUnique({
-      where: { user_id: String(userId) },
+    const existingUser = await prisma.user.findUnique({
+      where: { telegramId: String(userId) },
     });
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+    if (!existingUser) {
+      await prisma.user.create({
+        data: { telegramId: String(userId) },
+      });
     }
 
-    // ...
+    const miningSession = await prisma.miningSession.findFirst({
+      where: { userId: String(userId), status: 'in_progress' },
+    });
+
+    if (!miningSession) {
+      // Create a new mining session with the start time
+      await prisma.miningSession.create({
+        data: {
+          userId: String(userId),
+          startTime: new Date(), // Store the current UTC time
+          duration: 28800, // Set default duration (8 hours)
+          status: 'in_progress',
+        },
+      });
+    }
+
+    // Fetch user's data again
+    const user = await prisma.user.findUnique({
+      where: { telegramId: String(userId) },
+    });
+
+    const updatedSession = await prisma.miningSession.findFirst({
+      where: { userId: String(userId), status: 'in_progress' },
+    });
+
+    const elapsedSeconds = Math.floor((new Date() - updatedSession.startTime) / 1000);
+    const remainingTime = Math.max(0, updatedSession.duration - elapsedSeconds);
+
+    let response = {
+      coins: user.coins,
+      stone: user.diamonds,
+      timer: remainingTime, // Return the calculated remaining time
+      mining: true, // Indicate that mining is in progress
+    };
+
+    return res.status(200).json(response);
   } catch (error) {
-    console.error(error);
+    console.error('Error during fetching game state:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
-  }
-}
-    // Create a new mining session
-    const miningSession = await prisma.miningSession.create({
-      data: {
-        userId: String(userId),
-        startTime: new Date(),
-        duration: 8 * 60 * 60, // 8 hours in seconds
-        status: 'in_progress',
-      },
-    });
-
-    // Schedule a task to update mining session status after the duration
-    schedule.scheduleJob(new Date(Date.now() + miningSession.duration * 1000), async () => {
-      await completeMiningSession(miningSession.id); // Pass the mining session ID
-    });
-
-    return res.status(200).json({ message: 'Mining started!' });
-  } catch (error) {
-    console.error('Error during mining:', error);
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
-}
-
-async function completeMiningSession(sessionId) {
-  try {
-    // Update mining session status to 'completed'
-    await prisma.miningSession.update({
-      where: { id: sessionId },
-      data: { status: 'completed' },
-    });
-
-    // Update user's mining progress and in-game currency (coins)
-    const session = await prisma.miningSession.findUnique({
-      where: { id: sessionId },
-    });
-    const user = await prisma.user.update({
-      where: { user_id: session.userId },
-      data: {
-        miningProgress: { increment: 1 },
-        coins: { increment: 500 },
-      },
-    });
-
-    // Add a new entry to the game history
-    await prisma.gameHistory.create({
-      data: {
-        userId: session.userId,
-        action: 'mining_completed',
-      },
-    });
-  } catch (error) {
-    console.error('Error completing mining session:', error);
   }
 }
