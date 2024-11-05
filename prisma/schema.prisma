@@ -9,13 +9,13 @@ datasource db {
 }
 
 model User {
-  id             String           @id @default(cuid())
-  userId     String           @unique
-  username       String?
-  firstName      String?
-  earnedCoins    Int              @default(0)
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  id       String   @id @default(cuid())
+  user_id  String   @unique
+  username String?
+  first_name String?
+  earned_coins Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   gameSessions   GameSession[]    // Reverse relation for GameSession
   gameHistory    GameHistory[]    // Reverse relation for GameHistory
   referrals      Referral[]       // Reverse relation for Referral
@@ -25,7 +25,7 @@ model User {
 model GameSession {
   id            String   @id @default(cuid())
   user          User     @relation(fields: [userId], references: [id])
-  userId        String
+  user_id        String
   claimStreak   Int      @default(0)
   lastClaimedAt DateTime?
   createdAt     DateTime @default(now())
@@ -35,7 +35,7 @@ model GameSession {
 model GameHistory {
   id        String   @id @default(cuid())
   user      User     @relation(fields: [userId], references: [id])
-  userId    String
+  user_id    String
   action    String
   timestamp DateTime @default(now())
 }
@@ -43,14 +43,14 @@ model GameHistory {
 model Referral {
   id         String   @id @default(cuid())
   user       User     @relation(fields: [userId], references: [id])
-  userId     String
+  user_id     String
   referredId String
   createdAt  DateTime @default(now())
 }
 
 model MiningSession {
   id         String   @id @default(cuid())
-  userId     String
+  user_id     String
   user       User     @relation(fields: [userId], references: [id])
   startTime  DateTime
   duration   Int      @default(28800)
