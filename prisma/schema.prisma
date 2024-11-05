@@ -9,17 +9,11 @@ datasource db {
 }
 
 model User {
-  id          Int      @id @default(autoincrement()) // Primary Key
-  telegramId  String   @unique // Unique Telegram user ID
-  username    String?  // Optional username from Telegram
-  firstName   String?  // Optional first name from Telegram
-  coins       Int      @default(0) // User's total coins earned
-  referrals   Int      @default(0) // Referral count (if needed)
-}
-
-model GameHistory {
-  id        Int      @id @default(autoincrement()) // Primary Key
-  userId    Int      @relation(fields: [userId], references: [id])
-  action    String   // Description of game action (like "sold diamonds", "completed task")
-  createdAt DateTime @default(now()) // Timestamp of action
+id       String   @id @default(cuid())
+user_id  String   @unique
+username String?
+first_name String?
+earned_coins Integer default(0)
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
 }
