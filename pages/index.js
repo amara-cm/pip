@@ -121,11 +121,11 @@ function HomeScreen() {
         });
         setStone((prevStone) => prevStone + (1 / 28800)); // Increment stone amount
       }, 1000);
-
+  
       return () => clearInterval(interval);
     }
   }, [mining]);
-
+  
   const startMining = () => {
     if (!mining) {
       setMining(true);
@@ -133,6 +133,7 @@ function HomeScreen() {
       setStone(0); // Reset stone collected
     }
   };
+
 
   const handleSell = () => {
     setCoins((prevCoins) => prevCoins + 500); // Add coins after selling
