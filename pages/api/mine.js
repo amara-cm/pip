@@ -38,7 +38,7 @@ async function handleMining(req, res) {
 
     // Schedule a task to update mining session status after the duration
     schedule.scheduleJob(new Date(Date.now() + miningSession.duration * 1000), async () => {
-      await completeMiningSession((link unavailable));
+      await completeMiningSession(miningSession.id); // Pass the mining session ID
     });
 
     return res.status(200).json({ message: 'Mining started!' });
