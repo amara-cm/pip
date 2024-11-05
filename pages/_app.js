@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import '../styles/global.css';
 import Loading from '../components/loading';
 import GameError from '../components/GameError';
 
