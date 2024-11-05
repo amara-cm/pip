@@ -12,20 +12,21 @@ export default async function handler(req, res) {
 async function handleMining(req, res) {
   const { userId } = req.body;
 
-  if (!userId) {
-    return res.status(400).json({ error: 'User ID is required' });
-  }
-
   try {
-    // Check if user is already mining
-    const existingSession = await prisma.miningSession.findFirst({
-      where: { userId: String(userId), status: 'in_progress' },
+    const user = await prisma.user.findUnique({
+      where: { user_id: String(userId) },
     });
 
-    if (existingSession) {
-      return res.status(400).json({ error: 'User is already mining' });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
 
+    // ...
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
     // Create a new mining session
     const miningSession = await prisma.miningSession.create({
       data: {
