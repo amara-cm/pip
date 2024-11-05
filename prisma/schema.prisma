@@ -24,7 +24,7 @@ model User {
 
 model GameSession {
   id            String   @id @default(cuid())
-  user          User     @relation(fields: [userId], references: [id])
+  user          User     @relation(fields: [user_id], references: [id])
   user_id        String
   claimStreak   Int      @default(0)
   lastClaimedAt DateTime?
@@ -34,7 +34,7 @@ model GameSession {
 
 model GameHistory {
   id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [user_id], references: [id])
   user_id    String
   action    String
   timestamp DateTime @default(now())
@@ -42,7 +42,7 @@ model GameHistory {
 
 model Referral {
   id         String   @id @default(cuid())
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [user_id], references: [id])
   user_id     String
   referredId String
   createdAt  DateTime @default(now())
@@ -51,7 +51,7 @@ model Referral {
 model MiningSession {
   id         String   @id @default(cuid())
   user_id     String
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [user_id], references: [id])
   startTime  DateTime
   duration   Int      @default(28800)
   status     String
