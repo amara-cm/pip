@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import '../styles/global.css';
-import Loading from '../components/Loading';
+import Loading from '../components/loading';
 
 function MyApp({ Component, pageProps }) {
 const [isLoading, setIsLoading] = useState(true);
