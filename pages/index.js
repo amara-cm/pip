@@ -78,6 +78,7 @@ function HomeScreen() {
   const [mining, setMining] = useState(false);
   const [timer, setTimer] = useState(28800); // 8 hours in seconds
 
+  // Fetch saved state from the server (for example, when page reloads)
   useEffect(() => {
     const fetchData = async () => {
       const userId = ''; // Fetch user ID from Telegram context or other means
@@ -86,7 +87,7 @@ function HomeScreen() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId }), // Make sure to pass the userId here
+        body: JSON.stringify({ userId }),
       });
 
       if (savedState.ok) {
@@ -101,9 +102,10 @@ function HomeScreen() {
       }
     };
 
-    fetchData(); // Call fetchData to load user's game state
+    fetchData();
   }, []);
 
+  // Handle the mining countdown
   useEffect(() => {
     if (mining) {
       const interval = setInterval(() => {
@@ -117,11 +119,11 @@ function HomeScreen() {
         });
         setStone((prevStone) => prevStone + (1 / 28800)); // Increment stone amount
       }, 1000);
-  
+
       return () => clearInterval(interval);
     }
   }, [mining]);
-  
+
   const startMining = () => {
     if (!mining) {
       setMining(true);
@@ -130,21 +132,10 @@ function HomeScreen() {
     }
   };
 
-  const miningStart = new Date(); // store start time in memory
-
-  function getRemainingTime() {
-    const now = new Date();
-    const elapsed = Math.floor((now - miningStart) / 1000); // elapsed time in seconds
-    const totalMiningTime = 8 * 60 * 60; // 8 hours in seconds
-    const remaining = totalMiningTime - elapsed;
-    return remaining > 0 ? remaining : 0;
-  }
-
-
   const handleSell = () => {
     setCoins((prevCoins) => prevCoins + 500); // Add coins after selling
     setStone(0); // Reset stone
-    setMining(false); // Go back to mining
+    setMining(false); // End mining
   };
 
   return (
