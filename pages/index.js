@@ -130,6 +130,17 @@ function HomeScreen() {
     }
   };
 
+  const miningStart = new Date(); // store start time in memory
+
+  function getRemainingTime() {
+    const now = new Date();
+    const elapsed = Math.floor((now - miningStart) / 1000); // elapsed time in seconds
+    const totalMiningTime = 8 * 60 * 60; // 8 hours in seconds
+    const remaining = totalMiningTime - elapsed;
+    return remaining > 0 ? remaining : 0;
+  }
+
+
   const handleSell = () => {
     setCoins((prevCoins) => prevCoins + 500); // Add coins after selling
     setStone(0); // Reset stone
