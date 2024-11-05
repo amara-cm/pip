@@ -32,7 +32,7 @@ async function handleTelegramUser(req, res) {
 
 async function handleUserFetch(req, res) {
   try {
-    const response = await fetch(/api/userProfile?userId=${req.query.userId});
+    const response = await fetch('/api/userProfile?userId=${req.query.userId}');
     const data = await response.json();
     return res.status(200).json(data);
   } catch (error) {
