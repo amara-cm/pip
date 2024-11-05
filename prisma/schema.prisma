@@ -4,36 +4,22 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("PINK_PRISMA_URL") // uses connection pooling
-  directUrl = env("PINK_URL_NON_POOLING") // uses a direct connection
+  url      = env("PINK_PRISMA_URL") 
+  directUrl = env("PINK_URL_NON_POOLING")
 }
 
 model User {
-  id          Int      @id @default(autoincrement()) // Primary key
-  telegramId  String   @unique                     // User ID from Telegram (string for compatibility)
-  username    String?  // Telegram Username (can be null if not set)
-  ipAddress   String?  // User's IP Address for anti-cheating
-  coins       Int      @default(0)                 // Total coins earned
-  diamonds    Int      @default(0)                 // Pink Star Diamonds collected
-  referrerId  Int?     // Referral data (who invited whom)
-  referrer    User?    @relation("UserReferrals", fields: [referrerId], references: [id]) // Referrer relation
-  referrals   User[]   @relation("UserReferrals")  // Referrals array
-  tasks       Task[]   // Tasks tracking for the user
-  gameHistory GameHistory[] // Store game-related actions
-  createdAt   DateTime @default(now())              // Timestamp when the user was created
-}
-
-model MiningSession {
-  id          String   @id @default(cuid())
-  userId      String
-  startTime   DateTime
-  duration    Int
-  status      String
+  id          Int      @id @default(autoincrement()) // Primary Key
+  telegramId  String   @unique // Unique Telegram user ID
+  username    String?  // Optional username from Telegram
+  firstName   String?  // Optional first name from Telegram
+  coins       Int      @default(0) // User's total coins earned
+  referrals   Int      @default(0) // Referral count (if needed)
 }
 
 model GameHistory {
-  id        String   @id @default(cuid())
-  userId    String
-  action    String
-  timestamp DateTime @default(now())
+  id        Int      @id @default(autoincrement()) // Primary Key
+  userId    Int      @relation(fields: [userId], references: [id])
+  action    String   // Description of game action (like "sold diamonds", "completed task")
+  createdAt DateTime @default(now()) // Timestamp of action
 }
