@@ -1,59 +1,75 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
+// Handle POST request to save or retrieve mining progress
 export default async function handler(req, res) {
-  const { method, body } = req;
+  if (req.method === 'POST') {
+    const { userId } = req.body;
 
-  switch (method) {
-    case 'POST':
-      const userId = body.userId;
+    try {
+      // Fetch the current user's mining session
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+      });
 
-      // Start mining session
-      if (body.action === 'start-mining') {
-        // Check if there's already an active mining session
-        const existingSession = await prisma.miningSession.findFirst({
-          where: { user_id: userId, status: 'active' },
-        });
-
-        if (existingSession) {
-          return res.status(400).json({ error: 'Mining session already active' });
-        }
-
-        const miningSession = await prisma.miningSession.create({
-          data: {
-            user_id: userId,
-            startTime: new Date(),
-            duration: 28800, // 8 hours
-            status: 'active',
-          },
-        });
-        return res.status(201).json(miningSession);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
       }
 
-      // Sell stone
-      if (body.action === 'sell-stone') {
-        await prisma.miningSession.updateMany({
-          where: { user_id: userId, status: 'active' },
-          data: { status: 'completed' },
+      const { miningStartTime, collectedStone, earnedCoins } = user;
+
+      // Check if the mining session is still active
+      if (miningStartTime) {
+        const currentTime = new Date();
+        const elapsedTime = Math.floor((currentTime - new Date(miningStartTime)) / 1000); // seconds
+
+        const remainingTime = Math.max(0, 28800 - elapsedTime); // 8 hours = 28800 seconds
+        const stone = (elapsedTime >= 28800) ? collectedStone : collectedStone + (elapsedTime / 28800);
+
+        return res.status(200).json({
+          startTime: miningStartTime,
+          duration: 28800,  // 8 hours
+          timer: remainingTime,
+          stone,
+          coins: earnedCoins
         });
-        await prisma.user.update({
-          where: { user_id: userId },
-          data: { earned_coins: { increment: 500 } },
+      } else {
+        // If no active mining session
+        return res.status(200).json({
+          startTime: null,
+          duration: 28800,  // 8 hours
+          timer: 28800,
+          stone: 0,
+          coins: earnedCoins
         });
-        return res.status(200).json({ message: 'Stone sold' });
       }
 
-      // Get mining session
-      if (body.action === 'get-mining-session') {
-        const miningSession = await prisma.miningSession.findFirst({
-          where: { user_id: userId, status: 'active' },
-        });
-        return res.status(200).json(miningSession);
-      }
-
-      return res.status(400).json({ error: 'Invalid action' });
-    
-    default:
-      return res.status(405).json({ error: 'Method Not Allowed' });
+    } catch (error) {
+      return res.status(500).json({ error: 'Error fetching mining data' });
+    }
   }
+
+  // Handle PUT request to update mining progress
+  if (req.method === 'PUT') {
+    const { userId, startTime, stone, coins } = req.body;
+
+    try {
+      // Update mining session in the database
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: {
+          miningStartTime: startTime,
+          collectedStone: stone,
+          earnedCoins: coins,
+        },
+      });
+
+      return res.status(200).json({ message: 'Mining session updated successfully' });
+
+    } catch (error) {
+      return res.status(500).json({ error: 'Error updating mining session' });
+    }
+  }
+
+  return res.status(405).json({ error: 'Method Not Allowed' });
 }
