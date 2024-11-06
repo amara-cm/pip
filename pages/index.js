@@ -79,32 +79,34 @@ function HomeScreen() {
   const [stone, setStone] = useState(0);
   const [mining, setMining] = useState(false);
   const [timer, setTimer] = useState(28800); // 8 hours in seconds
+  const [userId, setUserId] = useState(''); // Set this dynamically based on the user
 
   // Fetch saved state from the server (for example, when page reloads)
   useEffect(() => {
     const fetchData = async () => {
-      const userId = ''; // Replace with the actual user ID logic
+      if (!userId) return; // Ensure we have a userId before calling the API
 
-      const savedState = await fetch(`/api/mine?userId=${userId}`, {
-        method: 'GET',
-      });
+      try {
+        const response = await fetch(`/api/mine?userId=${userId}`);
+        if (response.ok) {
+          const savedState = await response.json();
+          const { startTime, duration, stone, coins } = savedState;
+          const currentTime = new Date();
+          const elapsedTime = Math.floor((currentTime - new Date(startTime)) / 1000); // in seconds
 
-      if (savedState.ok) {
-        const result = await savedState.json();
-        const { startTime, duration, stone, coins } = result;
-        const currentTime = new Date();
-        const elapsedTime = Math.floor((currentTime - new Date(startTime)) / 1000); // in seconds
-
-        const remainingTime = Math.max(0, duration - elapsedTime); // calculate remaining time
-        setTimer(remainingTime);
-        setMining(elapsedTime < duration);
-        setCoins(coins);
-        setStone(stone);
+          const remainingTime = Math.max(0, duration - elapsedTime); // calculate remaining time
+          setTimer(remainingTime);
+          setMining(elapsedTime < duration);
+          setCoins(coins);
+          setStone(stone);
+        }
+      } catch (error) {
+        console.error('Failed to fetch saved state:', error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [userId]);
 
   // Handle the mining countdown
   useEffect(() => {
@@ -126,7 +128,7 @@ function HomeScreen() {
   }, [mining]);
 
   const startMining = async () => {
-    if (!mining) {
+    if (!mining && userId) {
       const currentTime = new Date().toISOString();
 
       setMining(true);
@@ -134,18 +136,26 @@ function HomeScreen() {
       setStone(0); // Reset stone collected
 
       // Save mining start time to the server
-      const response = await fetch('/api/mine', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: user.id, // Replace with actual user ID
-          startTime: currentTime,
-          stone: 0,
-          coins,
-        }),
-      });
+      try {
+        const response = await fetch('/api/mine', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId,
+            startTime: currentTime,
+            stone: 0,
+            coins,
+            duration: 28800, // 8 hours
+          }),
+        });
+        if (!response.ok) {
+          console.error('Failed to save mining state');
+        }
+      } catch (error) {
+        console.error('Error while saving mining state:', error);
+      }
     }
   };
 
@@ -157,19 +167,28 @@ function HomeScreen() {
     setMining(false); // End mining
 
     // Save the updated coin balance to the server
-    const response = await fetch('/api/mine', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: user.id, // Replace with actual user ID
-        startTime: currentTime,
-        stone: 0,
-        coins: newCoins,
-      }),
-    });
+    try {
+      const response = await fetch('/api/mine', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          startTime: new Date().toISOString(),
+          stone: 0,
+          coins: newCoins,
+          duration: 28800, // Keep the same duration
+        }),
+      });
+      if (!response.ok) {
+        console.error('Failed to update coin state');
+      }
+    } catch (error) {
+      console.error('Error while updating coin state:', error);
+    }
   };
+
   return (
     <div className="flex flex-col justify-between items-center w-full h-screen bg-black text-white font-outfit font-semibold">
       <div className="w-full max-w-[30rem] mt-[28%]">
