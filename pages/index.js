@@ -128,19 +128,59 @@ function HomeScreen() {
     }
   }, [mining]);
 
-  const startMining = () => {
-    if (!mining) {
-      setMining(true);
-      setTimer(28800); // Reset timer
-      setStone(0); // Reset stone collected
-    }
-  };
+  const startMining = async () => {
+  if (!mining) {
+    const currentTime = new Date().toISOString();
 
-  const handleSell = () => {
-    setCoins((prevCoins) => prevCoins + 500); // Add coins after selling
-    setStone(0); // Reset stone
-    setMining(false); // End mining
-  };
+    setMining(true);
+    setTimer(28800); // Reset timer
+    setStone(0); // Reset stone collected
+
+    // Save mining start time to the server
+    const response = await fetch('/api/mine', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        userId: user.id,  // Replace with actual user ID
+        startTime: currentTime,
+        stone: 0,
+        coins
+      }),
+    });
+
+    if (!response.ok) {
+      console.error("Failed to save mining progress");
+    }
+  }
+};
+
+const handleSell = async () => {
+  const newCoins = coins + 500;
+
+  setCoins(newCoins); // Add coins after selling
+  setStone(0); // Reset stone
+  setMining(false); // End mining
+
+  // Save the updated coin balance to the server
+  const response = await fetch('/api/mine', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ 
+      userId: user.id,  // Replace with actual user ID
+      startTime: null,  // Mining session has ended
+      stone: 0,
+      coins: newCoins
+    }),
+  });
+
+  if (!response.ok) {
+    console.error("Failed to save coin progress");
+  }
+};
 
   return (
     <div className="flex flex-col justify-between items-center w-full h-screen bg-black text-white font-outfit font-semibold">
