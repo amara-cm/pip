@@ -1,46 +1,32 @@
-import prisma from '../../lib/db'; // Importing Prisma client
+import supabase from '../../lib/supabase'; // Import your Supabase client
 
 export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    return handleReferral(req, res); // Handle referral creation and rewarding
-  } else {
-    return res.status(405).json({ error: 'Method Not Allowed' });
-  }
-}
+    const { method } = req;
 
-// Helper function to handle referral creation and rewards
-async function handleReferral(req, res) {
-  const { inviterId, inviteeId } = req.body;
+    if (method === 'POST') {
+        const { userId, invitedUserId } = req.body;
 
-  // Validate input data
-  if (!inviterId || !inviteeId) {
-    return res.status(400).json({ error: 'Inviter ID and Invitee ID are required' });
-  }
+        // Insert a new referral record
+        const { data, error } = await supabase
+            .from('referrals')
+            .insert([{ user_id: userId, invited_user_id: invitedUserId }]);
 
-  try {
-    // Create the referral entry
-    const referral = await prisma.referral.create({
-      data: {
-        inviterId: inviterId,
-        inviteeId: inviteeId,
-      },
-    });
+        if (error) {
+            return res.status(400).json({ error: error.message });
+        }
 
-    // Reward both inviter and invitee with 500 coins each
-    await prisma.user.updateMany({
-      where: {
-        user_id: {
-          in: [inviterId, inviteeId],
-        },
-      },
-      data: {
-        coins: { increment: 500 }, // Increment coins by 500 for both users
-      },
-    });
+        // Reward the user for inviting a friend
+        const { error: rewardError } = await supabase
+            .from('users')
+            .update({ coins: supabase.raw('coins + 100') }) // Reward 100 coins for the inviter
+            .eq('id', userId);
 
-    return res.status(201).json({ message: 'Referral successful!', referral });
-  } catch (error) {
-    console.error('Error during referral:', error);
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
+        if (rewardError) {
+            return res.status(400).json({ error: rewardError.message });
+        }
+
+        res.json({ message: 'Referral recorded and coins rewarded' });
+    }
+
+    return res.status(405).json({ error: 'Method not allowed' });
 }
