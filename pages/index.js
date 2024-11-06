@@ -5,17 +5,17 @@ import Footer from '../components/Footer';
 function MiningButton({ onClick }) {
   return (
     <div className="flex justify-center">
-      <div 
-        className="object-contain w-[85vw] h-[6vh] mine-btn cursor-pointer" 
+      <div
+        className="object-contain w-[85vw] h-[6vh] mine-btn cursor-pointer"
         aria-label="Start mining"
         onClick={onClick}
         onContextMenu={(e) => e.preventDefault()}
         onTouchStart={(e) => e.preventDefault()}
       >
-        <img 
-          src="/icons/mine-btn.svg" 
+        <img
+          src="/icons/mine-btn.svg"
           alt="Mine Button"
-          style={{ pointerEvents: 'none' }}  // Disable pointer events for the image
+          style={{ pointerEvents: 'none' }}
         />
       </div>
     </div>
@@ -30,7 +30,9 @@ function CollectingButton({ timer, stone }) {
           Collecting {stone.toFixed(3)}
         </div>
         <div className="font-outfit font-semibold text-[1rem] text-[#B3B3B3]">
-          {`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60).toString().padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}
+          {`${Math.floor(timer / 3600)}:${Math.floor((timer % 3600) / 60)
+            .toString()
+            .padStart(2, '0')}:${(timer % 60).toString().padStart(2, '0')}`}
         </div>
       </div>
     </div>
@@ -40,17 +42,17 @@ function CollectingButton({ timer, stone }) {
 function SellButton({ onClick }) {
   return (
     <div className="flex justify-center">
-      <div 
-        className="object-contain w-[85vw] h-[6vh] sell-btn cursor-pointer" 
+      <div
+        className="object-contain w-[85vw] h-[6vh] sell-btn cursor-pointer"
         aria-label="Sell stone"
         onClick={onClick}
         onContextMenu={(e) => e.preventDefault()}
         onTouchStart={(e) => e.preventDefault()}
       >
-        <img 
-          src="/icons/sell-btn.svg" 
+        <img
+          src="/icons/sell-btn.svg"
           alt="Sell Button"
-          style={{ pointerEvents: 'none' }}  // Disable pointer events for the image
+          style={{ pointerEvents: 'none' }}
         />
       </div>
     </div>
@@ -60,11 +62,11 @@ function SellButton({ onClick }) {
 function StatDisplay({ iconSrc, value }) {
   return (
     <div className="flex gap-[0.5rem] justify-center items-center self-center text-4xl font-bold tracking-tighter leading-none text-white whitespace-nowrap">
-      <img 
-        loading="lazy" 
-        src={iconSrc} 
+      <img
+        loading="lazy"
+        src={iconSrc}
         alt=""
-        className="object-contain shrink-0 self-stretch my-auto aspect-square w-[2.1875rem] h-[2.1875rem]" 
+        className="object-contain shrink-0 self-stretch my-auto aspect-square w-[2.1875rem] h-[2.1875rem]"
         style={{ pointerEvents: 'none' }}
       />
       <p className="self-stretch my-auto">{value}</p>
@@ -80,33 +82,29 @@ function HomeScreen() {
 
   // Fetch saved state from the server (for example, when page reloads)
   useEffect(() => {
-  const fetchData = async () => {
-    const userId = ''; // Replace with the actual user ID logic
+    const fetchData = async () => {
+      const userId = ''; // Replace with the actual user ID logic
 
-    const savedState = await fetch(`/api/mine`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId }),
-    });
+      const savedState = await fetch(`/api/mine?userId=${userId}`, {
+        method: 'GET',
+      });
 
-    if (savedState.ok) {
-      const result = await savedState.json();
-      const { startTime, duration, stone, coins } = result;
-      const currentTime = new Date();
-      const elapsedTime = Math.floor((currentTime - new Date(startTime)) / 1000); // in seconds
+      if (savedState.ok) {
+        const result = await savedState.json();
+        const { startTime, duration, stone, coins } = result;
+        const currentTime = new Date();
+        const elapsedTime = Math.floor((currentTime - new Date(startTime)) / 1000); // in seconds
 
-      const remainingTime = Math.max(0, duration - elapsedTime); // calculate remaining time
-      setTimer(remainingTime);
-      setMining(elapsedTime < duration);
-      setCoins(coins); 
-      setStone(stone);
-    } else {
-      console.error("Error fetching game state");
-    }
-  };
+        const remainingTime = Math.max(0, duration - elapsedTime); // calculate remaining time
+        setTimer(remainingTime);
+        setMining(elapsedTime < duration);
+        setCoins(coins);
+        setStone(stone);
+      }
+    };
 
-  fetchData();
-}, []);
+    fetchData();
+  }, []);
 
   // Handle the mining countdown
   useEffect(() => {
@@ -120,49 +118,58 @@ function HomeScreen() {
           }
           return prev - 1;
         });
-        setStone((prevStone) => prevStone + (1 / 28800)); // Increment stone amount
+        setStone((prevStone) => prevStone + 1 / 28800); // Increment stone amount
       }, 1000);
 
       return () => clearInterval(interval);
     }
   }, [mining]);
 
-const startMining = async () => {
-  if (!mining) {
-    const currentTime = new Date().toISOString();
-    setMining(true);
-    setTimer(28800); // Reset timer
-    setStone(0); // Reset stone collected
+  const startMining = async () => {
+    if (!mining) {
+      const currentTime = new Date().toISOString();
 
+      setMining(true);
+      setTimer(28800); // Reset timer
+      setStone(0); // Reset stone collected
+
+      // Save mining start time to the server
+      const response = await fetch('/api/mine', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id, // Replace with actual user ID
+          startTime: currentTime,
+          stone: 0,
+          coins,
+        }),
+      });
+    }
+  };
+
+  const handleSell = async () => {
+    const newCoins = coins + 500;
+
+    setCoins(newCoins); // Add coins after selling
+    setStone(0); // Reset stone
+    setMining(false); // End mining
+
+    // Save the updated coin balance to the server
     const response = await fetch('/api/mine', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, action: 'start-mining', startTime: currentTime }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: user.id, // Replace with actual user ID
+        startTime: currentTime,
+        stone: 0,
+        coins: newCoins,
+      }),
     });
-
-    if (!response.ok) {
-      console.error('Failed to start mining');
-    }
-  }
-};
-
-const handleSell = async () => {
-  const newCoins = coins + 500;
-  setCoins(newCoins); // Add coins after selling
-  setStone(0); // Reset stone
-  setMining(false); // End mining
-
-  const response = await fetch('/api/mine', {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ userId, action: 'sell-stone' }),
-  });
-
-  if (!response.ok) {
-    console.error('Failed to sell stone');
-  }
-};
-
+  };
   return (
     <div className="flex flex-col justify-between items-center w-full h-screen bg-black text-white font-outfit font-semibold">
       <div className="w-full max-w-[30rem] mt-[28%]">
