@@ -1,66 +1,47 @@
-import prisma from "../../lib/db";
+import { supabase } from '../../lib/db'; // Import Supabase client
 
-export default async function handler(req, res) {
-  const { userId, startTime, stone, coins } = req.body;
+export async function handler(req, res) {
+  const { method } = req;
+  const { userId, startTime, stone, coins } = req.body || {}; // Get values from request body
 
-  if (req.method === 'PUT') {
-    // Update mining session
-    try {
-      // Get the current user
-      const user = await prisma.user.findUnique({
-        where: { user_id: userId },
-        include: {
-          miningSessions: true, // To track the mining session for the user
-        },
-      });
+  if (method === 'GET') {
+    // Fetch saved game state for a user
+    const { data, error } = await supabase
+      .from('game_state')
+      .select('start_time, duration, stone, coins')
+      .eq('user_id', userId)
+      .single(); // Expecting only one record for the user
 
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
-
-      // Create or update a mining session for the user
-      const miningSession = await prisma.miningSession.upsert({
-        where: { user_id: userId },
-        update: {
-          startTime: new Date(startTime),
-          stone: stone,
-          coins: coins,
-        },
-        create: {
-          user_id: userId,
-          startTime: new Date(startTime),
-          stone: stone,
-          coins: coins,
-          duration: 28800, // 8 hours duration
-          status: 'mining',
-        },
-      });
-
-      return res.status(200).json(miningSession);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Internal server error" });
+    if (error) {
+      return res.status(500).json({ message: 'Error fetching game state' });
     }
-  } else if (req.method === 'GET') {
-    // Get the current mining session of the user
-    const { userId } = req.query;
 
-    try {
-      const miningSession = await prisma.miningSession.findUnique({
-        where: { user_id: userId },
-      });
-
-      if (!miningSession) {
-        return res.status(404).json({ message: "Mining session not found" });
-      }
-
-      return res.status(200).json(miningSession);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  } else {
-    // Method not allowed
-    res.status(405).json({ message: "Method Not Allowed" });
+    return res.status(200).json(data);
   }
+
+  if (method === 'PUT') {
+    // Save or update game state for the user
+    const { data, error } = await supabase
+      .from('game_state')
+      .upsert(
+        {
+          user_id: userId,
+          start_time: startTime,
+          duration: 28800, // 8 hours in seconds (for your mining duration)
+          stone: stone,
+          coins: coins,
+        },
+        { onConflict: ['user_id'] } // Ensures the record is updated if user_id exists
+      );
+
+    if (error) {
+      return res.status(500).json({ message: 'Error saving game state' });
+    }
+
+    return res.status(200).json({ message: 'Game state saved successfully' });
+  }
+
+  return res.status(405).json({ message: 'Method Not Allowed' }); // If an unsupported method is used
 }
+
+export default handler;
