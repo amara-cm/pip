@@ -86,22 +86,18 @@ function HomeScreen() {
     const fetchData = async () => {
       if (!userId) return; // Ensure we have a userId before calling the API
 
-      try {
-        const response = await fetch(`/api/mine?userId=${userId}`);
-        if (response.ok) {
-          const savedState = await response.json();
-          const { startTime, duration, stone, coins } = savedState;
-          const currentTime = new Date();
-          const elapsedTime = Math.floor((currentTime - new Date(startTime)) / 1000); // in seconds
+      const response = await fetch(`/api/mine?userId=${userId}`);
+      if (response.ok) {
+        const savedState = await response.json();
+        const { startTime, duration, stone, coins } = savedState;
+        const currentTime = new Date();
+        const elapsedTime = Math.floor((currentTime - new Date(startTime)) / 1000); // in seconds
 
-          const remainingTime = Math.max(0, duration - elapsedTime); // calculate remaining time
-          setTimer(remainingTime);
-          setMining(elapsedTime < duration);
-          setCoins(coins);
-          setStone(stone);
-        }
-      } catch (error) {
-        console.error('Failed to fetch saved state:', error);
+        const remainingTime = Math.max(0, duration - elapsedTime); // calculate remaining time
+        setTimer(remainingTime);
+        setMining(elapsedTime < duration);
+        setCoins(coins);
+        setStone(stone);
       }
     };
 
@@ -136,26 +132,19 @@ function HomeScreen() {
       setStone(0); // Reset stone collected
 
       // Save mining start time to the server
-      try {
-        const response = await fetch('/api/mine', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            userId,
-            startTime: currentTime,
-            stone: 0,
-            coins,
-            duration: 28800, // 8 hours
-          }),
-        });
-        if (!response.ok) {
-          console.error('Failed to save mining state');
-        }
-      } catch (error) {
-        console.error('Error while saving mining state:', error);
-      }
+      await fetch('/api/mine', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          startTime: currentTime,
+          stone: 0,
+          coins,
+          duration: 28800, // 8 hours
+        }),
+      });
     }
   };
 
@@ -167,26 +156,19 @@ function HomeScreen() {
     setMining(false); // End mining
 
     // Save the updated coin balance to the server
-    try {
-      const response = await fetch('/api/mine', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          startTime: new Date().toISOString(),
-          stone: 0,
-          coins: newCoins,
-          duration: 28800, // Keep the same duration
-        }),
-      });
-      if (!response.ok) {
-        console.error('Failed to update coin state');
-      }
-    } catch (error) {
-      console.error('Error while updating coin state:', error);
-    }
+    await fetch('/api/mine', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId,
+        startTime: new Date().toISOString(),
+        stone: 0,
+        coins: newCoins,
+        duration: 28800, // Keep the same duration
+      }),
+    });
   };
 
   return (
