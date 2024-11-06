@@ -1,35 +1,41 @@
-import supabase from '../../lib/supabase'; // Import Supabase client
+// /pages/api/mine.js
+import { NextApiRequest, NextApiResponse } from 'next';
+import supabase from '../../lib/supabase';  // Adjust import path if necessary
 
-export async function handler(req, res) {
+export default async function handler(req, res) {
   const { method } = req;
-  const { userId, startTime, stone, coins } = req.body || {}; // Get values from request body
 
   if (method === 'GET') {
-    await supabase
+    const { userId } = req.query;
+
+    const { data, error } = await supabase
       .from('game_state')
-      .select('start_time, duration, stone, coins')
+      .select('*')
       .eq('user_id', userId)
-      .single(); // Fetch game state
-    return; // Do nothing further
+      .single();
+
+    if (error) return res.status(500).json({ message: 'Error fetching game state' });
+    
+    return res.status(200).json(data);
   }
 
   if (method === 'PUT') {
-    await supabase
+    const { userId, coins, stone, startTime, duration } = req.body;
+
+    const { data, error } = await supabase
       .from('game_state')
-      .upsert(
-        {
-          user_id: userId,
-          start_time: startTime,
-          duration: 28800, // 8 hours in seconds
-          stone: stone,
-          coins: coins,
-        },
-        { onConflict: ['user_id'] }
-      );
-    return; // Do nothing further
+      .upsert({
+        user_id: userId,
+        coins,
+        stone,
+        start_time: startTime,
+        duration,
+      }, { onConflict: ['user_id'] });
+
+    if (error) return res.status(500).json({ message: 'Error updating game state' });
+
+    return res.status(200).json(data);
   }
 
-  return; // Do nothing further for unsupported methods
+  return res.status(405).json({ message: 'Method Not Allowed' });
 }
-
-export default handler;
