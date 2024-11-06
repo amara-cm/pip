@@ -1,73 +1,68 @@
 import prisma from "../../lib/db";
 
+const prisma = new PrismaClient();
+
 export default async function handler(req, res) {
-  const { method, body } = req;
-  const { userId, action, startTime, stone, coins } = body;
+  const { userId, startTime, stone, coins } = req.body;
 
-  switch (method) {
-    case 'GET':
-      try {
-        const user = await prisma.user.findUnique({
-          where: { user_id: userId },
-          include: { miningSessions: true },
-        });
+  if (req.method === 'PUT') {
+    // Update mining session
+    try {
+      // Get the current user
+      const user = await prisma.user.findUnique({
+        where: { user_id: userId },
+        include: {
+          miningSessions: true, // To track the mining session for the user
+        },
+      });
 
-        if (user && user.miningSessions.length > 0) {
-          const currentSession = user.miningSessions[user.miningSessions.length - 1];
-          const elapsedTime = Math.floor((new Date() - new Date(currentSession.startTime)) / 1000);
-          const remainingTime = Math.max(0, currentSession.duration - elapsedTime);
-
-          return res.status(200).json({
-            startTime: currentSession.startTime,
-            duration: currentSession.duration,
-            coins: user.earned_coins,
-            stone: currentSession.stone,
-            remainingTime,
-          });
-        } else {
-          return res.status(200).json({
-            startTime: null,
-            duration: 0,
-            coins: user ? user.earned_coins : 0,
-            stone: 0,
-            remainingTime: 0,
-          });
-        }
-      } catch (error) {
-        console.error('Failed to retrieve mining data:', error);
-        return res.status(500).json({ error: 'Failed to fetch data' });
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
       }
 
-    case 'PUT':
-      try {
-        if (action === 'start-mining') {
-          const miningSession = await prisma.miningSession.upsert({
-            where: { user_id: userId },
-            update: { startTime, status: 'active' },
-            create: { user_id: userId, startTime, duration: 28800, status: 'active' },
-          });
+      // Create or update a mining session for the user
+      const miningSession = await prisma.miningSession.upsert({
+        where: { user_id: userId },
+        update: {
+          startTime: new Date(startTime),
+          stone: stone,
+          coins: coins,
+        },
+        create: {
+          user_id: userId,
+          startTime: new Date(startTime),
+          stone: stone,
+          coins: coins,
+          duration: 28800, // 8 hours duration
+          status: 'mining',
+        },
+      });
 
-          return res.status(200).json({ message: 'Mining session started' });
-        } else if (action === 'sell-stone') {
-          const updatedSession = await prisma.miningSession.updateMany({
-            where: { user_id: userId, status: 'active' },
-            data: { status: 'completed' },
-          });
+      return res.status(200).json(miningSession);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  } else if (req.method === 'GET') {
+    // Get the current mining session of the user
+    const { userId } = req.query;
 
-          const updatedUser = await prisma.user.update({
-            where: { user_id: userId },
-            data: { earned_coins: { increment: 500 } },
-          });
+    try {
+      const miningSession = await prisma.miningSession.findUnique({
+        where: { user_id: userId },
+      });
 
-          return res.status(200).json({ message: 'Stone sold' });
-        }
-      } catch (error) {
-        console.error('Error updating mining session:', error);
-        return res.status(500).json({ error: 'Failed to save mining data' });
+      if (!miningSession) {
+        return res.status(404).json({ message: "Mining session not found" });
       }
 
-    default:
-      res.setHeader('Allow', ['GET', 'PUT']);
-      return res.status(405).end('Method ${method} Not Allowed');
+      return res.status(200).json(miningSession);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  } else {
+    // Method not allowed
+    res.status(405).json({ message: "Method Not Allowed" });
   }
 }
