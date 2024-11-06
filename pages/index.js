@@ -77,30 +77,29 @@ function HomeScreen() {
   const [stone, setStone] = useState(0);
   const [mining, setMining] = useState(false);
   const [timer, setTimer] = useState(28800); // 8 hours in seconds
+  const [userId, setUserId] = useState(''); // Placeholder, should be fetched from Telegram context
 
   // Fetch saved state from the server (for example, when page reloads)
   useEffect(() => {
     const fetchData = async () => {
-      const userId = ''; // Fetch user ID from Telegram context or other means
       const savedState = await fetch(`/api/mine`, {
-        method: 'POST',
+        method: 'GET',  // Use GET here to fetch saved game state
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId }),
       });
 
       if (savedState.ok) {
         const result = await savedState.json();
-        const { startTime, duration } = result; // Get startTime and duration from the server
+        const { startTime, duration, coins, stone } = result; 
         const currentTime = new Date();
         const elapsedTime = Math.floor((currentTime - new Date(startTime)) / 1000); // in seconds
 
         const remainingTime = Math.max(0, duration - elapsedTime); // calculate remaining time
         setTimer(remainingTime);
         setMining(elapsedTime < duration); // Check if mining is still active
-        setCoins(result.coins); // Set coins
-        setStone(result.stone); // Set stone
+        setCoins(coins); // Set coins
+        setStone(stone); // Set stone
       } else {
         console.error("Error fetching game state");
       }
@@ -136,10 +135,25 @@ function HomeScreen() {
     }
   };
 
-  const handleSell = () => {
+  const handleSell = async () => {
     setCoins((prevCoins) => prevCoins + 500); // Add coins after selling
     setStone(0); // Reset stone
     setMining(false); // End mining
+
+    // Save the game state after selling
+    await fetch('/api/mine', {
+      method: 'PUT',  // Use PUT to update saved game state
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId, 
+        coins, 
+        stone,
+        startTime: Date.now(),
+        duration: 28800,
+      }),
+    });
   };
 
   return (
