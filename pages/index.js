@@ -80,34 +80,33 @@ function HomeScreen() {
 
   // Fetch saved state from the server (for example, when page reloads)
   useEffect(() => {
-    const fetchData = async () => {
-      const userId = ''; // Fetch user ID from Telegram context or other means
-      const savedState = await fetch(`/api/mine`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userId }),
-      });
+  const fetchData = async () => {
+    const userId = ''; // Replace with the actual user ID logic
 
-      if (savedState.ok) {
-        const result = await savedState.json();
-        const { startTime, duration } = result; // Get startTime and duration from the server
-        const currentTime = new Date();
-        const elapsedTime = Math.floor((currentTime - new Date(startTime)) / 1000); // in seconds
+    const savedState = await fetch(`/api/mine`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId }),
+    });
 
-        const remainingTime = Math.max(0, duration - elapsedTime); // calculate remaining time
-        setTimer(remainingTime);
-        setMining(elapsedTime < duration); // Check if mining is still active
-        setCoins(result.coins); // Set coins
-        setStone(result.stone); // Set stone
-      } else {
-        console.error("Error fetching game state");
-      }
-    };
+    if (savedState.ok) {
+      const result = await savedState.json();
+      const { startTime, duration, stone, coins } = result;
+      const currentTime = new Date();
+      const elapsedTime = Math.floor((currentTime - new Date(startTime)) / 1000); // in seconds
 
-    fetchData();
-  }, []);
+      const remainingTime = Math.max(0, duration - elapsedTime); // calculate remaining time
+      setTimer(remainingTime);
+      setMining(elapsedTime < duration);
+      setCoins(coins); 
+      setStone(stone);
+    } else {
+      console.error("Error fetching game state");
+    }
+  };
+
+  fetchData();
+}, []);
 
   // Handle the mining countdown
   useEffect(() => {
@@ -151,7 +150,7 @@ function HomeScreen() {
     });
 
     if (!response.ok) {
-      console.error("Failed to save mining progress");
+      console.error("Failed");
     }
   }
 };
@@ -171,11 +170,12 @@ const handleSell = async () => {
     },
     body: JSON.stringify({ 
       userId: user.id,  // Replace with actual user ID
-      startTime: null,  // Mining session has ended
+      startTime: currentTime,
       stone: 0,
-      coins: newCoins
+      coins
     }),
   });
+
 
   if (!response.ok) {
     console.error("Failed to save coin progress");
