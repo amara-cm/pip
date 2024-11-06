@@ -1,7 +1,5 @@
 import prisma from "../../lib/db";
 
-const prisma = new PrismaClient();
-
 export default async function handler(req, res) {
   const { userId, startTime, stone, coins } = req.body;
 
