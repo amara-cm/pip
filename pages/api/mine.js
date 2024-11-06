@@ -1,4 +1,4 @@
-import { supabase } from '../../lib/supabase'; // Import Supabase client
+import supabase from '../../lib/supabase'; // Import Supabase client
 
 export async function handler(req, res) {
   const { method } = req;
