@@ -1,4 +1,4 @@
-import prisma from "../lib/db"; // Ensure you import your Prisma client
+import prisma from "../../lib/db"; // Ensure you import your Prisma client
 
 export default async function handler(req, res) {
   const { method } = req;
