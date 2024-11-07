@@ -35,33 +35,26 @@ async function handleTelegramUpdate(update) {
   if (!message || !message.from) return;
 
   const { id: telegram_uid, username, first_name } = message.from;
-  const text = message.text || '';
-  
-  // Extract referral UID from /start command if available
-  let referred_by = null;
-  if (text.startsWith('/start')) {
-    const args = text.split(' '); // Split the message text
-    referred_by = args.length > 1 ? args[1] : null; // Referral UID if present
-  }
+
+  console.log('Received message from user:', message);
 
   // Store or update user data in Supabase
   try {
     const { data, error } = await supabase
-      .from('users')
-      .upsert({
-        telegram_uid,
-        username,
-        first_name,
-        referred_by: referred_by ? parseInt(referred_by, 10) : null, // Store referral UID if available
-      }, {
-        onConflict: ['telegram_uid'], // Update user if they already exist
-      });
+      .from('users') // Ensure this matches your actual table name
+      .upsert([
+        {
+          telegram_uid, // Store Telegram UID
+          username,
+          first_name,
+        },
+      ]);
 
     if (error) {
       throw error;
     }
 
-    console.log(`User data for ${username || 'Pinx'} stored/updated successfully, referred by ${referred_by || 'None'}.`);
+    console.log(`User data for ${username || 'Pinx'} stored/updated successfully.`);
   } catch (error) {
     console.error('Error saving/updating user data in Supabase:', error);
   }
