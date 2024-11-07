@@ -1,5 +1,5 @@
 import { Telegraf } from 'telegraf';
-import supabase from '../../lib/supabase';  // Import your Supabase client
+import prisma from '../../lib/db'; // Ensure the path is correct
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
       const rawBody = await getRawBody(req); // Get raw body as a string
       const update = JSON.parse(rawBody); // Parse JSON
 
-      await handleTelegramUpdate(update); // Process the update
+      await handleTelegramUpdate(update);
       return res.status(200).json({ message: 'Update received' });
     } catch (error) {
       console.error('Error processing update:', error);
@@ -34,28 +34,19 @@ async function handleTelegramUpdate(update) {
 
   if (!message || !message.from) return;
 
-  const { id, username, first_name, referrer_id } = message.from;
+  const { id, username, first_name } = message.from;
 
-  // Store or update user data in Supabase
+  // Store or update user data in the database
   try {
-    const { data, error } = await supabase
-      .from('users')  // Ensure this matches the table name in Supabase
-      .upsert([
-        {
-          telegram_uid: id,  // Store the Telegram user ID
-          username,
-          first_name,
-          referred_by: referrer_id || null,  // If a referrer exists
-        },
-      ]);
+    await prisma.user.upsert({
+      where: { user_id: String(id) },
+      update: { username, first_name },
+      create: { user_id: String(id), username, first_name },
+    });
 
-    if (error) {
-      console.error('Error saving/updating user data in Supabase:', error);
-    } else {
-      console.log(`User data for ${username || 'User'} stored/updated successfully.`);
-    }
+    console.log(`User data for ${username || 'Major'} stored/updated successfully.`);
   } catch (error) {
-    console.error('Error processing data in Supabase:', error);
+    console.error('Error saving/updating user data:', error);
   }
 }
 
