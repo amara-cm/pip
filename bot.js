@@ -1,33 +1,37 @@
 import { Telegraf } from 'telegraf';
-import supabase from './lib/supabase';  // Ensure you have a Supabase client setup
+import supabase from './lib/supabase'; // Make sure this path is correct
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
-bot.telegram.setWebhook('https://pinkstar.vercel.app/api/webhook');  // Your actual webhook URL
+// Set webhook for receiving updates
+bot.telegram.setWebhook('https://pinkstar.vercel.app/api/webhook');  // Replace with your actual webhook URL
 
-// Start command handler
+// Handle the /start command (this will catch referral deep link parameters)
 bot.start(async (ctx) => {
   const { id: telegram_uid, username, first_name } = ctx.from;
-  const referred_by = ctx.message.text.split(' ')[1] || null;  // Capture referral ID from the start command if available (e.g., `/start 123456789`)
+
+  // Capture the referral UID if provided in the deep link
+  const args = ctx.message.text.split(' '); // Get the command arguments
+  const referred_by = args.length > 1 ? args[1] : null; // Check if there's a referral UID
 
   try {
-    // Store or update user data in the Supabase `users` table
+    // Store or update user data in Supabase
     const { data, error } = await supabase
       .from('users')
       .upsert({
-        telegram_uid,           // Use Telegram UID
-        username,               // Username from Telegram
-        first_name,             // First name from Telegram
-        referred_by: referred_by ? parseInt(referred_by) : null  // Referred by (if provided)
-      }, { onConflict: ['telegram_uid'] });  // Ensure it updates on conflict based on `telegram_uid`
+        telegram_uid, // Use Telegram UID
+        username,
+        first_name,
+        referred_by: referred_by ? parseInt(referred_by, 10) : null, // Save referral UID if it exists
+      }, {
+        onConflict: ['telegram_uid'], // Update user if they already exist
+      });
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
     // Send a welcome message back to the user
     await ctx.reply(
-      `⭐️Hello, ${(username || 'Pinx')}! Welcome to @Pinx! Your main task is to mine Pink Star Diamonds, sell, and earn ⭐️coins. Start now!`,
+      '⭐️ Hello, ' + (username || 'Pinx') + '! Welcome to @Pinx! Your main task is to mine Pink Star Diamonds, sell, and earn ⭐️coins. Start now!', 
       {
         reply_markup: {
           inline_keyboard: [
@@ -39,14 +43,17 @@ bot.start(async (ctx) => {
         },
       }
     );
+    
+    // Log success
+    console.log(`User ${telegram_uid} stored/updated successfully, referred by ${referred_by}.`);
   } catch (error) {
-    console.error('Error storing/updating user data in Supabase:', error);
+    console.error('Error storing/updating user data:', error);
   }
 });
 
-// Set your bot's webhook handler
+// Set your bot's webhook handler (you can leave this in webhook.js)
 bot.launch();
 
-// Graceful shutdown for the bot (good practice)
+// Ensure proper graceful shutdown
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
