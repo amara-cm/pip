@@ -3,6 +3,8 @@ import supabase from './lib/supabase';
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
+bot.telegram.setWebhook('https://pinkstar.vercel.app/api/webhook');  // Replace with your actual webhook URL
+
 // Start command handler
 bot.start(async (ctx) => {
   const { id, username, first_name } = ctx.from;
