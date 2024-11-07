@@ -1,5 +1,5 @@
 import { Telegraf } from 'telegraf';
-import prisma from './path-to-prisma-instance'; // Adjust the path to your Prisma instance
+import supabase from './lib/supabase';
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
@@ -17,7 +17,7 @@ bot.start(async (ctx) => {
 
     // Send the welcome message back to the user
     await ctx.reply(
-      '⭐️Hello, ' + (username || 'Major') + '! Welcome to @Major! Your main task is to become the coolest Major by making simple tasks (inviting other Majors, sending gifts, etc.) and earning ⭐️Stars. ⭐️Good Luck!', 
+      '⭐️Hello, ' + (username || 'Pinx') + '! Welcome to @Pinx! Your main task is to mine Pink Star Diamonds, sell, and earn ⭐️coins. Start now!', 
       {
         reply_markup: {
           inline_keyboard: [
