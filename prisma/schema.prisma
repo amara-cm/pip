@@ -4,26 +4,28 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("PINK_PRISMA_URL")
+  url      = env("PINK_PRISMA_URL") 
   directUrl = env("PINK_URL_NON_POOLING")
 }
 
 model User {
-  id            String       @id @default(uuid())
-  telegramUid   String       @unique // User's Telegram UID is the primary key
-  username      String?      // Telegram username (optional)
-  firstName     String?      // First name of the user (optional)
-  coins         Int          @default(0) // Total coins user has earned (from tasks, referrals, mining)
-  miningState   MiningState? // One-to-one relationship with mining state
-  referrals     Referral[]   // One-to-many relationship for referrals
-  tasks         Task[]       // One-to-many relationship for tasks
-  dailyLogin    DailyLogin?  // One-to-one relationship for daily login rewards
-  createdAt     DateTime     @default(now())
+  id           String   @id @default(cuid())
+  telegram_uid String   @unique
+  username     String?
+  first_name   String?
+  coins        Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  // Relations
+  miningStates MiningState[]
+  referrals    Referral[]
+  tasks        Task[]
+  dailyLogins  DailyLogin[]
 }
 
 model MiningState {
   id           String   @id @default(uuid())
-  user         User     @relation(fields: [telegramUid], references: [telegramUid]) // Link to the User model
+  user         User     @relation(fields: [telegram_uid], references: [telegram_uid]) // Correct reference to User model
   countdownEnd DateTime? // When the 8-hour countdown ends (null if not mining)
   stonesMined  Float    @default(0.0) // Stones mined during the countdown
   canSell      Boolean  @default(false) // If the user can sell stones for coins
@@ -32,24 +34,24 @@ model MiningState {
 }
 
 model Referral {
-  id          String    @id @default(uuid())
-  user        User      @relation(fields: [telegramUid], references: [telegramUid]) // Link to the User model
-  friendUid   String    // Friend's Telegram UID
-  createdAt   DateTime  @default(now())
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [telegram_uid], references: [telegram_uid]) // Correct reference to User model
+  friendUid   String   // Friend's Telegram UID
+  createdAt   DateTime @default(now())
 }
 
 model Task {
-  id          String    @id @default(uuid())
-  user        User      @relation(fields: [telegramUid], references: [telegramUid]) // Link to the User model
-  description String    // Task description
-  isComplete  Boolean   @default(false) // Whether the task is completed
-  rewardCoins Int       @default(0)     // Coins earned for completing this task
-  createdAt   DateTime  @default(now())
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [telegram_uid], references: [telegram_uid]) // Correct reference to User model
+  description String   // Task description
+  isComplete  Boolean  @default(false) // Whether the task is completed
+  rewardCoins Int      @default(0)     // Coins earned for completing this task
+  createdAt   DateTime @default(now())
 }
 
 model DailyLogin {
   id            String    @id @default(uuid())
-  user          User      @relation(fields: [telegramUid], references: [telegramUid]) // Link to the User model
+  user          User      @relation(fields: [telegram_uid], references: [telegram_uid]) // Correct reference to User model
   currentStreak Int       @default(0) // Days in a row the user claimed rewards
   lastClaim     DateTime? // Last time the user claimed daily reward
   nextClaimDue  DateTime  // When the next claim is available (starts at 00:00 UTC)
