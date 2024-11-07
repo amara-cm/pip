@@ -17,6 +17,7 @@ model User {
   createdAt     DateTime       @default(now())
   referredBy    User?          @relation("UserReferrals", fields: [referredById], references: [user_id])
   referredById  String?
+  referredUsers User[]         @relation("UserReferrals")  // This is the opposite relation field
   miningSessions MiningSession[]
   referrals     Referral[]     @relation("UserReferralStats")
   tasks         Task[]
