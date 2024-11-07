@@ -9,46 +9,49 @@ datasource db {
 }
 
 model User {
-  id         String   @id @default(cuid())
-  telegramUid String   @unique           // Telegram UID (fixed, won't change)
-  username   String?                      // Username (optional)
-  firstName  String?                      // Firstname (optional)
-  earnedCoins Int    @default(0)          // Total coins earned
-  createdAt  DateTime @default(now())
-  miningSessions   MiningSession[]  // Reverse relation for mining sessions
-  referrals        Referral[]       // Reverse relation for referrals
-  tasks            Task[]           // Reverse relation for tasks
+  telegramUid   String       @id @unique // User's Telegram UID is the primary key
+  username      String?      // Telegram username (optional)
+  firstName     String?      // First name of the user (optional)
+  coins         Int          @default(0) // Total coins user has earned (from tasks, referrals, mining)
+  miningState   MiningState? // One-to-one relationship with mining state
+  referrals     Referral[]   // One-to-many relationship for referrals
+  tasks         Task[]       // One-to-many relationship for tasks
+  dailyLogin    DailyLogin?  // One-to-one relationship for daily login rewards
+  createdAt     DateTime     @default(now())
 }
 
-model MiningSession {
-  id          String   @id @default(cuid())
-  user        User     @relation(fields: [userId], references: [id])
-  userId      String
-  startTime   DateTime                // When mining started
-  countdown   Int      @default(28800) // Countdown in seconds (8 hours)
-  status      String   @default("ongoing") // "ongoing" or "complete"
-  sellEnabled Boolean  @default(false) // Whether the user can sell mined items
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model MiningState {
+  id           String   @id @default(uuid())
+  user         User     @relation(fields: [telegramUid], references: [telegramUid]) // Link to the User model
+  countdownEnd DateTime? // When the 8-hour countdown ends (null if not mining)
+  stonesMined  Float    @default(0.0) // Stones mined during the countdown
+  canSell      Boolean  @default(false) // If the user can sell stones for coins
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Referral {
-  id          String   @id @default(cuid())
-  referrer    User     @relation(fields: [referrerId], references: [id])  // The user who made the referral
-  referrerId  String
-  referredUid String                                      // Telegram UID of the referred user
-  createdAt   DateTime @default(now())
+  id          String    @id @default(uuid())
+  user        User      @relation(fields: [telegramUid], references: [telegramUid]) // Link to the User model
+  friendUid   String    // Friend's Telegram UID
+  createdAt   DateTime  @default(now())
 }
 
 model Task {
-  id          String   @id @default(cuid())
-  user        User     @relation(fields: [userId], references: [id])
-  userId      String
-  taskName    String                         // Task description
-  completedAt DateTime?                      // When the task was completed
-  rewardCoins Int        @default(0)          // Reward coins for completing the task
-  isDailyLogin Boolean   @default(false)      // Whether this is a daily login task
-  dailyStreak  Int       @default(0)          // Streak count for daily login rewards
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id          String    @id @default(uuid())
+  user        User      @relation(fields: [telegramUid], references: [telegramUid]) // Link to the User model
+  description String    // Task description
+  isComplete  Boolean   @default(false) // Whether the task is completed
+  rewardCoins Int       @default(0)     // Coins earned for completing this task
+  createdAt   DateTime  @default(now())
+}
+
+model DailyLogin {
+  id            String    @id @default(uuid())
+  user          User      @relation(fields: [telegramUid], references: [telegramUid]) // Link to the User model
+  currentStreak Int       @default(0) // Days in a row the user claimed rewards
+  lastClaim     DateTime? // Last time the user claimed daily reward
+  nextClaimDue  DateTime  // When the next claim is available (starts at 00:00 UTC)
+  streakReward  Int       @default(0) // Coins rewarded for the current streak
+  createdAt     DateTime  @default(now())
 }
