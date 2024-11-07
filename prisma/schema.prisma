@@ -4,50 +4,50 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("PINK_PRISMA_URL") 
+  url      = env("PINK_PRISMA_URL")
   directUrl = env("PINK_URL_NON_POOLING")
 }
 
 model User {
-  id           String   @id @default(cuid())
-  user_id      String   @unique
-  username     String?
-  first_name   String?
-  coins        Int      @default(0)
-  createdAt    DateTime @default(now())
-  referredBy   User?    @relation("UserReferrals", fields: [referredById], references: [user_id])
-  referredById String?
+  id            String         @id @default(cuid())
+  user_id       String         @unique
+  username      String?
+  first_name    String?
+  coins         Int            @default(0)
+  createdAt     DateTime       @default(now())
+  referredBy    User?          @relation("UserReferrals", fields: [referredById], references: [user_id])
+  referredById  String?
   miningSessions MiningSession[]
-  referrals    Referral?
-  tasks        Task[]
-  dailyLogins  DailyLogin[]
+  referrals     Referral[]     @relation("UserReferralStats")
+  tasks         Task[]
+  dailyLogins   DailyLogin[]
 }
 
 model Referral {
-  id           String   @id @default(cuid())
-  user         User     @relation("UserReferralStats", fields: [user_id], references: [user_id])
-  user_id      String
+  id            String   @id @default(cuid())
+  user          User     @relation("UserReferralStats", fields: [user_id], references: [user_id])
+  user_id       String
   referralCount Int      @default(0)
   referralCoins Int      @default(0)
-  createdAt    DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model MiningSession {
-  id         String   @id @default(cuid())
-  user       User     @relation(fields: [userId], references: [user_id])
-  userId     String
+  id           String   @id @default(cuid())
+  user         User     @relation(fields: [userId], references: [user_id])
+  user_id       String
   countdownEnd DateTime?
-  stonesMined Float    @default(0.0)
-  canSell    Boolean   @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  stonesMined  Float    @default(0.0)
+  canSell      Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Task {
   id          String   @id @default(cuid())
   user        User     @relation(fields: [userId], references: [user_id])
-  userId      String
+  user_id      String
   description String
   isComplete  Boolean  @default(false)
   rewardCoins Int      @default(0)
@@ -56,13 +56,13 @@ model Task {
 }
 
 model DailyLogin {
-  id          String   @id @default(cuid())
-  user        User     @relation(fields: [userId], references: [user_id])
-  userId      String
+  id           String   @id @default(cuid())
+  user         User     @relation(fields: [userId], references: [user_id])
+  user_id       String
   currentStreak Int     @default(0)
-  lastClaim   DateTime?
+  lastClaim    DateTime?
   nextClaimDue DateTime
   streakReward Int     @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
