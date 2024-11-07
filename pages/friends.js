@@ -68,4 +68,36 @@ const Friends = ({ updateCoins, showReward }) => {
           Invite Friends to join and earn rewards together!
         </div>
         <div className="flex flex-row justify-center items-center gap-[5px]">
-          <button onClick={handleInvite}
+          <button onClick={handleInvite} className="w-[100px] h-[35px] flex justify-center items-center">
+            <img
+              src="/icons/sendinv-btn.svg"
+              alt="Send Invite"
+              style={{ pointerEvents: 'none' }} // Disable pointer events for the image
+            />
+          </button>
+          <button onClick={() => handleCopy(`https://t.me/pinxhousebot?start=${telegramUID}`)} className="w-[50px] h-[35px] flex justify-center items-center">
+            <img
+              src="/icons/copy-btn.svg"
+              alt="Copy Referral Link"
+              style={{ pointerEvents: 'none' }} // Disable pointer events for the image
+            />
+          </button>
+        </div>
+      </div>
+      <div className="flex flex-col justify-start items-start w-screen h-[21.77vh] gap-[30px] p-4">
+        <div className="w-[80%] font-semibold text-[1.5rem] leading-none text-left text-white">
+          Friends
+        </div>
+        <div className="flex flex-col gap-2">
+          {referrals.map((ref, index) => (
+            <div key={index} className="text-xl text-white">{ref}</div>
+          ))}
+        </div>
+      </div>
+
+      <Footer currentPage="friends" />
+    </div>
+  );
+};
+
+export default Friends;
