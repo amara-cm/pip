@@ -1,5 +1,5 @@
 import { Telegraf } from 'telegraf';
-import prisma from '../../lib/db'; // Ensure the path is correct
+import { supabase } from '../../lib/supabase'; // Import Supabase client from your lib/supabase.js
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
@@ -36,17 +36,25 @@ async function handleTelegramUpdate(update) {
 
   const { id, username, first_name } = message.from;
 
-  // Store or update user data in the database
+  // Store or update user data in Supabase
   try {
-    await prisma.user.upsert({
-      where: { user_id: String(id) },
-      update: { username, first_name },
-      create: { user_id: String(id), username, first_name },
-    });
+    const { data, error } = await supabase
+      .from('users') // Make sure your table is named 'users' or adjust accordingly
+      .upsert([
+        {
+          telegram_uid: id, // Use Telegram UID
+          username,
+          first_name,
+        },
+      ]);
 
-    console.log(`User data for ${username || 'Major'} stored/updated successfully.`);
+    if (error) {
+      throw error;
+    }
+
+    console.log(`User data for ${username || 'Pinx'} stored/updated successfully.`);
   } catch (error) {
-    console.error('Error saving/updating user data:', error);
+    console.error('Error saving/updating user data in Supabase:', error);
   }
 }
 
