@@ -48,7 +48,7 @@ const DailyLogin = ({ currentDay, loginTimer, handleClaim, coins }) => {
 };
 
 // TaskList Component
-const TaskList = ({ tasks, handleGo }) => {
+const TaskList = ({ tasks, handleGo, handleClaim }) => {
   return (
     <div className="text-center">
       <div className="text-2xl mb-4">Tasks</div>
@@ -56,9 +56,19 @@ const TaskList = ({ tasks, handleGo }) => {
         {tasks.map(task => (
           <div key={task.id} className="flex justify-between items-center bg-gray-700 p-4 rounded">
             <span>{task.name}</span>
-            <button onClick={() => handleGo(task)} className="px-4 py-2 bg-blue-500 rounded text-xl">
-              Go
-            </button>
+            {task.type === 'referral' ? (
+              task.progress >= task.requirement ? (
+                <button onClick={() => handleClaim(task)} className="px-4 py-2 bg-green-500 rounded text-xl">
+                  Claim
+                </button>
+              ) : (
+                <span>{`${task.progress}/${task.requirement}`}</span>
+              )
+            ) : (
+              <button onClick={() => handleGo(task)} className="px-4 py-2 bg-blue-500 rounded text-xl">
+                Go
+              </button>
+            )}
           </div>
         ))}
       </div>
@@ -67,14 +77,14 @@ const TaskList = ({ tasks, handleGo }) => {
 };
 
 const tasksList = [
-  { id: 1, name: 'Subscribe to Pinx channel', reward: 200, link: 'https://t.me/pinxann' },
-  { id: 2, name: 'Boost Pinx channel', reward: 300, link: 'https://t.me/boost/pinxann' },
-  { id: 3, name: 'Follow us on X', reward: 200, link: 'https://x.com/thepinxhouse' },
-  { id: 4, name: 'Follow us on Instagram', reward: 200, link: 'https://www.instagram.com/realpinxhouse' },
-  { id: 5, name: 'Subscribe to our YouTube channel', reward: 500, link: 'https://youtube.com/pink' },
-  { id: 6, name: 'Invite a friend', reward: 50, link: 'https://t.me/pinxhousebot?start=invite1' },
-  { id: 7, name: 'Invite 3 friends', reward: 150, link: 'https://t.me/pinxhousebot?start=invite3' },
-  { id: 8, name: 'Invite 10 friends', reward: 500, link: 'https://t.me/pinxhousebot?start=invite10' },
+  { id: 1, name: 'Subscribe to Pinx channel', reward: 200, link: 'https://t.me/pinxann', type: 'normal' },
+  { id: 2, name: 'Boost Pinx channel', reward: 300, link: 'https://t.me/boost/pinxann', type: 'normal' },
+  { id: 3, name: 'Follow us on X', reward: 200, link: 'https://x.com/thepinxhouse', type: 'normal' },
+  { id: 4, name: 'Follow us on Instagram', reward: 200, link: 'https://www.instagram.com/realpinxhouse', type: 'normal' },
+  { id: 5, name: 'Subscribe to our YouTube channel', reward: 500, link: 'https://youtube.com/pink', type: 'normal' },
+  { id: 6, name: 'Invite a friend', reward: 50, requirement: 1, progress: 0, type: 'referral' },
+  { id: 7, name: 'Invite 3 friends', reward: 150, requirement: 3, progress: 0, type: 'referral' },
+  { id: 8, name: 'Invite 10 friends', reward: 500, requirement: 10, progress: 0, type: 'referral' },
 ];
 
 const Tasks = () => {
@@ -99,11 +109,15 @@ const Tasks = () => {
     }
   };
 
-  const handleClaim = () => {
-    setCoins(coins + dailyReward);
-    setDailyReward(dailyReward + 10); // Increase daily reward
-    setCurrentDay(currentDay + 1);
-    setLoginTimer(24 * 60 * 60); // Reset timer
+  const handleClaim = (task) => {
+    setCoins(coins + task.reward);
+    setTasks(tasks.filter(t => t.id !== task.id));
+  };
+
+  const incrementReferralProgress = (taskId) => {
+    setTasks(tasks.map(task =>
+      task.id === taskId && task.type === 'referral' ? { ...task, progress: task.progress + 1 } : task
+    ));
   };
 
   useEffect(() => {
@@ -121,7 +135,7 @@ const Tasks = () => {
           loginTimer={loginTimer}
           handleClaim={handleClaim}
         />
-        <TaskList tasks={tasks} handleGo={handleGo} />
+        <TaskList tasks={tasks} handleGo={handleGo} handleClaim={handleClaim} />
       </div>
       <Footer currentPage="tasks" />
     </div>
