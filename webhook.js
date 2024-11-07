@@ -1,7 +1,6 @@
 import { Telegraf } from 'telegraf';
-import supabase from '../../lib/supabase';  // Ensure you're using Supabase client
+import supabase from '../../lib/supabase';  // Import your Supabase client
 
-// Set the bot
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
 // Disable the default body parser for raw body handling
@@ -35,7 +34,7 @@ async function handleTelegramUpdate(update) {
 
   if (!message || !message.from) return;
 
-  const { id, username, first_name } = message.from;
+  const { id, username, first_name, referrer_id } = message.from;
 
   // Store or update user data in Supabase
   try {
@@ -46,13 +45,14 @@ async function handleTelegramUpdate(update) {
           telegram_uid: id,  // Store the Telegram user ID
           username,
           first_name,
+          referred_by: referrer_id || null,  // If a referrer exists
         },
       ]);
 
     if (error) {
       console.error('Error saving/updating user data in Supabase:', error);
     } else {
-      console.log(`User data for ${username || 'Major'} stored/updated successfully.`);
+      console.log(`User data for ${username || 'User'} stored/updated successfully.`);
     }
   } catch (error) {
     console.error('Error processing data in Supabase:', error);
