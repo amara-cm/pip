@@ -1,5 +1,5 @@
 import { Telegraf } from 'telegraf';
-import { supabase } from '../../lib/supabase'; // Import Supabase client from your lib/supabase.js
+import supabase from '../../lib/supabase'; // Import Supabase client from your lib/supabase.js
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
