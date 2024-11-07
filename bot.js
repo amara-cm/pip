@@ -1,31 +1,33 @@
 import { Telegraf } from 'telegraf';
-import supabase from './lib/supabase';  // Assuming you've set up Supabase client correctly
+import supabase from './lib/supabase';  // Ensure you have a Supabase client setup
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
-bot.telegram.setWebhook('https://pinkstar.vercel.app/api/webhook');  // Your webhook URL
+bot.telegram.setWebhook('https://pinkstar.vercel.app/api/webhook');  // Your actual webhook URL
 
 // Start command handler
 bot.start(async (ctx) => {
-  const { id, username, first_name } = ctx.from;
+  const { id: telegram_uid, username, first_name } = ctx.from;
+  const referred_by = ctx.message.text.split(' ')[1] || null;  // Capture referral ID from the start command if available (e.g., `/start 123456789`)
 
-  // Store or update user data in Supabase
   try {
+    // Store or update user data in the Supabase `users` table
     const { data, error } = await supabase
       .from('users')
       .upsert({
-        telegram_uid: id,          // Use Telegram UID
-        username,
-        first_name,
-      });
+        telegram_uid,           // Use Telegram UID
+        username,               // Username from Telegram
+        first_name,             // First name from Telegram
+        referred_by: referred_by ? parseInt(referred_by) : null  // Referred by (if provided)
+      }, { onConflict: ['telegram_uid'] });  // Ensure it updates on conflict based on `telegram_uid`
 
     if (error) {
       throw error;
     }
 
-    // Send the welcome message back to the user
+    // Send a welcome message back to the user
     await ctx.reply(
-      '⭐️Hello, ' + (username || 'Pinx') + '! Welcome to @Pinx! Your main task is to mine Pink Star Diamonds, sell, and earn ⭐️coins. Start now!', 
+      `⭐️Hello, ${(username || 'Pinx')}! Welcome to @Pinx! Your main task is to mine Pink Star Diamonds, sell, and earn ⭐️coins. Start now!`,
       {
         reply_markup: {
           inline_keyboard: [
@@ -42,9 +44,9 @@ bot.start(async (ctx) => {
   }
 });
 
-// Set your bot's webhook handler (you can leave this in webhook.js)
+// Set your bot's webhook handler
 bot.launch();
 
-// Ensure proper graceful shutdown (this is good practice for long-running bots)
+// Graceful shutdown for the bot (good practice)
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
