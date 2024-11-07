@@ -1,6 +1,7 @@
 import { Telegraf } from 'telegraf';
-import supabase from '../../lib/supabase'; // Import Supabase client from your lib/supabase.js
+import supabase from '../../lib/supabase';  // Ensure you're using Supabase client
 
+// Set the bot
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
 // Disable the default body parser for raw body handling
@@ -17,7 +18,7 @@ export default async function handler(req, res) {
       const rawBody = await getRawBody(req); // Get raw body as a string
       const update = JSON.parse(rawBody); // Parse JSON
 
-      await handleTelegramUpdate(update);
+      await handleTelegramUpdate(update); // Process the update
       return res.status(200).json({ message: 'Update received' });
     } catch (error) {
       console.error('Error processing update:', error);
@@ -34,29 +35,27 @@ async function handleTelegramUpdate(update) {
 
   if (!message || !message.from) return;
 
-  const { id: telegram_uid, username, first_name } = message.from;
-
-  console.log('Received message from user:', message);
+  const { id, username, first_name } = message.from;
 
   // Store or update user data in Supabase
   try {
     const { data, error } = await supabase
-      .from('users') // Ensure this matches your actual table name
+      .from('users')  // Ensure this matches the table name in Supabase
       .upsert([
         {
-          telegram_uid, // Store Telegram UID
+          telegram_uid: id,  // Store the Telegram user ID
           username,
           first_name,
         },
       ]);
 
     if (error) {
-      throw error;
+      console.error('Error saving/updating user data in Supabase:', error);
+    } else {
+      console.log(`User data for ${username || 'Major'} stored/updated successfully.`);
     }
-
-    console.log(`User data for ${username || 'Pinx'} stored/updated successfully.`);
   } catch (error) {
-    console.error('Error saving/updating user data in Supabase:', error);
+    console.error('Error processing data in Supabase:', error);
   }
 }
 
