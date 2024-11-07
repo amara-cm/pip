@@ -35,7 +35,7 @@ model Referral {
 
 model MiningSession {
   id           String   @id @default(cuid())
-  user         User     @relation(fields: [userId], references: [user_id])
+  user         User     @relation(fields: [user_id], references: [user_id])
   user_id       String
   countdownEnd DateTime?
   stonesMined  Float    @default(0.0)
@@ -46,7 +46,7 @@ model MiningSession {
 
 model Task {
   id          String   @id @default(cuid())
-  user        User     @relation(fields: [userId], references: [user_id])
+  user        User     @relation(fields: [user_id], references: [user_id])
   user_id      String
   description String
   isComplete  Boolean  @default(false)
@@ -57,7 +57,7 @@ model Task {
 
 model DailyLogin {
   id           String   @id @default(cuid())
-  user         User     @relation(fields: [userId], references: [user_id])
+  user         User     @relation(fields: [user_id], references: [user_id])
   user_id       String
   currentStreak Int     @default(0)
   lastClaim    DateTime?
