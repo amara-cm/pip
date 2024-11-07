@@ -1,21 +1,27 @@
 import { Telegraf } from 'telegraf';
-import supabase from './lib/supabase';
+import supabase from './lib/supabase';  // Assuming you've set up Supabase client correctly
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
-bot.telegram.setWebhook('https://pinkstar.vercel.app/api/webhook');  // Replace with your actual webhook URL
+bot.telegram.setWebhook('https://pinkstar.vercel.app/api/webhook');  // Your webhook URL
 
 // Start command handler
 bot.start(async (ctx) => {
   const { id, username, first_name } = ctx.from;
 
-  // Store or update user data in the database
+  // Store or update user data in Supabase
   try {
-    await prisma.user.upsert({
-      where: { user_id: String(id) },
-      update: { username, first_name },
-      create: { user_id: String(id), username, first_name },
-    });
+    const { data, error } = await supabase
+      .from('users')
+      .upsert({
+        telegram_uid: id,          // Use Telegram UID
+        username,
+        first_name,
+      });
+
+    if (error) {
+      throw error;
+    }
 
     // Send the welcome message back to the user
     await ctx.reply(
@@ -32,7 +38,7 @@ bot.start(async (ctx) => {
       }
     );
   } catch (error) {
-    console.error('Error storing/updating user data:', error);
+    console.error('Error storing/updating user data in Supabase:', error);
   }
 });
 
