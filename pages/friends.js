@@ -15,19 +15,36 @@ const Friends = ({ updateCoins, showReward }) => {
     fetchTelegramUID();
   }, []);
 
-  const handleInvite = () => {
+  const handleInvite = async () => {
     const referralLink = `https://t.me/pinxhousebot?start=${telegramUID}`;
     setReferrals([...referrals, referralLink]);
 
+    // Open Telegram share link
     window.open(`https://t.me/share/url?url=${encodeURIComponent(referralLink)}`, '_blank');
 
-    updateCoins(100);
-    showReward("+100 coins for successful invite!");
+    // Send referral to the server
+    const response = await fetch('/api/friends', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: 'YOUR_USER_ID', // Replace with actual user ID
+        invitedUserId: telegramUID, // This could be the new user's ID if available
+      }),
+    });
+
+    if (response.ok) {
+      updateCoins(100); // Update coins locally
+      showReward("+100 coins for successful invite!");
+    } else {
+      console.error("Error recording referral");
+    }
   };
 
   const handleCopy = (referralLink) => {
     navigator.clipboard.writeText(referralLink);
-    alert('Referral link copied!');
+    // Remove alert to avoid showing a message
   };
 
   const handleNewInviteeReward = () => {
@@ -51,36 +68,4 @@ const Friends = ({ updateCoins, showReward }) => {
           Invite Friends to join and earn rewards together!
         </div>
         <div className="flex flex-row justify-center items-center gap-[5px]">
-          <button onClick={handleInvite} className="w-[100px] h-[35px] flex justify-center items-center">
-            <img
-              src="/icons/sendinv-btn.svg"
-              alt="Send Invite"
-              style={{ pointerEvents: 'none' }} // Disable pointer events for the image
-            />
-          </button>
-          <button onClick={() => handleCopy(`https://t.me/pinxhousebot?start=${telegramUID}`)} className="w-[50px] h-[35px] flex justify-center items-center">
-            <img
-              src="/icons/copy-btn.svg"
-              alt="Copy Referral Link"
-              style={{ pointerEvents: 'none' }} // Disable pointer events for the image
-            />
-          </button>
-        </div>
-      </div>
-      <div className="flex flex-col justify-start items-start w-screen h-[21.77vh] gap-[30px] p-4">
-        <div className="w-[80%] font-semibold text-[1.5rem] leading-none text-left text-white">
-          Friends
-        </div>
-        <div className="flex flex-col gap-2">
-          {referrals.map((ref, index) => (
-            <div key={index} className="text-xl text-white">{ref}</div>
-          ))}
-        </div>
-      </div>
-
-      <Footer currentPage="friends" />
-    </div>
-  );
-};
-
-export default Friends;
+          <button onClick={handleInvite}
