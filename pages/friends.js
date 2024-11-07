@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Footer from '../components/Footer';
 
 const Friends = ({ updateCoins, showReward }) => {
-  const [referrals, setReferrals] = useState([]);
+  const [referrals, setReferrals] = useState([]); // Keeping this for future use if needed
   const [telegramUID, setTelegramUID] = useState('');
 
   useEffect(() => {
@@ -17,9 +17,8 @@ const Friends = ({ updateCoins, showReward }) => {
 
   const handleInvite = async () => {
     const referralLink = `https://t.me/pinxhousebot?start=${telegramUID}`;
-    setReferrals([...referrals, referralLink]);
 
-    // Open Telegram share link
+    // Open Telegram share link without showing the referral in state
     window.open(`https://t.me/share/url?url=${encodeURIComponent(referralLink)}`, '_blank');
 
     // Send referral to the server
@@ -44,7 +43,7 @@ const Friends = ({ updateCoins, showReward }) => {
 
   const handleCopy = (referralLink) => {
     navigator.clipboard.writeText(referralLink);
-    // Remove alert to avoid showing a message
+    // No need for alert or displaying the referral link
   };
 
   const handleNewInviteeReward = () => {
@@ -64,7 +63,7 @@ const Friends = ({ updateCoins, showReward }) => {
   return (
     <div className="relative flex flex-col w-screen h-screen bg-black">
       <div className="flex flex-col justify-center items-center w-screen h-[21.77vh] gap-[30px] p-4">
-        <div className="w-[80%] font-outfit font-semibold text-[1.5rem] leading-none text-center text-white">
+        <div className="w-auto font-outfit font-semibold text-[1rem] leading-none text-center text-white">
           Invite Friends to join and earn rewards together!
         </div>
         <div className="flex flex-row justify-center items-center gap-[5px]">
@@ -85,14 +84,10 @@ const Friends = ({ updateCoins, showReward }) => {
         </div>
       </div>
       <div className="flex flex-col justify-start items-start w-screen h-[21.77vh] gap-[30px] p-4">
-        <div className="w-[80%] font-semibold text-[1.5rem] leading-none text-left text-white">
+        <div className="w-[80%] font-semibold text-[1rem] leading-none text-left text-white">
           Friends
         </div>
-        <div className="flex flex-col gap-2">
-          {referrals.map((ref, index) => (
-            <div key={index} className="text-xl text-white">{ref}</div>
-          ))}
-        </div>
+        {/* No need to display the referral links anymore */}
       </div>
 
       <Footer currentPage="friends" />
