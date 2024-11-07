@@ -1,39 +1,42 @@
 import { Telegraf } from 'telegraf';
-import supabase from '../../lib/supabase';  // Import your Supabase client
+import prisma from './lib/db'; // Adjust the path to your Prisma instance
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
-// Handle "/start" command
+// Start command handler
 bot.start(async (ctx) => {
   const { id, username, first_name } = ctx.from;
 
-  // Attempt to retrieve the referrer ID (if applicable)
-  const referrer_id = ctx.referrer ? ctx.referrer.id : null;
-
-  // Store or update user data in Supabase
+  // Store or update user data in the database
   try {
-    const { data, error } = await supabase
-      .from('users')
-      .upsert([
-        {
-          telegram_uid: id,  // Store the Telegram user ID
-          username,
-          first_name,
-          referred_by: referrer_id || null,  // Store the referrer if it exists
-        },
-      ]);
+    await prisma.user.upsert({
+      where: { user_id: String(id) },
+      update: { username, first_name },
+      create: { user_id: String(id), username, first_name },
+    });
 
-    if (error) {
-      console.error('Error saving/updating user data in Supabase:', error);
-      ctx.reply('An error occurred while saving your data.');
-    } else {
-      ctx.reply(`Welcome ${first_name || username}! Your data has been stored successfully.`);
-    }
+    // Send the welcome message back to the user
+    await ctx.reply(
+      '⭐️Hello, ' + (username || 'Pinx') + '! Welcome to @Major! Your main task is to mine Pink Star Diamond, sell, and earn ⭐️ coins. ⭐️Start Now!', 
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              { text: 'Play', url: 'https://t.me/pinxhousebot/app' },
+              { text: 'Website', url: 'https://t.me/pinxhousebot/app' },
+            ],
+          ],
+        },
+      }
+    );
   } catch (error) {
-    console.error('Error processing data in Supabase:', error);
-    ctx.reply('An error occurred while saving your data.');
+    console.error('Error storing/updating user data:', error);
   }
 });
 
-// Start the bot
+// Set your bot's webhook handler (you can leave this in webhook.js)
 bot.launch();
+
+// Ensure proper graceful shutdown (this is good practice for long-running bots)
+process.once('SIGINT', () => bot.stop('SIGINT'));
+process.once('SIGTERM', () => bot.stop('SIGTERM'));
