@@ -9,7 +9,8 @@ datasource db {
 }
 
 model User {
-  telegramUid   String       @id @unique // User's Telegram UID is the primary key
+  id            String       @id @default(uuid())
+  telegramUid   String       @unique // User's Telegram UID is the primary key
   username      String?      // Telegram username (optional)
   firstName     String?      // First name of the user (optional)
   coins         Int          @default(0) // Total coins user has earned (from tasks, referrals, mining)
