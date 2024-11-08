@@ -77,13 +77,12 @@ function HomeScreen() {
   const [stone, setStone] = useState(0);
   const [mining, setMining] = useState(false);
   const [timer, setTimer] = useState(28800); // 8 hours in seconds
-  const [userId, setUserId] = useState(''); // Placeholder, should be fetched from Telegram context
+  const [userId, setUserId] = useState(''); 
 
-  // Fetch saved state from the server (for example, when page reloads)
   useEffect(() => {
     const fetchData = async () => {
       const savedState = await fetch(`/api/mine`, {
-        method: 'GET',  // Use GET here to fetch saved game state
+        method: 'GET', 
         headers: {
           'Content-Type': 'application/json',
         },
@@ -93,13 +92,13 @@ function HomeScreen() {
         const result = await savedState.json();
         const { startTime, duration, coins, stone } = result; 
         const currentTime = new Date();
-        const elapsedTime = Math.floor((currentTime - new Date(startTime)) / 1000); // in seconds
+        const elapsedTime = Math.floor((currentTime - new Date(startTime)) / 1000); 
 
-        const remainingTime = Math.max(0, duration - elapsedTime); // calculate remaining time
+        const remainingTime = Math.max(0, duration - elapsedTime); 
         setTimer(remainingTime);
-        setMining(elapsedTime < duration); // Check if mining is still active
-        setCoins(coins); // Set coins
-        setStone(stone); // Set stone
+        setMining(elapsedTime < duration); 
+        setCoins(coins); 
+        setStone(stone); 
       } else {
         console.error("Error fetching game state");
       }
@@ -108,7 +107,6 @@ function HomeScreen() {
     fetchData();
   }, []);
 
-  // Handle the mining countdown
   useEffect(() => {
     if (mining) {
       const interval = setInterval(() => {
@@ -120,35 +118,45 @@ function HomeScreen() {
           }
           return prev - 1;
         });
-        setStone((prevStone) => prevStone + (1 / 28800)); // Increment stone amount
+        setStone((prevStone) => prevStone + (1 / 28800)); 
       }, 1000);
 
       return () => clearInterval(interval);
     }
   }, [mining]);
 
-  const startMining = () => {
+  const startMining = async () => {
     if (!mining) {
       setMining(true);
-      setTimer(28800); // Reset timer
-      setStone(0); // Reset stone collected
+      setTimer(28800); 
+      setStone(0); 
+
+      await fetch('/api/mine', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          action: 'mine',
+        }),
+      });
     }
   };
 
   const handleSell = async () => {
-    setCoins((prevCoins) => prevCoins + 500); // Add coins after selling
-    setStone(0); // Reset stone
-    setMining(false); // End mining
+    setCoins((prevCoins) => prevCoins + 500); 
+    setStone(0); 
+    setMining(false); 
 
-    // Save the game state after selling
     await fetch('/api/mine', {
-      method: 'PUT',  // Use PUT to update saved game state
+      method: 'PUT',  
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         userId, 
-        coins, 
+        coins: coins + 500,
         stone,
         startTime: Date.now(),
         duration: 28800,
