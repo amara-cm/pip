@@ -7,6 +7,7 @@ export default async function handler(req, res) {
     const { userId } = req.query;
 
     try {
+      // Get the user from the database along with their mining sessions
       const user = await prisma.user.findUnique({
         where: { user_id: userId },
         include: { miningSessions: true },
@@ -16,12 +17,13 @@ export default async function handler(req, res) {
         return res.status(404).json({ error: 'User not found' });
       }
 
+      // Find the ongoing mining session, if any
       const session = user.miningSessions.find(session => new Date(session.countdownEnd) > new Date());
 
       if (session) {
         const currentTime = new Date();
-        const elapsedTime = Math.floor((currentTime - new Date(session.createdAt)) / 1000); 
-        const remainingTime = Math.max(0, 28800 - elapsedTime); 
+        const elapsedTime = Math.floor((currentTime - new Date(session.createdAt)) / 1000);
+        const remainingTime = Math.max(0, 28800 - elapsedTime); // 8 hours = 28800 seconds
 
         return res.status(200).json({
           startTime: session.createdAt,
@@ -43,6 +45,7 @@ export default async function handler(req, res) {
     const { userId, coins, stone, startTime, duration } = req.body;
 
     try {
+      // Get user data
       const user = await prisma.user.findUnique({
         where: { user_id: userId },
       });
@@ -51,20 +54,23 @@ export default async function handler(req, res) {
         return res.status(404).json({ error: 'User not found' });
       }
 
+      // Update user's coins in the database
       await prisma.user.update({
         where: { user_id: user.user_id },
         data: { coins },
       });
 
+      // Set countdown end time
       const countdownEnd = new Date();
-      countdownEnd.setSeconds(countdownEnd.getSeconds() + duration); 
+      countdownEnd.setSeconds(countdownEnd.getSeconds() + duration); // 8 hours in seconds
 
+      // Create a new mining session
       await prisma.miningSession.create({
         data: {
           user_id: user.user_id,
           countdownEnd,
           stonesMined: stone,
-          canSell: false,
+          canSell: false, // The stone is not sellable until the session ends
         },
       });
 
@@ -79,6 +85,7 @@ export default async function handler(req, res) {
     const { userId } = req.body;
 
     try {
+      // Get user data
       const user = await prisma.user.findUnique({
         where: { user_id: userId },
       });
@@ -87,12 +94,13 @@ export default async function handler(req, res) {
         return res.status(404).json({ error: 'User not found' });
       }
 
+      // Create a new mining session with 8 hours duration
       await prisma.miningSession.create({
         data: {
           user_id: user.user_id,
-          countdownEnd: new Date(Date.now() + 28800 * 1000),
+          countdownEnd: new Date(Date.now() + 28800 * 1000), // 8 hours from now
           stonesMined: 0,
-          canSell: true,
+          canSell: true, // Stones are sellable when mining starts
         },
       });
 
