@@ -1,8 +1,6 @@
 import { Telegraf } from 'telegraf';
 import prisma from '../../lib/db'; // Ensure the path is correct
 
-const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
-
 // Disable the default body parser for raw body handling
 export const config = {
   api: {
@@ -40,8 +38,17 @@ async function handleTelegramUpdate(update) {
   try {
     await prisma.user.upsert({
       where: { user_id: String(id) },
-      update: { username, first_name, lastActive: new Date() }, // Update last activity time
-      create: { user_id: String(id), username, first_name, lastActive: new Date() }, // Set activity on creation
+      update: {
+        username,
+        first_name,
+        lastActive: new Date(), // Update last activity time
+      },
+      create: {
+        user_id: String(id),
+        username,
+        first_name,
+        lastActive: new Date(), // Set activity on creation
+      },
     });
 
     console.log(`User data for ${username || 'Pinx'} stored/updated successfully.`);
