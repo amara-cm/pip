@@ -12,7 +12,7 @@ const DailyLogin = ({ currentDay, loginTimer, handleClaim, coins }) => {
         {[...Array(7)].map((_, index) => (
           <div
             key={index}
-            className="relative flex flex-col justify-center items-center p-[1%] gap-[0.5rem] w-[12.14%] h-[27.78%] bg-black border border-white rounded-[0.5rem]"
+            className="relative flex flex-col justify-center items-center p-[1%] gap-[0.5rem] w-[13.46%] h-[100%] bg-black border border-white rounded-[0.5rem]"
             style={{
               backgroundImage: `url('/d${index + 1}.svg')`, // Dynamically setting the background image
               backgroundRepeat: 'no-repeat',
@@ -23,8 +23,8 @@ const DailyLogin = ({ currentDay, loginTimer, handleClaim, coins }) => {
             <span className="font-semibold text-[0.625rem] text-white leading-[0.625rem] tracking-[0.03125rem]">
               Day {index + 1}
             </span>
-            <div className="w-[68.01%] h-[20%]">
-              <img src="/icons/gamecoin.svg" alt="coins" />
+            <div className="w-[22%] h-[20%]">
+              <img src="/icons/gamecoin.svg" alt="coins" style={{ pointerEvents: 'none' }} className="w-[22%] h-[20%]" />
             </div>
           </div>
         ))}
