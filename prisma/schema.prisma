@@ -4,8 +4,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("PINK_PRISMA_URL")
-  directUrl = env("PINK_URL_NON_POOLING")
+  url      = env("PINXSB_POSTGRES_PRISMA_URL")  // Use pooled connection for most queries
+  directUrl = env("PINXSB_POSTGRES_URL_NON_POOLING")  // Use non-pooled connection for specific scenarios
 }
 
 model User {
