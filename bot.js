@@ -1,5 +1,5 @@
 import { Telegraf } from 'telegraf';
-import prisma from './lib/db'; // Adjust the path to your Prisma instance
+import prisma from './lib/db'; // Ensure the path is correct to your Prisma instance
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
@@ -11,13 +11,22 @@ bot.start(async (ctx) => {
   try {
     await prisma.user.upsert({
       where: { user_id: String(id) },
-      update: { username, first_name },
-      create: { user_id: String(id), username, first_name },
+      update: {
+        username,
+        first_name,
+        lastActive: new Date(), // Store the last activity time
+      },
+      create: {
+        user_id: String(id),
+        username,
+        first_name,
+        lastActive: new Date(), // Set activity on creation
+      },
     });
 
     // Send the welcome message back to the user
     await ctx.reply(
-      '⭐️Hello, ' + (username || 'Pinx') + '! Welcome to @Major! Your main task is to mine Pink Star Diamond, sell, and earn ⭐️ coins. ⭐️Start Now!', 
+      '⭐️Hello, ' + (username || 'Pinx') + '! Welcome to @PinxHouseBot! Your main task is to mine Pink Star Diamonds, sell them, and earn ⭐️ coins. ⭐️Start Now!',
       {
         reply_markup: {
           inline_keyboard: [
