@@ -81,20 +81,21 @@ function HomeScreen() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const savedState = await fetch(`/api/mine?userId=${userId}`, {
-        method: 'GET',
+      const savedState = await fetch(`/api/mine`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ userId, action: 'status' }),
       });
   
       if (savedState.ok) {
         const result = await savedState.json();
-        const { startTime, duration, remainingTime, coins, stone } = result; 
+        const { countdownEnd, stonesMined, canSell } = result; 
+        const remainingTime = Math.max(0, (new Date(countdownEnd) - new Date()) / 1000);
         setTimer(remainingTime); 
-        setMining(remainingTime > 0);
-        setCoins(coins); 
-        setStone(stone); 
+        setMining(remainingTime > 0 && !canSell);
+        setStone(stonesMined); 
       } else {
         console.error("Error fetching game state");
       }
@@ -130,11 +131,15 @@ function HomeScreen() {
       const response = await fetch('/api/mine', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: currentUserId, action: 'start' }),
+        body: JSON.stringify({ userId, action: 'start' }),
       });
       const result = await response.json();
       if (response.ok) {
         console.log(result.message); // Show countdownEnd in the UI
+        const { countdownEnd } = result;
+        const remainingTime = Math.max(0, (new Date(countdownEnd) - new Date()) / 1000);
+        setTimer(remainingTime);
+        setMining(true);
       } else {
         console.error(result.message);
       }
@@ -149,11 +154,13 @@ function HomeScreen() {
       const response = await fetch('/api/mine', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: currentUserId, action: 'sell' }),
+        body: JSON.stringify({ userId, action: 'sell' }),
       });
       const result = await response.json();
       if (response.ok) {
         console.log(result.message); // Update UI to reflect new coin balance
+        setCoins(prev => prev + 500);
+        setStone(0);
       } else {
         console.error(result.message);
       }
