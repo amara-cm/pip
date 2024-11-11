@@ -1,37 +1,34 @@
+// /pages/api/referrals.js
 import prisma from '../../lib/db';
 
 export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    const { userId, referredUserId } = req.body;
+  const { userId, referredUserId } = req.body;
 
-    try {
-      const referrer = await prisma.user.findUnique({
-        where: { user_id: userId },
-      });
-
-      if (!referrer) {
-        return res.status(404).json({ error: 'User not found' });
-      }
-
-      // Store referral
-      await prisma.referral.upsert({
-        where: { user_id: referrer.user_id },
-        update: {
-          referralCount: { increment: 1 }, // Increase referral count
-        },
-        create: {
-          user_id: referrer.user_id,
-          referralCount: 1,
-          referralCoins: 0, // Can be updated later for rewards
-        },
-      });
-
-      return res.status(200).json({ message: 'Referral stored' });
-    } catch (error) {
-      console.error('Error storing referral:', error);
-      return res.status(500).json({ error: 'Server error' });
-    }
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  return res.status(405).json({ error: 'Method Not Allowed' });
+  try {
+    // Add referral logic
+    await prisma.referral.upsert({
+      where: { user_id: userId },
+      update: {
+        referralCount: { increment: 1 },
+      },
+      create: { user_id: userId, referralCount: 1 },
+    });
+
+    // Add referred user logic
+    await prisma.user.create({
+      data: {
+        user_id: referredUserId,
+        referredById: userId,
+      }
+    });
+
+    res.status(200).json({ message: 'Referral added successfully' });
+  } catch (error) {
+    console.error('Referral API error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 }
