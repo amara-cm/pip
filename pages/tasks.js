@@ -120,6 +120,44 @@ const Tasks = () => {
     ));
   };
 
+  // Claiming daily login reward
+const claimDailyReward = async () => {
+  try {
+    const response = await fetch('/api/tasks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: currentUserId, action: 'claim' }),
+    });
+    const result = await response.json();
+    if (response.ok) {
+      console.log(result.message); // Show reward in UI
+    } else {
+      console.error(result.message);
+    }
+  } catch (error) {
+    console.error('Failed to claim daily reward:', error);
+  }
+};
+
+// Completing a task
+const completeTask = async (taskId) => {
+  try {
+    const response = await fetch('/api/tasks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: currentUserId, action: 'completeTask', taskId }),
+    });
+    const result = await response.json();
+    if (response.ok) {
+      console.log(result.message); // Mark task as done in UI
+    } else {
+      console.error(result.message);
+    }
+  } catch (error) {
+    console.error('Failed to complete task:', error);
+  }
+};
+
   useEffect(() => {
     const interval = setInterval(() => {
       setLoginTimer(prev => prev - 1);
