@@ -101,14 +101,6 @@ const Tasks = () => {
     }, 60000); // 1 minute delay
   };
 
-  const completeTask = (taskId) => {
-    const task = tasks.find(t => t.id === taskId);
-    if (task) {
-      setCoins(coins + task.reward);
-      setTasks(tasks.filter(t => t.id !== taskId));
-    }
-  };
-
   const handleClaim = (task) => {
     setCoins(coins + task.reward);
     setTasks(tasks.filter(t => t.id !== task.id));
