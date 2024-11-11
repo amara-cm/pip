@@ -51,6 +51,25 @@ const Friends = ({ updateCoins, showReward }) => {
     showReward("+50 coins for joining through a referral!");
   };
 
+    // Adding a referral
+  const addReferral = async (referredUserId) => {
+    try {
+      const response = await fetch('/api/referrals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: currentUserId, referredUserId }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        console.log(result.message); // Update referral count in UI
+      } else {
+        console.error(result.message);
+      }
+    } catch (error) {
+      console.error('Failed to add referral:', error);
+    }
+  };
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const inviterUID = urlParams.get('start');
