@@ -81,32 +81,30 @@ function HomeScreen() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const savedState = await fetch(`/api/mine`, {
-        method: 'GET', 
+      const savedState = await fetch(`/api/mine?userId=${userId}`, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-
+  
       if (savedState.ok) {
         const result = await savedState.json();
-        const { startTime, duration, coins, stone } = result; 
-        const currentTime = new Date();
-        const elapsedTime = Math.floor((currentTime - new Date(startTime)) / 1000); 
-
-        const remainingTime = Math.max(0, duration - elapsedTime); 
-        setTimer(remainingTime);
-        setMining(elapsedTime < duration); 
+        const { startTime, duration, remainingTime, coins, stone } = result; 
+        setTimer(remainingTime); 
+        setMining(remainingTime > 0);
         setCoins(coins); 
         setStone(stone); 
       } else {
         console.error("Error fetching game state");
       }
     };
-
-    fetchData();
-  }, []);
-
+  
+    if (userId) {
+      fetchData();
+    }
+  }, [userId]); // Fetch when userId changes
+  
   useEffect(() => {
     if (mining) {
       const interval = setInterval(() => {
@@ -118,9 +116,10 @@ function HomeScreen() {
           }
           return prev - 1;
         });
-        setStone((prevStone) => prevStone + (1 / 28800)); 
+  
+        setStone((prevStone) => prevStone + (1 / 28800)); // Gradually add mined stones
       }, 1000);
-
+  
       return () => clearInterval(interval);
     }
   }, [mining]);
