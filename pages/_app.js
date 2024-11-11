@@ -4,7 +4,7 @@ import Loading from '../components/loading';
 
 function MyApp({ Component, pageProps }) {
     const [isLoading, setIsLoading] = useState(true);
-    const [earnedCoins, setEarnedCoins] = useState(0);
+    const [coins, setCoins] = useState(0);
     const [mineCountdown, setMineCountdown] = useState(0);
     const [dailyClaimTimer, setDailyClaimTimer] = useState(0);
     const [gameInteractions, setGameInteractions] = useState([]);
@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }) {
 
             if (response.ok) {
                 const data = await response.json();
-                setEarnedCoins(data.earnedCoins || 0);
+                setCoins(data.coins || 0);
                 setMineCountdown(data.mineCountdown || 0);
                 setDailyClaimTimer(data.dailyClaimTimer || 0);
                 setGameInteractions(data.gameInteractions || []);
@@ -60,7 +60,15 @@ function MyApp({ Component, pageProps }) {
         <>
             {isLoading ? <Loading /> : <Component {...pageProps} 
                 completedTasks={completedTasks} 
-                completeTask={updateCompletedTasks} />}
+                completeTask={updateCompletedTasks} 
+                coins={coins}
+                updateCoins={(increment) => {
+                    setCoins(prev => {
+                        const newCoins = prev + increment;
+                        saveData({ coins: newCoins });
+                        return newCoins;
+                    });
+                }} />}
         </>
     );
 }
