@@ -10,36 +10,57 @@ function MyApp({ Component, pageProps }) {
     const [gameInteractions, setGameInteractions] = useState([]);
     const [completedTasks, setCompletedTasks] = useState([]);
 
+    const userId = 'YOUR_USER_ID'; // Replace with actual user ID
+
     useEffect(() => {
-        const timeoutId = setTimeout(() => {
+        const fetchData = async () => {
+            const response = await fetch(`/api/userData`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId, action: 'retrieve' }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setEarnedCoins(data.earnedCoins || 0);
+                setMineCountdown(data.mineCountdown || 0);
+                setDailyClaimTimer(data.dailyClaimTimer || 0);
+                setGameInteractions(data.gameInteractions || []);
+                setCompletedTasks(data.completedTasks || []);
+            } else {
+                console.error("Error fetching user data");
+            }
             setIsLoading(false);
-        }, 3000);
+        };
 
-        // Load saved state from localStorage
-        const savedMineCountdown = localStorage.getItem('mineCountdown');
-        const savedDailyClaimTimer = localStorage.getItem('dailyClaimTimer');
-        const savedInteractions = localStorage.getItem('gameInteractions');
-        const savedCompletedTasks = localStorage.getItem('completedTasks');
+        fetchData();
+    }, [userId]);
 
-        if (savedMineCountdown) setMineCountdown(Number(savedMineCountdown));
-        if (savedDailyClaimTimer) setDailyClaimTimer(Number(savedDailyClaimTimer));
-        if (savedInteractions) setGameInteractions(JSON.parse(savedInteractions));
-        if (savedCompletedTasks) setCompletedTasks(JSON.parse(savedCompletedTasks));
+    const saveData = async (updatedData) => {
+        await fetch(`/api/userData`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId, action: 'save', ...updatedData }),
+        });
+    };
 
-        return () => clearTimeout(timeoutId);
-    }, []);
+    const updateCompletedTasks = (taskId) => {
+        setCompletedTasks((prev) => {
+            const newCompletedTasks = [...prev, taskId];
+            saveData({ completedTasks: newCompletedTasks });
+            return newCompletedTasks;
+        });
+    };
 
     return (
         <>
             {isLoading ? <Loading /> : <Component {...pageProps} 
                 completedTasks={completedTasks} 
-                completeTask={(taskId) => {
-                    setCompletedTasks((prev) => {
-                        const newCompletedTasks = [...prev, taskId];
-                        localStorage.setItem('completedTasks', JSON.stringify(newCompletedTasks));
-                        return newCompletedTasks;
-                    });
-                }} />}
+                completeTask={updateCompletedTasks} />}
         </>
     );
 }
