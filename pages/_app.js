@@ -4,54 +4,44 @@ import Loading from '../components/loading';
 
 function MyApp({ Component, pageProps }) {
     const [isLoading, setIsLoading] = useState(true);
-    const [coins, setCoins] = useState(0);
+    const [earnedCoins, setEarnedCoins] = useState(0);
     const [mineCountdown, setMineCountdown] = useState(0);
     const [dailyClaimTimer, setDailyClaimTimer] = useState(0);
     const [gameInteractions, setGameInteractions] = useState([]);
-    const [completedTasks, setCompletedTasks] = useState([]);
-
-    const userId = 'YOUR_USER_ID'; // Replace with actual user ID
+    const [completedTasks, setCompletedTasks] = useState([]); // New state for completed tasks
 
     useEffect(() => {
-        const fetchData = async () => {
-            const response = await fetch(`/api/userData`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ userId, action: 'retrieve' }),
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                setCoins(data.coins || 0);
-                setMineCountdown(data.mineCountdown || 0);
-                setDailyClaimTimer(data.dailyClaimTimer || 0);
-                setGameInteractions(data.gameInteractions || []);
-                setCompletedTasks(data.completedTasks || []);
-            } else {
-                console.error("Error fetching user data");
-            }
+        const timeoutId = setTimeout(() => {
             setIsLoading(false);
-        };
+        }, 3000);
 
-        fetchData();
-    }, [userId]);
+        // Load saved state from localStorage
+        const savedMineCountdown = localStorage.getItem('mineCountdown');
+        const savedDailyClaimTimer = localStorage.getItem('dailyClaimTimer');
+        const savedInteractions = localStorage.getItem('gameInteractions');
+        const savedCompletedTasks = localStorage.getItem('completedTasks'); // Retrieve completed tasks
 
-    const saveData = async (updatedData) => {
-        await fetch(`/api/userData`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ userId, action: 'save', ...updatedData }),
-        });
-    };
+        if (savedMineCountdown) {
+            setMineCountdown(Number(savedMineCountdown));
+        }
+        if (savedDailyClaimTimer) {
+            setDailyClaimTimer(Number(savedDailyClaimTimer));
+        }
+        if (savedInteractions) {
+            setGameInteractions(JSON.parse(savedInteractions));
+        }
+        if (savedCompletedTasks) { // Initialize completed tasks from localStorage
+            setCompletedTasks(JSON.parse(savedCompletedTasks));
+        }
 
-    const updateCompletedTasks = (taskId) => {
+        return () => clearTimeout(timeoutId);
+    }, []);
+
+    // Function to update completed tasks
+    const completeTask = (taskId) => {
         setCompletedTasks((prev) => {
             const newCompletedTasks = [...prev, taskId];
-            saveData({ completedTasks: newCompletedTasks });
+            localStorage.setItem('completedTasks', JSON.stringify(newCompletedTasks));
             return newCompletedTasks;
         });
     };
@@ -60,15 +50,9 @@ function MyApp({ Component, pageProps }) {
         <>
             {isLoading ? <Loading /> : <Component {...pageProps} 
                 completedTasks={completedTasks} 
-                completeTask={updateCompletedTasks} 
-                coins={coins}
-                updateCoins={(increment) => {
-                    setCoins(prev => {
-                        const newCoins = prev + increment;
-                        saveData({ coins: newCoins });
-                        return newCoins;
-                    });
-                }} />}
+                completeTask={completeTask} 
+                // pass down any other props you need
+            />}
         </>
     );
 }
