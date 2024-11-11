@@ -1,4 +1,3 @@
-// /pages/api/tasks.js
 import prisma from '../../lib/db';
 
 // Helper function to calculate daily streak reward
@@ -73,6 +72,29 @@ export default async function handler(req, res) {
 
       res.status(200).json({ message: `Task completed, ${task.rewardCoins} coins added.` });
     } 
+    else if (action === 'createTask') {
+      // Create a new task
+      const { description, rewardCoins } = req.body;
+
+      const newTask = await prisma.task.create({
+        data: {
+          user_id: userId,
+          description,
+          rewardCoins,
+        },
+      });
+
+      res.status(201).json(newTask);
+    }
+    else if (action === 'fetchTasks') {
+      // Fetch all tasks for the user
+      const tasks = await prisma.task.findMany({
+        where: { user_id: userId },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      res.status(200).json(tasks);
+    }
     else {
       res.status(400).json({ message: 'Invalid action' });
     }
