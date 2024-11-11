@@ -124,43 +124,42 @@ function HomeScreen() {
     }
   }, [mining]);
 
+  // Starting the mining session (button click)
   const startMining = async () => {
-    if (!mining) {
-      setMining(true);
-      setTimer(28800); 
-      setStone(0); 
-
-      await fetch('/api/mine', {
+    try {
+      const response = await fetch('/api/mine', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          action: 'mine',
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: currentUserId, action: 'start' }),
       });
+      const result = await response.json();
+      if (response.ok) {
+        console.log(result.message); // Show countdownEnd in the UI
+      } else {
+        console.error(result.message);
+      }
+    } catch (error) {
+      console.error('Failed to start mining:', error);
     }
   };
-
-  const handleSell = async () => {
-    setCoins((prevCoins) => prevCoins + 500); 
-    setStone(0); 
-    setMining(false); 
-
-    await fetch('/api/mine', {
-      method: 'PUT',  
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId, 
-        coins: coins + 500,
-        stone,
-        startTime: Date.now(),
-        duration: 28800,
-      }),
-    });
+  
+  // Selling mined resources (button click)
+  const sellMining = async () => {
+    try {
+      const response = await fetch('/api/mine', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: currentUserId, action: 'sell' }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        console.log(result.message); // Update UI to reflect new coin balance
+      } else {
+        console.error(result.message);
+      }
+    } catch (error) {
+      console.error('Failed to sell mined resources:', error);
+    }
   };
 
   return (
