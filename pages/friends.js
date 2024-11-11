@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import Footer from '../components/Footer';
 
 const Friends = ({ updateCoins, showReward }) => {
-  const [referrals, setReferrals] = useState([]); // Keeping this for future use if needed
   const [telegramUID, setTelegramUID] = useState('');
 
   useEffect(() => {
@@ -43,31 +42,11 @@ const Friends = ({ updateCoins, showReward }) => {
 
   const handleCopy = (referralLink) => {
     navigator.clipboard.writeText(referralLink);
-    // No need for alert or displaying the referral link
   };
 
   const handleNewInviteeReward = () => {
     updateCoins(50); // Reward 50 coins to the new invitee
     showReward("+50 coins for joining through a referral!");
-  };
-
-    // Adding a referral
-  const addReferral = async (referredUserId) => {
-    try {
-      const response = await fetch('/api/referrals', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: currentUserId, referredUserId }),
-      });
-      const result = await response.json();
-      if (response.ok) {
-        console.log(result.message); // Update referral count in UI
-      } else {
-        console.error(result.message);
-      }
-    } catch (error) {
-      console.error('Failed to add referral:', error);
-    }
   };
 
   useEffect(() => {
@@ -90,14 +69,14 @@ const Friends = ({ updateCoins, showReward }) => {
             <img
               src="/icons/sendinv-btn.svg"
               alt="Send Invite"
-              style={{ pointerEvents: 'none' }} // Disable pointer events for the image
+              style={{ pointerEvents: 'none' }}
             />
           </button>
           <button onClick={() => handleCopy(`https://t.me/pinxhousebot?start=${telegramUID}`)} className="w-[50px] h-[35px] flex justify-center items-center">
             <img
               src="/icons/copy-btn.svg"
               alt="Copy Referral Link"
-              style={{ pointerEvents: 'none' }} // Disable pointer events for the image
+              style={{ pointerEvents: 'none' }}
             />
           </button>
         </div>
@@ -106,9 +85,7 @@ const Friends = ({ updateCoins, showReward }) => {
         <div className="w-[80%] font-semibold text-[1rem] leading-none text-left text-white">
           Friends
         </div>
-        {/* No need to display the referral links anymore */}
       </div>
-
       <Footer currentPage="friends" />
     </div>
   );
