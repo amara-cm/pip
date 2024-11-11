@@ -187,7 +187,7 @@ function HomeScreen() {
           timer > 0 ? (
             <CollectingButton timer={timer} stone={stone} />
           ) : (
-            <SellButton onClick={handleSell} />
+            <SellButton onClick={sellMining} />
           )
         ) : (
           <MiningButton onClick={startMining} />
