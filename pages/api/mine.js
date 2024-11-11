@@ -1,4 +1,3 @@
-// /pages/api/mine.js
 import prisma from '../../lib/db';
 
 // Helper function to check if the mining session is completed
@@ -7,7 +6,7 @@ const checkMiningCompletion = (countdownEnd) => {
 };
 
 export default async function handler(req, res) {
-  const { userId, action } = req.body;  // action can be 'start' or 'sell'
+  const { userId, action } = req.body;  // action can be 'start', 'sell', or 'status'
 
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
@@ -54,6 +53,18 @@ export default async function handler(req, res) {
       ]);
 
       res.status(200).json({ message: '500 coins added, mining session reset' });
+    } 
+    else if (action === 'status') {
+      // Retrieve the current mining session data
+      const miningSession = await prisma.miningSession.findUnique({
+        where: { user_id: userId },
+      });
+
+      if (!miningSession) {
+        return res.status(404).json({ message: 'No mining session found.' });
+      }
+
+      res.status(200).json(miningSession);
     } 
     else {
       res.status(400).json({ message: 'Invalid action' });
