@@ -101,9 +101,24 @@ const Tasks = () => {
     }, 60000); // 1 minute delay
   };
 
-  const handleClaim = (task) => {
-    setCoins(coins + task.reward);
-    setTasks(tasks.filter(t => t.id !== task.id));
+  const handleClaim = async (task) => {
+    try {
+      const response = await fetch('/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: currentUserId, action: 'completeTask', taskId: task.id }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        console.log(result.message); // Show reward in UI
+        setCoins(coins + task.reward);
+        setTasks(tasks.filter(t => t.id !== task.id));
+      } else {
+        console.error(result.message);
+      }
+    } catch (error) {
+      console.error('Failed to claim task reward:', error);
+    }
   };
 
   const incrementReferralProgress = (taskId) => {
@@ -113,42 +128,43 @@ const Tasks = () => {
   };
 
   // Claiming daily login reward
-const claimDailyReward = async () => {
-  try {
-    const response = await fetch('/api/tasks', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: currentUserId, action: 'claim' }),
-    });
-    const result = await response.json();
-    if (response.ok) {
-      console.log(result.message); // Show reward in UI
-    } else {
-      console.error(result.message);
+  const claimDailyReward = async () => {
+    try {
+      const response = await fetch('/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: currentUserId, action: 'claim' }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        console.log(result.message); // Show reward in UI
+        setCoins(coins + dailyReward);
+      } else {
+        console.error(result.message);
+      }
+    } catch (error) {
+      console.error('Failed to claim daily reward:', error);
     }
-  } catch (error) {
-    console.error('Failed to claim daily reward:', error);
-  }
-};
+  };
 
-// Completing a task
-const completeTask = async (taskId) => {
-  try {
-    const response = await fetch('/api/tasks', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: currentUserId, action: 'completeTask', taskId }),
-    });
-    const result = await response.json();
-    if (response.ok) {
-      console.log(result.message); // Mark task as done in UI
-    } else {
-      console.error(result.message);
+  // Completing a task
+  const completeTask = async (taskId) => {
+    try {
+      const response = await fetch('/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: currentUserId, action: 'completeTask', taskId }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        console.log(result.message); // Mark task as done in UI
+      } else {
+        console.error(result.message);
+      }
+    } catch (error) {
+      console.error('Failed to complete task:', error);
     }
-  } catch (error) {
-    console.error('Failed to complete task:', error);
-  }
-};
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -163,7 +179,7 @@ const completeTask = async (taskId) => {
         <DailyLogin
           currentDay={currentDay}
           loginTimer={loginTimer}
-          handleClaim={handleClaim}
+          handleClaim={claimDailyReward}
         />
         <TaskList tasks={tasks} handleGo={handleGo} handleClaim={handleClaim} />
       </div>
