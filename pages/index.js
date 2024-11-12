@@ -81,21 +81,20 @@ function HomeScreen() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const savedState = await fetch(`/api/mine`, {
-        method: 'POST',
+      const savedState = await fetch(`/api/mine?userId=${userId}`, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId, action: 'status' }),
       });
   
       if (savedState.ok) {
         const result = await savedState.json();
-        const { countdownEnd, stonesMined, canSell } = result; 
-        const remainingTime = Math.max(0, (new Date(countdownEnd) - new Date()) / 1000);
+        const { startTime, duration, remainingTime, coins, stone } = result; 
         setTimer(remainingTime); 
-        setMining(remainingTime > 0 && !canSell);
-        setStone(stonesMined); 
+        setMining(remainingTime > 0);
+        setCoins(coins); 
+        setStone(stone); 
       } else {
         console.error("Error fetching game state");
       }
@@ -125,48 +124,43 @@ function HomeScreen() {
     }
   }, [mining]);
 
-  // Starting the mining session (button click)
   const startMining = async () => {
-    try {
-      const response = await fetch('/api/mine', {
+    if (!mining) {
+      setMining(true);
+      setTimer(28800); 
+      setStone(0); 
+
+      await fetch('/api/mine', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, action: 'start' }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          action: 'mine',
+        }),
       });
-      const result = await response.json();
-      if (response.ok) {
-        console.log(result.message); // Show countdownEnd in the UI
-        const { countdownEnd } = result;
-        const remainingTime = Math.max(0, (new Date(countdownEnd) - new Date()) / 1000);
-        setTimer(remainingTime);
-        setMining(true);
-      } else {
-        console.error(result.message);
-      }
-    } catch (error) {
-      console.error('Failed to start mining:', error);
     }
   };
-  
-  // Selling mined resources (button click)
-  const sellMining = async () => {
-    try {
-      const response = await fetch('/api/mine', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, action: 'sell' }),
-      });
-      const result = await response.json();
-      if (response.ok) {
-        console.log(result.message); // Update UI to reflect new coin balance
-        setCoins(prev => prev + 500);
-        setStone(0);
-      } else {
-        console.error(result.message);
-      }
-    } catch (error) {
-      console.error('Failed to sell mined resources:', error);
-    }
+
+  const handleSell = async () => {
+    setCoins((prevCoins) => prevCoins + 500); 
+    setStone(0); 
+    setMining(false); 
+
+    await fetch('/api/mine', {
+      method: 'PUT',  
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId, 
+        coins: coins + 500,
+        stone,
+        startTime: Date.now(),
+        duration: 28800,
+      }),
+    });
   };
 
   return (
@@ -187,7 +181,7 @@ function HomeScreen() {
           timer > 0 ? (
             <CollectingButton timer={timer} stone={stone} />
           ) : (
-            <SellButton onClick={sellMining} />
+            <SellButton onClick={handleSell} />
           )
         ) : (
           <MiningButton onClick={startMining} />
