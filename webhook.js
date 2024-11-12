@@ -10,6 +10,7 @@ export const config = {
 
 // Webhook handler
 export default async function handler(req, res) {
+  console.log(`Received ${req.method} request on /webhook`);
   if (req.method === 'POST') {
     try {
       const rawBody = await getRawBody(req); // Get raw body as a string
@@ -23,6 +24,7 @@ export default async function handler(req, res) {
     }
   }
 
+  console.log('Invalid method:', req.method);
   return res.status(405).json({ error: 'Method Not Allowed' });
 }
 
