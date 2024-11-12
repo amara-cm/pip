@@ -1,51 +1,145 @@
+import { PrismaClient } from '@prisma/client';
 import { Telegraf } from 'telegraf';
-import prisma from './lib/db'; // Ensure the path is correct to your Prisma instance
 
-const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
+const prisma = new PrismaClient();
+const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN); // Make sure to store your bot token in .env
 
-// Start command handler
+// Start Command: Register or fetch user from the database
 bot.start(async (ctx) => {
-  const { id, username, first_name } = ctx.from;
+  const telegramId = ctx.from.id.toString();
+  const username = ctx.from.username;
 
-  // Store or update user data in the database
+  if (!username) {
+    return ctx.reply('Please set a Telegram username to play.');
+  }
+
   try {
-    await prisma.user.upsert({
-      where: { user_id: String(id) },
-      update: {
-        username,
-        first_name,
-        lastActive: new Date(), // Store the last activity time
-      },
-      create: {
-        user_id: String(id),
-        username,
-        first_name,
-        lastActive: new Date(), // Set activity on creation
-      },
+    let user = await prisma.user.findUnique({
+      where: { telegramId }
     });
 
-    // Send the welcome message back to the user
-    await ctx.reply(
-      '⭐️Hello, ' + (username || 'Pinx') + '! Welcome to @PinxHouseBot! Your main task is to mine Pink Star Diamonds, sell them, and earn ⭐️ coins. ⭐️Start Now!',
-      {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              { text: 'Play', url: 'https://t.me/pinxhousebot/app' },
-              { text: 'Website', url: 'https://t.me/pinxhousebot/app' },
-            ],
-          ],
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          telegramId,
+          username,
         },
-      }
-    );
+      });
+      ctx.reply(`Welcome, ${username}! You’re now registered.`);
+    } else {
+      ctx.reply(`Welcome back, ${username}!`);
+    }
   } catch (error) {
-    console.error('Error storing/updating user data:', error);
+    console.error('Error during user registration:', error);
+    ctx.reply('Failed to register. Try again later.');
   }
 });
 
-// Set your bot's webhook handler (you can leave this in webhook.js)
-bot.launch();
+// Mining action: Increment user's Pink Star Diamonds
+bot.command('mine', async (ctx) => {
+  const telegramId = ctx.from.id.toString();
 
-// Ensure proper graceful shutdown (this is good practice for long-running bots)
-process.once('SIGINT', () => bot.stop('SIGINT'));
-process.once('SIGTERM', () => bot.stop('SIGTERM'));
+  try {
+    const user = await prisma.user.findUnique({ where: { telegramId } });
+
+    if (user) {
+      const diamondsMined = Math.floor(Math.random() * 10) + 1;
+
+      await prisma.user.update({
+        where: { telegramId },
+        data: {
+          diamonds: user.diamonds + diamondsMined,
+          gameHistory: {
+            create: {
+              action: 'mine',
+              amount: diamondsMined,
+            },
+          },
+        },
+      });
+
+      ctx.reply(`You mined ${diamondsMined} Pink Star Diamonds!`);
+    } else {
+      ctx.reply('You are not registered. Use /start to register.');
+    }
+  } catch (error) {
+    console.error('Error during mining:', error);
+    ctx.reply('Mining failed.');
+  }
+});
+
+// Sell action: Convert Pink Star Diamonds into Coins
+bot.command('sell', async (ctx) => {
+  const telegramId = ctx.from.id.toString();
+
+  try {
+    const user = await prisma.user.findUnique({ where: { telegramId } });
+
+    if (user && user.diamonds > 0) {
+      const coinsEarned = user.diamonds * 100;
+
+      await prisma.user.update({
+        where: { telegramId },
+        data: {
+          diamonds: 0,
+          coins: user.coins + coinsEarned,
+          gameHistory: {
+            create: {
+              action: 'sell',
+              amount: coinsEarned,
+            },
+          },
+        },
+      });
+
+      ctx.reply(`You sold ${user.diamonds} Pink Star Diamonds for ${coinsEarned} coins.`);
+    } else {
+      ctx.reply('You have no diamonds to sell.');
+    }
+  } catch (error) {
+    console.error('Error during selling:', error);
+    ctx.reply('Selling failed.');
+  }
+});
+
+// Referral tracking: Set who referred whom
+bot.command('referral', async (ctx) => {
+  const telegramId = ctx.from.id.toString();
+  const referrerUsername = ctx.message.text.split(' ')[1];  // Get referrer username from the command argument
+
+  if (!referrerUsername) {
+    return ctx.reply('Please provide the username of the person who referred you.');
+  }
+
+  try {
+    const referrer = await prisma.user.findUnique({
+      where: { username: referrerUsername },
+    });
+    const user = await prisma.user.findUnique({
+      where: { telegramId },
+    });
+
+    if (referrer && user && !user.referrerId) {
+      await prisma.user.update({
+        where: { telegramId },
+        data: {
+          referrerId: referrer.id,
+        },
+      });
+
+      ctx.reply(`${referrerUsername} referred you!`);
+    } else if (!referrer) {
+      ctx.reply('Referrer not found.');
+    } else {
+      ctx.reply('You already have a referrer.');
+    }
+  } catch (error) {
+    console.error('Error during referral setup:', error);
+    ctx.reply('Failed to set referral.');
+  }
+});
+
+// Launch the bot
+bot.launch().then(() => {
+  console.log('Telegram bot is running...');
+});
