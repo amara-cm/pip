@@ -4,7 +4,7 @@ import { Telegraf } from 'telegraf';
 const prisma = new PrismaClient();
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN); // Make sure to store your bot token in .env
 
-// Start Command: Register or fetch user from the database
+// Start Command: Register or fetch user from the database and reply
 bot.start(async (ctx) => {
   const telegramId = ctx.from.id.toString();
   const username = ctx.from.username;
