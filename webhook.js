@@ -32,28 +32,31 @@ async function handleTelegramUpdate(update) {
 
   if (!message || !message.from) return;
 
-  const { id, username, first_name } = message.from;
+  const { id, username, first_name, text } = message.from;
 
-  // Store or update user data in the database
-  try {
-    await prisma.user.upsert({
-      where: { user_id: String(id) },
-      update: {
-        username,
-        first_name,
-        lastActive: new Date(), // Update last activity time
-      },
-      create: {
-        user_id: String(id),
-        username,
-        first_name,
-        lastActive: new Date(), // Set activity on creation
-      },
-    });
+  // Check if the message is the /start command
+  if (text && text.startsWith('/start')) {
+    // Store or update user data in the database
+    try {
+      await prisma.user.upsert({
+        where: { user_id: String(id) },
+        update: {
+          username,
+          first_name,
+          lastActive: new Date(), // Update last activity time
+        },
+        create: {
+          user_id: String(id),
+          username,
+          first_name,
+          lastActive: new Date(), // Set activity on creation
+        },
+      });
 
-    console.log(`User data for ${username || 'Pinx'} stored/updated successfully.`);
-  } catch (error) {
-    console.error('Error saving/updating user data:', error);
+      console.log(`User data for ${username || 'Pinx'} stored/updated successfully.`);
+    } catch (error) {
+      console.error('Error saving/updating user data:', error);
+    }
   }
 }
 
