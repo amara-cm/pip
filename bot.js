@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../lib/db'; // Ensure the path is correct
 import { Telegraf } from 'telegraf';
 
 const prisma = new PrismaClient();
