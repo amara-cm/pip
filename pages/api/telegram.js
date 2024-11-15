@@ -1,18 +1,6 @@
-import { PrismaClient } from '@prisma/client';
-
-let prisma;
-const instantiatePrisma = () => {
-  if (!prisma) {
-    prisma = new PrismaClient();
-  } else {
-    prisma.$disconnect(); // Disconnect the previous client
-    prisma = new PrismaClient(); // Reinstantiate the Prisma client
-  }
-};
+import prisma from '../../lib/db'; // Ensure the path is correct
 
 export default async function handler(req, res) {
-  instantiatePrisma(); // Ensure Prisma client is instantiated
-
   const { id, username, first_name, action, earnedCoins, mineCountdown, dailyClaimTimer, gameInteractions, completedTasks, coins } = req.body;
 
   if (req.method === 'POST') {
