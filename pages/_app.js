@@ -30,8 +30,8 @@ function MyApp({ Component, pageProps }) {
     const saveUserData = async () => {
         if (!userId) return;
         try {
-            await axios.post('/api/userData', {
-                userId,
+            await axios.post('/api/telegram', {
+                id: userId,
                 action: 'save',
                 earnedCoins,
                 mineCountdown,
@@ -47,8 +47,8 @@ function MyApp({ Component, pageProps }) {
     const retrieveUserData = async () => {
         if (!userId) return;
         try {
-            const response = await axios.post('/api/userData', {
-                userId,
+            const response = await axios.post('/api/telegram', {
+                id: userId,
                 action: 'retrieve'
             });
             const data = response.data;
