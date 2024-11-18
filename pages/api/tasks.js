@@ -1,4 +1,4 @@
-import prisma from '../../lib/db';
+import supabase from '../../lib/db';
 
 // Helper function to calculate daily streak reward
 const calculateDailyReward = (streak) => {
@@ -18,7 +18,13 @@ export default async function handler(req, res) {
       // Daily login claim logic
       const now = new Date();
       const today = now.toISOString().slice(0, 10); // YYYY-MM-DD
-      const userLogin = await prisma.dailyLogin.findUnique({ where: { user_id: userId } });
+      const { data: userLogin, error: userLoginError } = await supabase
+        .from('DailyLogin')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+
+      if (userLoginError) throw userLoginError;
 
       // If no record or missed login day, reset streak
       let streak = 0;
@@ -32,70 +38,60 @@ export default async function handler(req, res) {
           streak = 1;  // Reset streak
         }
       } else {
-        streak = 1;  // First time claim
+        streak = 1;  // First-time claim
       }
 
       const reward = calculateDailyReward(streak);
 
-      await prisma.$transaction([
-        prisma.dailyLogin.upsert({
-          where: { user_id: userId },
-          update: { currentStreak: streak, lastClaim: now, streakReward: reward },
-          create: { user_id: userId, currentStreak: streak, lastClaim: now, streakReward: reward, nextClaimDue: new Date(now.setHours(24, 0, 0, 0)) },
-        }),
-        prisma.user.update({
-          where: { user_id: userId },
-          data: { coins: { increment: reward } },  // Add daily reward coins
-        })
-      ]);
+      const { error: transactionError } = await supabase.rpc('claim_daily_reward', { user_id: userId, streak, reward });
+
+      if (transactionError) throw transactionError;
 
       res.status(200).json({ message: `Claimed ${reward} coins for day ${streak}` });
-    } 
-    else if (action === 'completeTask') {
+    } else if (action === 'completeTask') {
       const { taskId } = req.body;
 
-      const task = await prisma.task.findUnique({ where: { id: taskId } });
+      const { data: task, error: taskError } = await supabase
+        .from('Task')
+        .select('*')
+        .eq('id', taskId)
+        .single();
+
+      if (taskError) throw taskError;
+
       if (!task || task.isComplete) {
         return res.status(400).json({ message: 'Task already completed or not found.' });
       }
 
-      await prisma.$transaction([
-        prisma.task.update({
-          where: { id: taskId },
-          data: { isComplete: true },
-        }),
-        prisma.user.update({
-          where: { user_id: userId },
-          data: { coins: { increment: task.rewardCoins } },  // Add task reward coins
-        })
-      ]);
+      const { error: transactionError } = await supabase.rpc('complete_task', { task_id: taskId, user_id: userId, reward: task.rewardCoins });
+
+      if (transactionError) throw transactionError;
 
       res.status(200).json({ message: `Task completed, ${task.rewardCoins} coins added.` });
-    } 
-    else if (action === 'createTask') {
+    } else if (action === 'createTask') {
       // Create a new task
       const { description, rewardCoins } = req.body;
 
-      const newTask = await prisma.task.create({
-        data: {
-          user_id: userId,
-          description,
-          rewardCoins,
-        },
-      });
+      const { data: newTask, error: newTaskError } = await supabase
+        .from('Task')
+        .insert({ user_id: userId, description, rewardCoins })
+        .single();
+
+      if (newTaskError) throw newTaskError;
 
       res.status(201).json(newTask);
-    }
-    else if (action === 'fetchTasks') {
+    } else if (action === 'fetchTasks') {
       // Fetch all tasks for the user
-      const tasks = await prisma.task.findMany({
-        where: { user_id: userId },
-        orderBy: { createdAt: 'desc' },
-      });
+      const { data: tasks, error: tasksError } = await supabase
+        .from('Task')
+        .select('*')
+        .eq('user_id', userId)
+        .order('createdAt', { ascending: false });
+
+      if (tasksError) throw tasksError;
 
       res.status(200).json(tasks);
-    }
-    else {
+    } else {
       res.status(400).json({ message: 'Invalid action' });
     }
   } catch (error) {
