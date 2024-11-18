@@ -1,4 +1,5 @@
-import supabase from '../../lib/db'; // Ensure the path is correct
+// Ensure the path is correct
+import supabase from '../../lib/db';
 
 export default async function handler(req, res) {
   const { id, username, first_name, action, earnedCoins, mineCountdown, dailyClaimTimer, gameInteractions, completedTasks, coins } = req.body;
