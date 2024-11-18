@@ -1,8 +1,8 @@
-import supabase from './supabaseClient.js';
+import supabase from '../lib/db.js';
 
 async function main() {
   try {
-    const { data, error } = await supabase.from('your_table_name').select('*');
+    const { data, error } = await supabase.from('User').select('*');
     if (error) throw error;
     console.log('Connected to the database successfully:', data);
   } catch (error) {
