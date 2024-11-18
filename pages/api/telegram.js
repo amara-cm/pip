@@ -82,8 +82,12 @@ export default async function handler(req, res) {
         return res.status(404).json({ error: 'User not found' });
       }
     } catch (error) {
-      console.error('Error finding user:', error);
-      return res.status(500).json({ error: 'Internal Server Error' });
+      if (error.code === 'PGRST116') {
+        return res.status(404).json({ error: 'User not found' });
+      } else {
+        console.error('Error finding user:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
     }
   } else {
     return res.status(405).json({ error: 'Method Not Allowed' });
