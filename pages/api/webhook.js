@@ -42,22 +42,17 @@ async function handleTelegramUpdate(update) {
   const { id, username, first_name, text } = message.from;
   console.log('Received message from:', { id, username, first_name, text });
 
-  // Check if the message is the /start command
-  if (text && text.startsWith('/start')) {
-    // Store or update user data in the database
-    try {
-      const { error: userError } = await supabase
-        .from('User')
-        .upsert({ user_id: id, username, first_name, lastActive: new Date() });
+  // Store or update user data in the database
+  try {
+    const { error: userError } = await supabase
+      .from('User')
+      .upsert({ user_id: id, username, first_name, lastActive: new Date() });
 
-      if (userError) throw userError;
+    if (userError) throw userError;
 
-      console.log(`User data for ${username || 'Pinx'} stored/updated successfully.`);
-    } catch (error) {
-      console.error('Error saving/updating user data:', error);
-    }
-  } else {
-    console.log('Message does not start with /start');
+    console.log(`User data for ${username || 'Pinx'} stored/updated successfully.`);
+  } catch (error) {
+    console.error('Error saving/updating user data:', error);
   }
 }
 
