@@ -5,10 +5,16 @@ const Friends = ({ updateCoins, showReward }) => {
   const [telegramUID, setTelegramUID] = useState('');
 
   useEffect(() => {
-    // Simulate fetching user's Telegram UID
-    const fetchTelegramUID = () => {
-      const uid = '123456789'; // Example UID, replace with actual UID
-      setTelegramUID(uid);
+    // Fetch the user's Telegram UID from the API
+    const fetchTelegramUID = async () => {
+      try {
+        const userId = 'current_user_id'; // Replace with the actual logic to get the current user's ID
+        const response = await fetch(`/api/telegram?id=${userId}`);
+        const data = await response.json();
+        setTelegramUID(data.userId);
+      } catch (error) {
+        console.error('Error fetching Telegram UID:', error);
+      }
     };
 
     fetchTelegramUID();
@@ -17,35 +23,34 @@ const Friends = ({ updateCoins, showReward }) => {
   const handleInvite = async () => {
     const referralLink = `https://t.me/pinxhousebot?start=${telegramUID}`;
 
-    // Open Telegram share link without showing the referral in state
     window.open(`https://t.me/share/url?url=${encodeURIComponent(referralLink)}`, '_blank');
 
-    // Send referral to the server
-    const response = await fetch('/api/friends', {
+    const response = await fetch('/api/referrals', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        userId: 'YOUR_USER_ID', // Replace with actual user ID
-        invitedUserId: telegramUID, // This could be the new user's ID if available
+        userId: 'current_user_id', // Replace with actual user ID
+        referredUserId: telegramUID,
       }),
     });
 
     if (response.ok) {
-      updateCoins(100); // Update coins locally
+      updateCoins(100);
       showReward("+100 coins for successful invite!");
     } else {
       console.error("Error recording referral");
     }
   };
 
-  const handleCopy = (referralLink) => {
+  const handleCopy = () => {
+    const referralLink = `https://t.me/pinxhousebot?start=${telegramUID}`;
     navigator.clipboard.writeText(referralLink);
   };
 
   const handleNewInviteeReward = () => {
-    updateCoins(50); // Reward 50 coins to the new invitee
+    updateCoins(50);
     showReward("+50 coins for joining through a referral!");
   };
 
@@ -72,7 +77,7 @@ const Friends = ({ updateCoins, showReward }) => {
               style={{ pointerEvents: 'none' }}
             />
           </button>
-          <button onClick={() => handleCopy(`https://t.me/pinxhousebot?start=${telegramUID}`)} className="w-[50px] h-[35px] flex justify-center items-center">
+          <button onClick={handleCopy} className="w-[50px] h-[35px] flex justify-center items-center">
             <img
               src="/icons/copy-btn.svg"
               alt="Copy Referral Link"
