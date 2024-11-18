@@ -1,5 +1,5 @@
 import { Telegraf } from 'telegraf';
-import prisma from '../../lib/db'; // Ensure the path is correct
+import supabase from '../../lib/db'; // Ensure the path is correct
 
 // Disable the default body parser for raw body handling
 export const config = {
@@ -40,20 +40,11 @@ async function handleTelegramUpdate(update) {
   if (text && text.startsWith('/start')) {
     // Store or update user data in the database
     try {
-      await prisma.user.upsert({
-        where: { user_id: String(id) },
-        update: {
-          username,
-          first_name,
-          lastActive: new Date(), // Update last activity time
-        },
-        create: {
-          user_id: String(id),
-          username,
-          first_name,
-          lastActive: new Date(), // Set activity on creation
-        },
-      });
+      const { error: userError } = await supabase
+        .from('User')
+        .upsert({ user_id: id, username, first_name, lastActive: new Date() });
+
+      if (userError) throw userError;
 
       console.log(`User data for ${username || 'Pinx'} stored/updated successfully.`);
     } catch (error) {
