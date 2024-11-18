@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }) {
     const getUserId = async () => {
         try {
             const response = await axios.get('/api/telegram', {
-                params: { id: 'actual_user_id' } // Replace 'actual_user_id' with the logic to get the actual user ID
+                params: { id: 'user_id' } // Replace 'actual_user_id' with the logic to get the actual user ID
             });
             return response.data.userId; // Assuming the response contains the userId
         } catch (error) {
