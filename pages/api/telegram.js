@@ -1,4 +1,4 @@
-import prisma from '../../lib/db'; // Ensure the path is correct
+import supabase from '../../lib/db'; // Ensure the path is correct
 
 export default async function handler(req, res) {
   const { id, username, first_name, action, earnedCoins, mineCountdown, dailyClaimTimer, gameInteractions, completedTasks, coins } = req.body;
@@ -7,29 +7,39 @@ export default async function handler(req, res) {
     if (action === 'save' || action === 'retrieve') {
       try {
         if (action === 'save') {
-          await prisma.userData.upsert({
-            where: { user_id: id },
-            update: { earnedCoins, mineCountdown, dailyClaimTimer, gameInteractions, completedTasks },
-            create: { user_id: id, earnedCoins, mineCountdown, dailyClaimTimer, gameInteractions, completedTasks },
-          });
+          const { error: userDataError } = await supabase
+            .from('UserData')
+            .upsert({ user_id: id, earnedCoins, mineCountdown, dailyClaimTimer, gameInteractions, completedTasks });
+
+          if (userDataError) throw userDataError;
 
           if (coins !== undefined) {
-            await prisma.user.update({
-              where: { user_id: id },
-              data: { coins: { increment: coins } },
-            });
+            const { error: userError } = await supabase
+              .from('User')
+              .update({ coins })
+              .eq('user_id', id);
+
+            if (userError) throw userError;
           }
 
           return res.status(200).json({ message: 'User data saved successfully' });
         } else if (action === 'retrieve') {
-          const userData = await prisma.userData.findUnique({
-            where: { user_id: id },
-          });
+          const { data: userData, error: userDataError } = await supabase
+            .from('UserData')
+            .select('*')
+            .eq('user_id', id)
+            .single();
+
+          if (userDataError) throw userDataError;
 
           if (userData) {
-            const user = await prisma.user.findUnique({
-              where: { user_id: id },
-            });
+            const { data: user, error: userError } = await supabase
+              .from('User')
+              .select('*')
+              .eq('user_id', id)
+              .single();
+
+            if (userError) throw userError;
 
             return res.status(200).json({ ...userData, coins: user ? user.coins : 0 });
           } else {
@@ -42,13 +52,13 @@ export default async function handler(req, res) {
       }
     } else {
       try {
-        await prisma.user.upsert({
-          where: { user_id: String(id) },
-          update: { username, first_name },
-          create: { user_id: String(id), username, first_name },
-        });
+        const { error: userError } = await supabase
+          .from('User')
+          .upsert({ user_id: id, username, first_name });
 
-        return res.status(201).json({ message: 'User created/updated', userId: String(id) });
+        if (userError) throw userError;
+
+        return res.status(201).json({ message: 'User created/updated', userId: id });
       } catch (error) {
         console.error('Error upserting user:', error);
         return res.status(500).json({ error: 'Internal Server Error' });
@@ -58,9 +68,13 @@ export default async function handler(req, res) {
     const { id } = req.query;
 
     try {
-      const user = await prisma.user.findUnique({
-        where: { user_id: String(id) },
-      });
+      const { data: user, error: userError } = await supabase
+        .from('User')
+        .select('*')
+        .eq('user_id', id)
+        .single();
+
+      if (userError) throw userError;
 
       if (user) {
         return res.status(200).json({ userId: user.user_id, username: user.username, firstName: user.first_name });
