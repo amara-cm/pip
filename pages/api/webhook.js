@@ -14,7 +14,9 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const rawBody = await getRawBody(req); // Get raw body as a string
+      console.log('Raw body:', rawBody);
       const update = JSON.parse(rawBody); // Parse JSON
+      console.log('Parsed update:', update);
 
       await handleTelegramUpdate(update);
       return res.status(200).json({ message: 'Update received' });
@@ -32,9 +34,13 @@ export default async function handler(req, res) {
 async function handleTelegramUpdate(update) {
   const { message } = update;
 
-  if (!message || !message.from) return;
+  if (!message || !message.from) {
+    console.log('No message or message.from found');
+    return;
+  }
 
   const { id, username, first_name, text } = message.from;
+  console.log('Received message from:', { id, username, first_name, text });
 
   // Check if the message is the /start command
   if (text && text.startsWith('/start')) {
@@ -50,6 +56,8 @@ async function handleTelegramUpdate(update) {
     } catch (error) {
       console.error('Error saving/updating user data:', error);
     }
+  } else {
+    console.log('Message does not start with /start');
   }
 }
 
