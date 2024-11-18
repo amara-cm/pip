@@ -1,4 +1,4 @@
-import supabase from '../lib/db.js';
+import supabase from './lib/db.js';
 
 async function main() {
   try {
