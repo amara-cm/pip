@@ -1,4 +1,4 @@
-import prisma from '../../lib/db';
+import supabase from '../../lib/db';
 
 export default async function handler(req, res) {
   const { userId, referredUserId } = req.body;
@@ -9,21 +9,18 @@ export default async function handler(req, res) {
 
   try {
     // Add referral logic
-    await prisma.referral.upsert({
-      where: { user_id: userId },
-      update: {
-        referralCount: { increment: 1 },
-      },
-      create: { user_id: userId, referralCount: 1 },
-    });
+    const { error: referralError } = await supabase
+      .from('Referral')
+      .upsert({ user_id: userId, referralCount: supabase.rpc('increment', { field: 'referralCount' }) });
+
+    if (referralError) throw referralError;
 
     // Add referred user logic
-    await prisma.user.create({
-      data: {
-        user_id: referredUserId,
-        referredById: userId,
-      }
-    });
+    const { error: userError } = await supabase
+      .from('User')
+      .insert({ user_id: referredUserId, referredById: userId });
+
+    if (userError) throw userError;
 
     res.status(200).json({ message: 'Referral added successfully' });
   } catch (error) {
