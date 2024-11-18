@@ -1,4 +1,5 @@
 import { Telegraf } from 'telegraf';
+import { v4 as uuidv4 } from 'uuid'; // Add UUID library for unique ID generation
 import supabase from '../../lib/db'; // Ensure the path is correct
 
 // Disable the default body parser for raw body handling
@@ -42,11 +43,14 @@ async function handleTelegramUpdate(update) {
   const { id, username, first_name, text } = message.from;
   console.log('Received message from:', { id, username, first_name, text });
 
+  // Generate a unique ID for the user
+  const uniqueId = uuidv4();
+
   // Store or update user data in the database
   try {
     const { error: userError } = await supabase
       .from('User')
-      .upsert({ user_id: id, username, first_name, lastActive: new Date() });
+      .upsert({ id: uniqueId, user_id: id, username, first_name, lastActive: new Date() });
 
     if (userError) throw userError;
 
