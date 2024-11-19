@@ -22,7 +22,10 @@ export default async function handler(req, res) {
 
     if (userError) throw userError;
 
-    res.status(200).json({ message: 'Referral added successfully' });
+    // Generate referral link with the user's Telegram ID
+    const referralLink = `https://your_actual_domain.com/referral?userId=${userId}`;
+
+    res.status(200).json({ message: 'Referral added successfully', referralLink });
   } catch (error) {
     console.error('Referral API error:', error);
     res.status(500).json({ message: 'Internal server error' });
