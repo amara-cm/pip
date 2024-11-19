@@ -22,7 +22,8 @@ export default async function handler(req, res) {
     }
 
     // Set session or PASETO for the user
-    res.status(200).json({ message: 'User authenticated', userId });
+    const newToken = await generateToken(userId);
+    res.status(200).json({ message: 'User authenticated', userId, token: newToken });
   } catch (error) {
     console.error('Error during auto-login:', error);
     res.status(400).json({ message: 'Invalid token' });
