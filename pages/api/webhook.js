@@ -1,5 +1,4 @@
 import { Telegraf } from 'telegraf';
-import { V4 } from 'paseto';
 import { v4 as uuidv4 } from 'uuid';
 import supabase from '../../lib/db';
 import { generateToken } from '../../lib/paseto';
@@ -13,13 +12,10 @@ export const config = {
 };
 
 export default async function handler(req, res) {
-  console.log(`Received ${req.method} request on /webhook`);
   if (req.method === 'POST') {
     try {
       const rawBody = await getRawBody(req);
-      console.log('Raw body:', rawBody);
       const update = JSON.parse(rawBody);
-      console.log('Parsed update:', update);
 
       await handleTelegramUpdate(update, res);
     } catch (error) {
@@ -27,7 +23,6 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   } else {
-    console.log('Invalid method:', req.method);
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 }
@@ -36,13 +31,10 @@ async function handleTelegramUpdate(update, res) {
   const { message } = update;
 
   if (!message || !message.from) {
-    console.log('No message or message.from found');
     return res.status(400).json({ error: 'Bad Request' });
   }
 
   const { id, username, first_name } = message.from;
-  console.log('Received message from:', { id, username, first_name });
-
   const uniqueId = uuidv4();
 
   try {
@@ -52,9 +44,7 @@ async function handleTelegramUpdate(update, res) {
 
     if (userError) throw userError;
 
-    console.log(`User data for ${username || 'Pinx'} stored/updated successfully.`);
-
-    const token = await generateToken(id);
+    const token = await generateToken(id, '30m');
     const autoLoginLink = `https://yourgame.com/auto-login?token=${token}`;
 
     // Send auto-login link to the user via Telegram (assuming you have a method to do this)
