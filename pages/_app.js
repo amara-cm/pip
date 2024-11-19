@@ -3,12 +3,6 @@ import axios from 'axios';
 import '../styles/global.css';
 import Loading from '../components/loading';
 
-// Dynamically import `paseto` only on the server side to avoid bundling issues
-let paseto;
-if (typeof window === 'undefined') {
-    paseto = require('../lib/paseto'); // Ensure this is the correct path to paseto.js
-}
-
 function MyApp({ Component, pageProps }) {
     const [isLoading, setIsLoading] = useState(true);
     const [earnedCoins, setEarnedCoins] = useState(0);
@@ -69,9 +63,10 @@ function MyApp({ Component, pageProps }) {
     };
 
     const handleUserAction = async () => {
-        if (!paseto) return; // Only attempt to refresh the token if paseto is available (server-side)
+        // Only attempt to refresh the token if paseto is available (server-side)
         try {
-            const newToken = await paseto.refreshToken(userId, token);
+            const { refreshToken } = await import('../lib/paseto');
+            const newToken = await refreshToken(userId, token);
             setToken(newToken);
         } catch (error) {
             console.error('Error refreshing token:', error);
@@ -88,9 +83,12 @@ function MyApp({ Component, pageProps }) {
             setUserId(id);
             if (id) {
                 await retrieveUserData();
-                if (paseto) { // Ensure paseto is available server-side before generating token
-                    const newToken = await paseto.generateToken(id);
+                try {
+                    const { generateToken } = await import('../lib/paseto');
+                    const newToken = await generateToken(id);
                     setToken(newToken);
+                } catch (error) {
+                    console.error('Error generating token:', error);
                 }
             }
         };
