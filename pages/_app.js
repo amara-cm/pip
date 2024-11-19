@@ -3,21 +3,6 @@ import axios from 'axios';
 import '../styles/global.css';
 import Loading from '../components/loading';
 
-let inactivityTimeout;
-
-function resetInactivityTimeout() {
-  clearTimeout(inactivityTimeout);
-  inactivityTimeout = setTimeout(() => {
-    // Handle session expiration, e.g., log out or refresh token
-  }, 30 * 60 * 1000); // 30 minutes
-}
-
-document.addEventListener('mousemove', resetInactivityTimeout);
-document.addEventListener('keypress', resetInactivityTimeout);
-
-// Initialize inactivity timeout
-resetInactivityTimeout();
-
 function MyApp({ Component, pageProps }) {
     const [isLoading, setIsLoading] = useState(true);
     const [earnedCoins, setEarnedCoins] = useState(0);
