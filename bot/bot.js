@@ -31,7 +31,7 @@ bot.start(async (ctx) => {
     }
 
     // Send POST request to /api/telegram
-    const response = await fetch('https://pinkstar.vercel.app/api/telegram', {
+    const response = await fetch('https://your-vercel-app-url.com/api/telegram', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -46,7 +46,7 @@ bot.start(async (ctx) => {
 
     if (response.ok) {
       ctx.reply(`Welcome, ${username}!`, Markup.inlineKeyboard([
-        Markup.button.url('Play the Game', result.autoLoginLink)
+        Markup.button.url('Open Web App', result.autoLoginLink)
       ]));
     } else {
       console.error('Error from /api/telegram:', result);
