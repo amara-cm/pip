@@ -1,12 +1,12 @@
 import supabase from '../../lib/db';
+import { generateToken } from '../../lib/paseto';
 
-// Helper function to check if the mining session is completed
 const checkMiningCompletion = (countdownEnd) => {
   return new Date() >= new Date(countdownEnd);
 };
 
 export default async function handler(req, res) {
-  const { userId, action } = req.body;  // action can be 'start', 'sell', or 'status'
+  const { userId, action } = req.body;
 
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
@@ -14,9 +14,8 @@ export default async function handler(req, res) {
 
   try {
     if (action === 'start') {
-      // Start mining logic
       const now = new Date();
-      const countdownEnd = new Date(now.getTime() + 8 * 60 * 60 * 1000); // 8-hour countdown
+      const countdownEnd = new Date(now.getTime() + 8 * 60 * 60 * 1000);
 
       const { error } = await supabase
         .from('MiningSession')
@@ -24,9 +23,9 @@ export default async function handler(req, res) {
 
       if (error) throw error;
 
-      res.status(200).json({ message: 'Mining started', countdownEnd });
+      const token = await generateToken(userId, '30m');
+      res.status(200).json({ message: 'Mining started', countdownEnd, token });
     } else if (action === 'sell') {
-      // Sell mined stones (check if mining is complete)
       const { data: miningSession, error: miningError } = await supabase
         .from('MiningSession')
         .select('*')
@@ -43,14 +42,13 @@ export default async function handler(req, res) {
         return res.status(400).json({ message: 'Mining is not complete yet.' });
       }
 
-      // Mining complete, allow sell
       const { error: transactionError } = await supabase.rpc('sell_mined_stones', { user_id: userId });
 
       if (transactionError) throw transactionError;
 
-      res.status(200).json({ message: '500 coins added, mining session reset' });
+      const token = await generateToken(userId, '30m');
+      res.status(200).json({ message: '500 coins added, mining session reset', token });
     } else if (action === 'status') {
-      // Retrieve the current mining session data
       const { data: miningSession, error } = await supabase
         .from('MiningSession')
         .select('*')
@@ -63,7 +61,8 @@ export default async function handler(req, res) {
         return res.status(404).json({ message: 'No mining session found.' });
       }
 
-      res.status(200).json(miningSession);
+      const token = await generateToken(userId, '30m');
+      res.status(200).json({ ...miningSession, token });
     } else {
       res.status(400).json({ message: 'Invalid action' });
     }
