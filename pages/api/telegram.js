@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     switch (action) {
       case 'menu_tap':
         const token = await generateToken(id, '30m');
-        const autoLoginLink = `https://t.me/pinxhousebot/app/auto-login?token=${token}`;
+        const autoLoginLink = `https://yourgame.com/auto-login?token=${token}`;
         // Send auto-login link to the user via Telegram
         // sendTelegramMessage(id, `Click here to login: ${autoLoginLink}`);
         return res.status(200).json({ token, autoLoginLink });
