@@ -1,52 +1,49 @@
 import { Telegraf } from 'telegraf';
-import { v4 as uuidv4 } from 'uuid'; // Add UUID library for unique ID generation
-import supabase from '../../lib/db'; // Ensure the path is correct
+import { v4 as uuidv4 } from 'uuid';
+import jwt from 'jsonwebtoken';
+import supabase from '../../lib/db';
 
-// Disable the default body parser for raw body handling
+const JWT_SECRET = process.env.JWT_SECRET;
+
 export const config = {
   api: {
     bodyParser: false,
   },
 };
 
-// Webhook handler
 export default async function handler(req, res) {
   console.log(`Received ${req.method} request on /webhook`);
   if (req.method === 'POST') {
     try {
-      const rawBody = await getRawBody(req); // Get raw body as a string
+      const rawBody = await getRawBody(req);
       console.log('Raw body:', rawBody);
-      const update = JSON.parse(rawBody); // Parse JSON
+      const update = JSON.parse(rawBody);
       console.log('Parsed update:', update);
 
-      await handleTelegramUpdate(update);
-      return res.status(200).json({ message: 'Update received' });
+      await handleTelegramUpdate(update, res);
     } catch (error) {
       console.error('Error processing update:', error);
       return res.status(500).json({ error: 'Internal Server Error' });
     }
+  } else {
+    console.log('Invalid method:', req.method);
+    return res.status(405).json({ error: 'Method Not Allowed' });
   }
-
-  console.log('Invalid method:', req.method);
-  return res.status(405).json({ error: 'Method Not Allowed' });
 }
 
-// Function to handle Telegram updates
-async function handleTelegramUpdate(update) {
+async function handleTelegramUpdate(update, res) {
   const { message } = update;
 
   if (!message || !message.from) {
     console.log('No message or message.from found');
-    return;
+    return res.status(400).json({ error: 'Bad Request' });
   }
 
-  const { id, username, first_name, text } = message.from;
-  console.log('Received message from:', { id, username, first_name, text });
+  const { id, username, first_name } = message.from;
+  console.log('Received message from:', { id, username, first_name });
 
-  // Generate a unique ID for the user
   const uniqueId = uuidv4();
 
-  // Store or update user data in the database
   try {
     const { error: userError } = await supabase
       .from('User')
@@ -55,12 +52,20 @@ async function handleTelegramUpdate(update) {
     if (userError) throw userError;
 
     console.log(`User data for ${username || 'Pinx'} stored/updated successfully.`);
+
+    const token = jwt.sign({ user_id: id, username, first_name }, JWT_SECRET, { expiresIn: '1h' });
+    const autoLoginLink = `https://yourgame.com/auto-login?token=${token}`;
+
+    // Send auto-login link to the user via Telegram (assuming you have a method to do this)
+    // sendTelegramMessage(id, `Click here to login: ${autoLoginLink}`);
+
+    return res.status(200).json({ message: 'Update received', autoLoginLink });
   } catch (error) {
     console.error('Error saving/updating user data:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 
-// Function to read raw body from the request (without micro)
 async function getRawBody(req) {
   return new Promise((resolve, reject) => {
     let body = '';
