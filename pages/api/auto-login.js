@@ -1,5 +1,5 @@
 import supabase from '../../lib/db';
-import { validateToken } from '../../lib/paseto';
+import { validateToken, generateToken } from '../../lib/paseto';
 
 export default async function handler(req, res) {
   const { token } = req.query;
@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     }
 
     // Set session or PASETO for the user
-    const newToken = await generateToken(userId);
+    const newToken = await generateToken(userId, '30m');
     res.status(200).json({ message: 'User authenticated', userId, token: newToken });
   } catch (error) {
     console.error('Error during auto-login:', error);
