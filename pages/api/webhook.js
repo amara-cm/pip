@@ -1,7 +1,8 @@
 import { Telegraf } from 'telegraf';
-import { V2 } from 'paseto';
+import { V4 } from 'paseto';
 import { v4 as uuidv4 } from 'uuid';
 import supabase from '../../lib/db';
+import { generateToken } from '../../lib/paseto';
 
 const PASETO_SECRET = process.env.PASETO_SECRET;
 
@@ -53,7 +54,7 @@ async function handleTelegramUpdate(update, res) {
 
     console.log(`User data for ${username || 'Pinx'} stored/updated successfully.`);
 
-    const token = await V2.sign({ user_id: id, username, first_name }, PASETO_SECRET);
+    const token = await generateToken(id);
     const autoLoginLink = `https://yourgame.com/auto-login?token=${token}`;
 
     // Send auto-login link to the user via Telegram (assuming you have a method to do this)
