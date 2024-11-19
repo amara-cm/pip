@@ -9,14 +9,14 @@ export default async function handler(req, res) {
     const { data: user, error } = await supabase
       .from('User')
       .select('*')
-      .eq('user_id', userId)
+      .eq('telegramId', userId)
       .single();
 
     if (error && error.code === 'PGRST116') {
       // User does not exist, create one
       const { error: createUserError } = await supabase
         .from('User')
-        .insert({ user_id: userId });
+        .insert({ telegramId: userId });
 
       if (createUserError) throw createUserError;
     }
