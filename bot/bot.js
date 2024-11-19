@@ -31,7 +31,7 @@ bot.start(async (ctx) => {
     }
 
     // Send POST request to /api/telegram
-    const response = await fetch('https://your-vercel-app-url.com/api/telegram', {
+    const response = await fetch('https://pinkstar.vercel.app/api/telegram', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
