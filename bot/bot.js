@@ -1,5 +1,6 @@
 import supabase from '../lib/db'; // Ensure the path is correct
 import { Telegraf, Markup } from 'telegraf';
+import fetch from 'node-fetch'; // Ensure you have node-fetch installed
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN); // Make sure to store your bot token in .env
 
@@ -27,14 +28,29 @@ bot.start(async (ctx) => {
         .insert({ telegramId, username });
 
       if (createUserError) throw createUserError;
+    }
 
-      ctx.reply(`Welcome, ${username}! You’re now registered.`, Markup.inlineKeyboard([
-        Markup.button.url('Play the Game', 'https://your-game-url.com')
+    // Send POST request to /api/telegram
+    const response = await fetch('https://pinkstar.vercel.app/api/telegram', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id: telegramId,
+        action: 'menu_tap'
+      })
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      ctx.reply(`Welcome, ${username}!`, Markup.inlineKeyboard([
+        Markup.button.url('Play the Game', result.autoLoginLink)
       ]));
     } else {
-      ctx.reply(`Welcome back, ${username}!`, Markup.inlineKeyboard([
-        Markup.button.url('Play the Game', 'https://your-game-url.com')
-      ]));
+      console.error('Error from /api/telegram:', result);
+      ctx.reply('Failed to generate auto-login link. Try again later.');
     }
   } catch (error) {
     console.error('Error during user registration:', error);
