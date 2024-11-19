@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/global.css';
 import Loading from '../components/loading';
+import { generateToken, validateToken, refreshToken } from '../lib/paseto';
 
 function MyApp({ Component, pageProps }) {
     const [isLoading, setIsLoading] = useState(true);
@@ -11,16 +12,16 @@ function MyApp({ Component, pageProps }) {
     const [gameInteractions, setGameInteractions] = useState([]);
     const [completedTasks, setCompletedTasks] = useState([]);
 
-    // State to store userId
+    // State to store userId and token
     const [userId, setUserId] = useState(null);
+    const [token, setToken] = useState(null);
 
-    // Helper function to get the user ID from your application logic (e.g., from webhook.js or bot.js)
     const getUserId = async () => {
         try {
             const response = await axios.get('/api/telegram', {
-                params: { id: 'user_id' } // Replace 'actual_user_id' with the logic to get the actual user ID
+                params: { id: 'user_id' } // Replace 'user_id' with the logic to get the actual user ID
             });
-            return response.data.userId; // Assuming the response contains the userId
+            return response.data.userId;
         } catch (error) {
             console.error('Error fetching user ID:', error);
             return null;
@@ -62,23 +63,32 @@ function MyApp({ Component, pageProps }) {
         }
     };
 
+    const handleUserAction = async () => {
+        try {
+            const newToken = await refreshToken(userId, token);
+            setToken(newToken);
+        } catch (error) {
+            console.error('Error refreshing token:', error);
+        }
+    };
+
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             setIsLoading(false);
         }, 3000);
 
-        // Fetch user ID and then retrieve user data
         const fetchUserIdAndData = async () => {
             const id = await getUserId();
             setUserId(id);
             if (id) {
                 await retrieveUserData();
+                const newToken = await generateToken(id);
+                setToken(newToken);
             }
         };
 
         fetchUserIdAndData();
 
-        // Load saved state from localStorage
         const savedMineCountdown = localStorage.getItem('mineCountdown');
         const savedDailyClaimTimer = localStorage.getItem('dailyClaimTimer');
         const savedInteractions = localStorage.getItem('gameInteractions');
@@ -93,11 +103,15 @@ function MyApp({ Component, pageProps }) {
     }, []);
 
     useEffect(() => {
-        // Save user data when state changes
         if (!isLoading) {
             saveUserData();
         }
     }, [earnedCoins, mineCountdown, dailyClaimTimer, gameInteractions, completedTasks]);
+
+    useEffect(() => {
+        const intervalId = setInterval(handleUserAction, 1800000); // Refresh token every 30 minutes
+        return () => clearInterval(intervalId);
+    }, [token]);
 
     return (
         <>
