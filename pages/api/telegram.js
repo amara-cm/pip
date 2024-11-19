@@ -1,4 +1,5 @@
 import supabase from '../../lib/db';
+import { generateToken } from '../../lib/paseto';
 
 export default async function handler(req, res) {
   const { id, action } = req.body;
@@ -6,18 +7,11 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     if (action === 'menu_tap') {
       try {
-        // Update lastActive field
-        const { error: userError } = await supabase
-          .from('User')
-          .update({ lastActive: new Date() })
-          .eq('user_id', id);
-
-        if (userError) throw userError;
-
-        // Notify web app about the user activity
-        res.status(200).json({ message: 'User interaction recorded and lastActive updated' });
+        const token = await generateToken(id);
+        // Respond with the generated token
+        res.status(200).json({ token });
       } catch (error) {
-        console.error('Error updating lastActive:', error);
+        console.error('Error generating token:', error);
         res.status(500).json({ message: 'Internal server error' });
       }
     }
